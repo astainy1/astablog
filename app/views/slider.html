@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider</title>
+</head>
+<body style="display: flex; justify-content: center; align-items: center; text-align: center; font-size: x-large;">
+    <section>
+        <h1>Images Slider</h1>
+        <img name="slide" alt="image slider" width="1000" height="1000" style="object-fit: cover; margin: 1em auto;">
+    </section>
+</body>
+<script>
+    
+    const imagTag = document.slide;
+    console.log(imagTag);
+
+    // Environment variable
+    const time = 3000;
+    let i = 0;
+    let images = [];
+
+    // Set the idexes to every image
+    images[0] = '../public/img/pic1.png'; 
+    images[1] = '../public/img/pic2.png'; 
+    images[2] = '../public/img/pic3.png'; 
+    images[3] = '../public/img/pic4.jpg'; 
+
+    function imageChanger(){
+
+        if(i < images.length - 1){
+            // Increment i by 1 every time
+            i++;
+
+            console.log(true);
+            // Set the image source attribute to the image path 
+            // for every time i increment to one based on the image index
+            imagTag.src = images[i]
+
+        }else{
+
+            // reset i to zero if i is not less than images.length
+            i = 0
+            console.log(false);
+        }
+        // Change image after a specific set time
+        setTimeout(imageChanger, time);
+    }
+    // Invoke function when window load
+    window.onload = imageChanger();
+
+</script>
+</html>

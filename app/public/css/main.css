@@ -1,0 +1,594 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+
+
+html, body, *{
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --background-btn: linear-gradient(to right, #ff105f, #ff00a6);
+}
+
+body{
+    font-size: 100%;
+    font-family: "open sans", sans-serif;
+    background: #fafafa;
+}
+
+.main-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    /* overflow: hidden; */
+    gap: 1rem;
+}
+
+/* Header style start here */
+header{
+    width: 100%;
+    position: relative;
+}
+
+header .nav-container{
+    background: #000;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    border-bottom: 3px solid #ff0084;
+}
+.header-menu{
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+}
+
+header .header-menu ul{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+header .header-menu ul li {
+    font-size: 1.3rem;
+    list-style-type: none;
+    margin: 0 5px;    
+    padding: 7px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+header nav .header-info .fa{
+    margin-right: 5px;
+}
+
+header .header-menu ul li a{
+    transition: .5s;
+    text-decoration: none;
+    color: #fff;
+}
+
+.header-account-detail li{
+    font-weight: 600;
+    transition:  all 0.8s;
+}
+
+.header-account-detail #active{
+    border: 1.5px solid #ff105f;
+}
+
+.header-account-detail li:hover{
+    background: var(--background-btn);
+    transform: translateY(-3px);
+}
+
+/* Menu for logged in screen */
+
+/* .profile-drop-down-container{
+    width: 100%;
+} */
+.drop-down-items {
+    position: absolute;
+    top: 90px;
+    right: 8%;
+    display: none;
+    justify-content: space-between;
+    flex-direction: column;
+    background: #ccc;
+    color: #000;
+    width: 150px;
+    z-index: 100;
+    border-radius: 5px;
+    height: auto;
+    padding: 15px 0;
+    transition: all 0.5s;
+}
+
+.drop-down-items li{
+    list-style-type: none;
+}
+
+ .drop-down-items li a{
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: #000;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+}
+
+.drop-down-items li a:hover{
+    background: var(--background-btn);
+    color: #fff;
+}
+
+/* Display profile menu on hover state */
+/* header .nav-container .header-menu .header-account-detail .drop-down-menu a .fa:hover .drop-down-items{
+    display: flex;
+} */
+
+header nav .header-info .logo-white img{
+    width: 100px;
+    height: auto;
+    padding: none;
+}
+
+header nav .header-info .logo-white{
+    padding: none;
+}
+
+.user-dropdown-menu{
+    background: #b2b1b1;
+    position: absolute;
+    right: 20;
+    top: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-info{
+    font-weight: 300;
+    color: #fff;
+}
+
+.header-info li a:hover{
+    color: #b2b1b1;
+}
+
+header .header-image-container{
+    position: relative;
+    /* background-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.4)), url(../img/header-bg.jpeg); */
+    background-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.7));
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    object-fit: cover;
+    height: auto;
+    min-height: 30vh;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    border-bottom-right-radius: 4%;
+    border-bottom-left-radius: 4%;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+header .header-image-container img{
+    position: sticky;
+    object-fit:cover;
+    display: block;
+    width: 100%;
+    height: 400px;
+    transition: all 0.5s;
+    z-index: -1;
+}
+
+header .header-image-container:hover{
+    background-image: linear-gradient(to left, rgba(0,0,0,0.7), rgba(0,0,0,0.7));
+}
+
+header .header-title{
+    position: absolute;
+    top: 14%;
+    left: 13%;
+    z-index: 50;
+    color: #fff;
+    padding: 3rem 0;
+}
+
+header .header-title h1{
+    font-weight: 400;
+    font-size: 1.7rem;
+    padding: 20px 0;
+    color: #fa699a;
+}
+
+header .header-title h2{
+    font-weight: 700;
+    font-size: 3.3rem;
+    width: 80%;
+
+}
+
+/* Header style ends here */
+
+
+/* Sidebar style starts */
+.main-content-container{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: row-reverse;
+    padding: 10px;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    gap: 2.3rem;
+    margin-bottom: 2rem;
+    margin-top: 3rem;
+
+
+}
+
+
+aside{
+    position: sticky;
+    background: #fbfbfb;
+    width: 40%;
+    max-width: 450px;
+    align-self: self-start;
+}
+
+.text-wadget p{
+    color: #434343;
+    padding: 1.7rem 0 3.5rem 0;
+}
+
+.text-wadget h2, .recent-news h3{
+    padding: 15px;
+    background: #eee;
+    border-bottom: 5px solid #ff105f;
+    font-size: 1.2rem;
+    color: #424141;
+}
+.recent-news-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 15px 30px 15px;
+    gap: 1.5rem;
+    transition: all 0.5s;
+}
+
+.recent-news-container img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.recent-news-container:hover{
+    transform: translateY(2%);
+}
+
+.recent-news-container a{
+    text-decoration: none;
+    color: #828080;
+    transition: all 0.5s;
+}
+.recent-news-container a:hover{
+    color: #434343;
+    text-decoration: underline;
+}
+
+.recent-news-container span{
+    font-size: 0.8rem;
+    transition: all 0.5s;
+    color: #828080;
+}
+
+.recent-news-container span:last-child{
+    margin-left: 7px;
+}
+
+.recent-news-date{
+    font-style: italic;
+}
+
+/* Sidebar style ends */
+
+
+/* Main content style starts here */
+main {
+    padding: 0 1rem;
+    /* background: #fa699a; */
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+main .main-title-text{
+    overflow: hidden;
+    height: auto;
+    width: 100%;
+    /* border: 1px solid red; */
+    transition: all 0.5s;
+}
+
+main .blog-tagline{
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    flex-direction: column;
+    gap: 1.3rem;
+    text-decoration: none;
+    font-size: 2rem;
+    color: #4d4b4b;
+    font-weight: 800;
+    transition: all 0.5s;
+    margin-bottom: 1rem;
+}
+
+main .blog-tagline span{
+    transition: all 0.5s;
+}
+
+main .blog-tagline span:hover{
+    color: #3c3b3b;
+    text-decoration: underline;
+}
+
+main .blog-tagline img{
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+    transform: scale(1);
+    border-radius: 20px;
+    transition: all 0.5s;
+}
+
+main .blog-tagline img:hover{
+    transform: scale(1.02);
+    object-fit: cover;
+    opacity: 0.9;
+    border-radius: 40px;
+}
+
+.blog-summary-main-content{
+    font-size: 1.2rem;
+    color: #424141;
+    padding: 10px 10px 15px 0;
+    margin-bottom: 1.9rem;
+}
+
+.blog-summary-read-more a{
+    background: var(--background-btn);
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 5px;
+    color: #ffffff;
+    font-weight: 500;
+    transition: all 0.5s ease;
+    border: 2px solid transparent;
+}
+
+.blog-summary-read-more a:hover{
+    opacity: 0.9;
+    border: 2px solid #ff105f;
+    background: transparent;
+    color: #272626;
+}
+
+.blog-summary-title{
+
+    border-bottom: 2px solid #dedede;
+    /* padding-bottom: 3rem; */
+    background: #ffffff;
+    border-radius: 5px;
+    padding: 1rem 1rem 3rem 1rem;
+    box-shadow: 0.2em 0.2em 0.2em 0.1em rgba(0,0,0,0.02),
+    -0.2em -0em 0.1em 0.1em rgba(0,0,0,0.01);
+}
+
+#noshadow{
+    box-shadow: none;
+    border: 0;
+}
+
+.blog-action-container a{
+    text-decoration: none;
+    display: flex;
+    gap: 20px;
+    color: #585757;
+    font-size: 1rem;
+    font-weight: 400;
+    transition: 0.5s;
+    text-transform: uppercase;
+}
+
+.blog-action-container a:hover{
+    color: #3c3b3b;
+}
+
+/* Main content style ends here */
+
+/* Login form and registration form style start here */
+form{
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    flex-direction: column;
+    gap: 1.8rem;
+    /* margin-bottom: 3em; */
+    padding: 3rem;
+    width: 30%;
+    max-width: 450px;
+    margin: 2em auto;
+    box-shadow: 0.2em 0.2em 0.2em 0.1em rgba(0,0,0,0.02),
+    -0.2em -0em 0.1em 0.1em rgba(0,0,0,0.01);
+}
+
+form h3{
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    color: #616060;
+    text-align: center;
+}
+
+form .input-container{
+    display: flex;
+    /* justify-content: center; */
+    gap: 1.5rem;
+    flex-direction: column;
+}
+
+form .form-control{
+    display: flex;
+    /* justify-content: center; */
+    gap: 0.5rem;
+    flex-direction: column;
+    font-size: 1.2rem;
+}
+
+form .form-control input{
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: rgb(81, 80, 80);
+}
+
+form .form-control input[type="submit"]{
+    background: var(--background-btn);
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+form .form-control input[type="submit"]:hover{
+    opacity: 0.8;
+}
+
+form .form-control .remember-me{
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+form .form-control input[type="email"], .form-control input[type="password"], .form-control input[type="text"]{
+    border: 1px solid #616060;
+    padding: 10px;
+}
+
+form .form-control .error{
+    color: red;
+    font-size: 0.9rem;
+}
+
+form .form-control .registration-label, form .form-control .login-label{
+    color: rgb(0, 0, 0);
+}
+
+form .addition-text{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+form .addition-text p a{
+    text-decoration: none;
+    color: #4d4b4b;
+    font-weight: 600;
+    transition: all 0.5s;
+}
+
+form .addition-text p a:hover{
+    text-decoration: underline;
+}
+
+
+
+/* #register{
+    display: none;
+} */
+
+/* #login{
+    visibility: hidden;
+} */
+
+/* Login form and registration form style ends here */
+
+/* Editor style starts here */
+/* .editor-account-detail{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 20%;
+    background: red;
+}
+
+.editor-account-detail .editor-profile-dropdow a{
+    padding: 15px;
+} */
+
+/* .editor-account-detail .editor-profile-dropdow a:hover{
+    background: var(--background-btn);
+    transform: translateY(-3px);
+} */
+
+/* .editor-dropdown-menu{
+    position: fixed;
+    top: 0;
+    background: #ff00a6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 20;
+} */
+/* Editor style ends here */
+
+/* Footer style starts here */
+footer{
+    padding: 1.5rem;
+    background: #000000;
+    /* position: fixed;  */
+    /* bottom: 0;  */
+    width: 100%;
+    color: #dedede;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+footer .copyright-text a, footer .icons a{
+    color: #dedede;
+    text-decoration: none;
+}
+
+footer .icons a{
+    margin-left: 20px;
+}
+
+footer .icons a .fa-brands:hover{
+    transition: all 0.5s;
+    color: #ff00a6;
+    transform: rotateZ(-30deg);
+}
+
+/* Footer style ends here */

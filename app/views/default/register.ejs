@@ -1,0 +1,68 @@
+
+      <!-- Header starts here -->
+      <%- include('./partials/__header.ejs') %>
+      <!-- Header ends here--->
+
+      <!-- Registration form start -->
+      <form action="/login" method="post" name="registration">
+        <h3>Register</h3>
+
+        <section class="input-container">
+          <section class="form-control">
+            <label for="username" class="registration-label">Username</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Enter Username"
+              required
+            />
+          </section>
+
+          <section class="form-control">
+            <label for="register-email" class="registration-label">Email</label>
+            <input
+              type="email"
+              name="email"
+              id="register-email"
+              placeholder="Enter Email"
+              required
+            />
+          </section>
+
+          <section class="form-control" class="registration-label">
+            <label for="register-password">Password</label>
+            <input
+              type="password"
+              name="password"
+              id="register-password"
+              placeholder="Enter Password"
+              required
+            />
+          </section>
+
+          <section class="form-control2">
+            <input type="checkbox" id="login-checked-box" name="checkbox" />
+            <label for="login-checked-box" class="remember-me"
+              >I agreed to the terms and conditions</label
+            >
+          </section>
+
+          <section class="form-control">
+            <input type="submit" id="register-submit-btn" value="Register" />
+          </section>
+          <section class="addition-text">
+            <p>
+              Already have account?
+              <a href="/login" id="login-bottom-btn"
+                >Login &srarr;
+              </a>
+            </p>
+          </section>
+        </section>
+      </form>
+      <!-- Registration form ends -->
+    </section>
+    <div style="margin-bottom: 5em"></div>
+
+    <%- include('../user/partials/__footer.ejs') %>
