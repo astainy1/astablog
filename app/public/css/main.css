@@ -103,13 +103,15 @@ header .header-menu ul li a{
     display: none;
     justify-content: space-between;
     flex-direction: column;
-    background: #ccc;
+    background: #f7f7f7;
     color: #000;
-    width: 150px;
+    width: 180px;
+    box-shadow: 0.2em 0.2em 0.2em 0.1em rgba(0,0,0,0.02),
+    -0.2em -0em 0.1em 0.1em rgba(0,0,0,0.01);
     z-index: 100;
     border-radius: 5px;
     height: auto;
-    padding: 15px 0;
+    padding: 15px 10px;
     transition: all 0.5s;
 }
 
@@ -122,7 +124,7 @@ header .header-menu ul li a{
     width: 100%;
     text-decoration: none;
     color: #000;
-    padding: 10px 20px;
+    padding: 7px 20px;
     font-size: 1.2rem;
 }
 
@@ -236,14 +238,18 @@ header .header-title h2{
     gap: 2.3rem;
     margin-bottom: 2rem;
     margin-top: 3rem;
-
-
+    flex-wrap: wrap-reverse;
+    background: #fff;
 }
 
 
 aside{
     position: sticky;
+    /* top: 10px; */
+    /* bottom: 0; */
+    /* right: 0; */
     background: #fbfbfb;
+    height: 100vh;
     width: 40%;
     max-width: 450px;
     align-self: self-start;
@@ -487,14 +493,15 @@ form .form-control .remember-me{
     font-weight: 600;
 }
 
+form .checkbox{
+    display: flex;
+    gap: 10px;
+    /* align-items: ; */
+}
+
 form .form-control input[type="email"], .form-control input[type="password"], .form-control input[type="text"]{
     border: 1px solid #616060;
     padding: 10px;
-}
-
-form .form-control .error{
-    color: red;
-    font-size: 0.9rem;
 }
 
 form .form-control .registration-label, form .form-control .login-label{
@@ -519,49 +526,147 @@ form .addition-text p a:hover{
     text-decoration: underline;
 }
 
-
-
-/* #register{
-    display: none;
-} */
-
-/* #login{
-    visibility: hidden;
-} */
-
-/* Login form and registration form style ends here */
-
-/* Editor style starts here */
-/* .editor-account-detail{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 20%;
-    background: red;
+form .error{
+    color: red;
+    font-size: 0.9rem;
 }
 
-.editor-account-detail .editor-profile-dropdow a{
-    padding: 15px;
-} */
 
-/* .editor-account-detail .editor-profile-dropdow a:hover{
-    background: var(--background-btn);
-    transform: translateY(-3px);
-} */
+/* Recent post bottom of an open post */
+.blog-post-main-container{
+    display: block;
+    /* background: rgb(255, 255, 255); */
+    width: 80%;
+    padding: 5em;
+}
 
-/* .editor-dropdown-menu{
-    position: fixed;
-    top: 0;
-    background: #ff00a6;
+.blog-post-main-container .blog-summary-title {
+    background: transparent !important;
+    padding: 1rem 2.3rem;
+}
+.blog-post-main-container .main-title-text img{
+    width: 100%;
+    height: 500px;
+}
+
+.recent-post-main-container{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    z-index: 20;
-} */
-/* Editor style ends here */
+    gap: 2rem;
+    padding: 3rem;
+    box-shadow: -0.4em -0.4em 0.2em 0.1em rgba(0,0,0,0.02),
+    0.2em 0em 0.1em 0.1em rgba(0,0,0,0.01);
+    overflow: hidden;
+}
+
+.recent-post-main-container h3{
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    color: #616060;
+    text-align: center;
+    margin-bottom: 1.2rem;
+}
+
+.recent-post-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 15px 15px 30px 15px;
+    transition: all 0.5s;
+    margin: 0 0.5rem;
+    /* background: red; */
+}
+
+.recent-post-container .recent-news-container{
+    width: 222px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    overflow: hidden;
+    padding-top: 0;
+    border-radius: 5px;
+}
+
+.recent-post-container .recent-news-container img{
+    object-fit: cover;
+    width: 225px;
+    height: 150px;
+    /* border-radius: 20px; */
+    transition: all 0.5s ease;
+}
+
+.recent-post-container .recent-news-container img:hover{
+    cursor: pointer;
+    transform: scale( 1.1);
+    opacity: 0.9;
+}
+
+.recent-post-container .recent-news-container .recent-news-text{
+    font-size: 1.2rem;
+}
+
+.author-info-on-post-main-container{
+    margin: 0 auto;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 50%;
+    padding: 2em;
+    margin-bottom: 3em;
+    gap: 40px;
+    background: #eee;
+}
+
+.author-info-on-post-main-container .author-image-container img{
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5%;
+}
+
+.author-info-on-post-main-container .author-details strong, ul li a, .fa-brands{
+    font-size: 1.2rem;
+    color: #515050;
+}
+
+.author-info-on-post-main-container .author-details span, .author-bio{
+    font-size: 1rem;
+    color: #585858;
+    margin: 0.7rem 0;
+}
+
+.author-info-on-post-main-container .author-details ul{
+    list-style-type: none;
+    display: flex;
+    gap: 30px;
+    margin-top: 0.5rem;
+}
+
+.author-info-on-post-main-container .author-details ul li a .fa-brands{
+    padding: 0 8px;
+    font-size: 1.2rem;
+    transition: all 0.5s;
+}
+
+.author-info-on-post-main-container .author-details ul li a .fa-brands:hover{
+    transform: rotate(-50deg);
+}
+
+.author-info-on-post-main-container .author-details ul li a .fa:hover{
+    transition: all 0.5s;
+}
+
+.author-info-on-post-main-container .author-details ul li a .fa:hover{
+    transform: rotate(-50deg);
+}
+
+
 
 /* Footer style starts here */
 footer{
@@ -584,11 +689,11 @@ footer .copyright-text a, footer .icons a{
 footer .icons a{
     margin-left: 20px;
 }
-
+s
 footer .icons a .fa-brands:hover{
     transition: all 0.5s;
     color: #ff00a6;
-    transform: rotateZ(-30deg);
+    transform: rotate(-30deg);
 }
 
 /* Footer style ends here */

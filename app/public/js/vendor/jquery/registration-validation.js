@@ -18,6 +18,7 @@ $(function () {
       // on the right side
       username: "required",
       // checkbox:  "required",
+      registercheckbox: "required",
       email: {
         required: true,
         // Specify that email should be validated
@@ -32,6 +33,7 @@ $(function () {
     // Specify validation error messages
     messages: {
       username: "This field is required!",
+      registercheckbox: "Agree to terms.",
       password: {
         required: "This field is required!",
         minlength: "Password must be at least 5 characters long.",

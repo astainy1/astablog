@@ -9,14 +9,14 @@ const routes = require('./routes/routers.js');
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Let express app listen to request and provide responses
+// Listen to request and provide responses
 
 // Default home routes
 app.get('/', routes.homeGetRoute)
 
 // Login routes
 app.get('/login', routes.loginGetRoute);
-app.post('/user', routes.loginPostRoute);
+app.post('/user/home', routes.loginPostRoute);
 
 // Register routes
 app.get('/register', routes.registerGetRoute);
@@ -30,16 +30,16 @@ app.post('/reset', routes.accoutRecoverPostRoute)
 app.get('/reset', routes.resetPasswordGetRoute)
 app.post('/login', routes.resetPasswordPostRoute)
 
-// Logged in user routes 
-app.get('/home', routes.userWorkspaceGetRoute);
+// Logged in user home routes 
+app.get('/user/home', routes.userHomeGetRoute);
 
 // Profile routes
-app.get('/profile', routes.userProfileGetRoute);
+app.get('/user/profile', routes.userProfileGetRoute);
 
 // Write article routes
-app.get('/article', routes.writeGetRoute);
+app.get('/user/article', routes.articleGetRoute);
 
-// Post routes
+// View Post routes
 app.get('/post', routes.viewpostGetRoute);
 
 

@@ -25,7 +25,7 @@ exports.loginGetRoute = (req, res) => {
 
 // Login page post route
 exports.loginPostRoute = (req, res) => {
-    res.redirect(303, '/home')
+    res.redirect(303, '/user/home')
 };
 
 // Register page get route
@@ -36,20 +36,6 @@ exports.registerGetRoute = (req, res) => {
 // Register page post route
 exports.registerPostRoute = (req, res) => {
 
-};
-
-
-/* 
-    
-*/
-// View post page get route
-exports.viewpostGetRoute = (req, res) => {
-    res.render('user/article', {title: 'Post | astaBlog'});
-};
-
-// View post page post route
-exports.viewpostPostRoute = (req, res) => {
-    
 };
 
 // Password reset page get route
@@ -73,14 +59,27 @@ exports.accoutRecoverPostRoute = (req, res) => {
     res.redirect(303, '/reset');
 };
 
+/* 
+    
+*/
 
-// Logged in user get route
-exports.userWorkspaceGetRoute = (req, res) => {
+// Logged in user home get route
+exports.userHomeGetRoute = (req, res) => {
     res.render('user/home', {title: 'Article Home Page | astsaBlog'});
 };
 
-exports.userWorkspacePostRoute = (req, res) => {
+exports.userHomePostRoute = (req, res) => {
 
+};
+
+// View post page get route
+exports.viewpostGetRoute = (req, res) => {
+    res.render('user/post', {title: 'Post | astaBlog'});
+};
+
+// View post page post route
+exports.viewpostPostRoute = (req, res) => {
+    
 };
 
 // Profile get routes
@@ -94,12 +93,12 @@ exports.userProfilePostRoute = (req, res) => {
 };
 
 // Write article get route
-exports.writeGetRoute = (req, res) => {
-    res.render('user/content', {title: 'Write post | astaBlog'});
+exports.articleGetRoute = (req, res) => {
+    res.render('user/createarticle', {title: 'Write post | astaBlog'});
 };
 
 // Write article post route
-exports.writePostRoute = (req, res) => {
+exports.articlePostRoute = (req, res) => {
 
 }
 
