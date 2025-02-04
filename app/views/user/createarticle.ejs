@@ -1,13 +1,39 @@
 
       <!-- Header starts here -->
-      <%- include('./partials/__header.ejs') %>
+      <%- include('./partials/__profileheader.ejs') %>
       <!-- Header ends here--->
        
-      <section class="main-content-container">
+      <section class="main-content-container" style="background: #f9f9f9;">
         <!-- Sidebar content start -->
-        <h1> Welcome Mr. Writer</h1>
+        
+        <div class="main-container">
+          <div class="editor-container editor-container_classic-editor editor-container_include-style" id="editor-container">
+            <div class="editor-container__editor"><div id="editor"></div></div>
+          </div>
+        </div>
+
+        <h1> Create Article</h1>
       </section>
     </section>
-    <div style="margin-bottom: 5em"></div>
 
-    <%- include('./partials/__footer') %>
+    <script type="importmap">
+      {
+        "imports": {
+          "ckeditor5": "../js/ckeditor/ckeditor5/ckeditor5.js",
+          "ckeditor5/": "../js/ckeditor/ckeditor5/",
+          "ckeditor5-premium-features": "../js/ckeditor/ckeditor5-premium-features/ckeditor5-premium-features.js",
+          "ckeditor5-premium-features/": "../js/ckeditor/ckeditor5-premium-features/"
+        }
+      }
+      </script>
+      <script src="https://cdn.ckbox.io/ckbox/2.6.1/ckbox.js" crossorigin></script>
+      <script type="module" src="../js/ckeditor/main.js"></script>
+      <!-- A friendly reminder to run on a server, remove this during the integration. -->
+      <script>
+        window.onload = function() {
+          if ( window.location.protocol === "file:" ) {
+            alert( "This sample requires an HTTP server. Please serve this file with a web server." );
+          }
+        };
+      </script>
+    <%- include('./partials/__profilefooter') %>

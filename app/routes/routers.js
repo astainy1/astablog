@@ -92,6 +92,26 @@ exports.userProfilePostRoute = (req, res) => {
 
 };
 
+// Edit profile get route
+exports.editProfileGetRoute = (req, res) => {
+    res.render('user/editProfile', {title: 'Edit Profile | astaBlog'});
+};
+
+// Edit profile post route
+exports.editProfilePostRoute = (req, res) => {
+    res.redirect(303, '/user/profile');
+};
+
+// View user profile get route
+exports.viewUserProfileGetRoute = (req, res) => {
+    res.render('user/viewprofile', {title: 'Writer Profile | astaBlog'});
+};
+
+// View user profile post route
+exports.viewUserProfilePostRoute = (req, res) => {
+    res.redirect('/user/post');
+};
+
 // Write article get route
 exports.articleGetRoute = (req, res) => {
     res.render('user/createarticle', {title: 'Write post | astaBlog'});

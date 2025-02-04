@@ -1,0 +1,109 @@
+
+      <!-- Header starts here -->
+      <%- include('./partials/__profileheader.ejs') %>
+      <!-- Header ends here--->
+       
+      <section class="main-profile-container"  id="main-container"style="background: #f9f9f9; overflow: hidden;">
+        <!-- Sidebar content start -->
+        <form action="/user/profile" method="post" class="edit-profile-container">
+            <h3> Edit Profile</h3>
+            <section class="change-profile-photo" >
+                <label for="file">
+                    <img  src="../img/author/author8.jpg" alt="author-profile" id="photo-preview" srcset="">
+                    <input type="file" name="profilePhoto"  id="file" accept=".jpg, .jpeg, .png" hidden>
+                </label>
+                <span id="hint">Click on the image</span>
+                <button type="button" id="removebtn">Remove</button>
+            </section>
+            
+            <section class="edit-details">
+
+                <section class="profile-form-control">
+                    <label for="user-name">Username</label>
+                    <input type="text" name="uName" id="user-name">
+                </section>
+                
+                <section class="profile-form-control">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" name="fName" id="Full-name">
+                </section>
+
+                <section class="profile-form-control">
+                    <label for="facebook-id">Facebook ID</label>
+                    <input type="url" name="socialmediaID" id="facebook-id">
+                </section>
+
+                <section class="profile-form-control">
+                    <label for="twitter-id">Twitter ID</label>
+                    <input type="url" name="socialmediaID" id="twitter-id">
+                </section>
+
+                <section class="profile-form-control">
+                    <label for="facebook-id">Email ID</label>
+                    <input type="url" name="socialmediaID" id="facebook-id">
+                </section>
+
+                <section class="profile-form-control">
+                    <label for="address">Address</label>
+                    <input type="text" name="address" id="address">
+                </section>
+
+                <section class="profile-form-control">
+                    <label for="bio">Bio</label>
+                    <!-- <textarea name="bio" id="bio" col="6" row="6"></textarea> -->
+                    <textarea name="bio" id="" cols="30" rows="10"></textarea>
+
+                </section>
+
+                <section class="profile-form-control">
+                <input type="submit" value="Update">
+                </section>
+            </section>
+        </form>
+        <!-- <section class="user-profile-main-container">
+
+
+          
+        </section> -->
+
+      </section>
+    </section>
+  
+<script defer>
+
+   let removebtn = document.querySelector('#removebtn');
+   let hint = document.querySelector('#hint');
+   let photoPlaceholder = document.querySelector('#photo-preview');
+   let profilePhoto = document.querySelector('#file');
+
+
+   profilePhoto.addEventListener('change', () => {
+
+       const newFile = profilePhoto.files;
+       let readFile = new FileReader();
+    if(newFile){
+
+        console.log('File is uploaded: ', newFile[0]);
+        console.log('File is uploaded: ', newFile[0].name);
+        readFile.onload = (event) => {
+            photoPlaceholder.setAttribute('src', event.target.result);
+        } 
+        readFile.readAsDataURL(newFile[0]);
+        hint.style.display = 'none';
+        removebtn.style.display = 'block';
+    }
+
+    if(newFile){
+        removebtn.addEventListener('click', () => {
+            hint.style.display = 'block';
+            removebtn.style.display = 'none';
+            // let currentFile = newFile[0].name;
+            // newSRC = `../img/author/author8.jpg`;
+            // {currentFile} =  newSRC 
+            photoPlaceholder.setAttribute('src', `../img/author/author8.jpg`);
+            console.log('File is removed: ', newFile[0].name);
+        })
+    }
+   });
+</script>
+    <%- include('./partials/__profilefooter.ejs') %>

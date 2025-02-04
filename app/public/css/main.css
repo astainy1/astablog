@@ -20,6 +20,7 @@ body{
 }
 
 .main-container{
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,6 +40,7 @@ header .nav-container{
     background: #000;
     position: sticky;
     top: 0;
+    z-index: 95;
     width: 100%;
     border-bottom: 3px solid #ff0084;
 }
@@ -91,11 +93,8 @@ header .header-menu ul li a{
     transform: translateY(-3px);
 }
 
-/* Menu for logged in screen */
+/* Navigation for logged in screen */
 
-/* .profile-drop-down-container{
-    width: 100%;
-} */
 .drop-down-items {
     position: absolute;
     top: 90px;
@@ -133,11 +132,6 @@ header .header-menu ul li a{
     color: #fff;
 }
 
-/* Display profile menu on hover state */
-/* header .nav-container .header-menu .header-account-detail .drop-down-menu a .fa:hover .drop-down-items{
-    display: flex;
-} */
-
 header nav .header-info .logo-white img{
     width: 100px;
     height: auto;
@@ -168,7 +162,6 @@ header nav .header-info .logo-white{
 
 header .header-image-container{
     position: relative;
-    /* background-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.4)), url(../img/header-bg.jpeg); */
     background-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.7));
     background-size: cover;
     background-position: center;
@@ -176,23 +169,23 @@ header .header-image-container{
     object-fit: cover;
     height: auto;
     min-height: 30vh;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
     border-bottom-right-radius: 4%;
     border-bottom-left-radius: 4%;
     transition: all 0.3s ease;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 header .header-image-container img{
     position: sticky;
+    top: 0;
     object-fit:cover;
     display: block;
     width: 100%;
     height: 400px;
     transition: all 0.5s;
     z-index: -1;
+    border-bottom-right-radius: 4%;
+    border-bottom-left-radius: 4%;
 }
 
 header .header-image-container:hover{
@@ -224,7 +217,6 @@ header .header-title h2{
 
 /* Header style ends here */
 
-
 /* Sidebar style starts */
 .main-content-container{
     position: relative;
@@ -234,7 +226,7 @@ header .header-title h2{
     padding: 10px;
     width: 100%;
     height: auto;
-    overflow: hidden;
+    /* overflow: hidden; */
     gap: 2.3rem;
     margin-bottom: 2rem;
     margin-top: 3rem;
@@ -245,7 +237,7 @@ header .header-title h2{
 
 aside{
     position: sticky;
-    /* top: 10px; */
+    top: 20px;
     /* bottom: 0; */
     /* right: 0; */
     background: #fbfbfb;
@@ -374,8 +366,13 @@ main .blog-tagline img:hover{
     font-size: 1.2rem;
     color: #424141;
     padding: 10px 10px 15px 0;
-    margin-bottom: 1.9rem;
+    /* margin-bottom: 1.1rem; */
 }
+
+.blog-summary-title ul li{
+    list-style-type:decimal;
+    padding: 0.3rem;
+};
 
 .blog-summary-read-more a{
     background: var(--background-btn);
@@ -396,7 +393,6 @@ main .blog-tagline img:hover{
 }
 
 .blog-summary-title{
-
     border-bottom: 2px solid #dedede;
     /* padding-bottom: 3rem; */
     background: #ffffff;
@@ -409,6 +405,11 @@ main .blog-tagline img:hover{
 #noshadow{
     box-shadow: none;
     border: 0;
+}
+
+article h5, article h6{
+    color: rgb(70, 70, 70);
+    font-size: 1.4rem;
 }
 
 .blog-action-container a{
@@ -429,7 +430,7 @@ main .blog-tagline img:hover{
 /* Main content style ends here */
 
 /* Login form and registration form style start here */
-form{
+.login-form, .registration-form, .reset-password-form, .recovery-form{
     padding: 1.5rem;
     background: #fff;
     border-radius: 5px;
@@ -620,7 +621,7 @@ form .error{
     padding: 2em;
     margin-bottom: 3em;
     gap: 40px;
-    background: #eee;
+    background: #f4f3fd;
 }
 
 .author-info-on-post-main-container .author-image-container img{
@@ -666,14 +667,502 @@ form .error{
     transform: rotate(-50deg);
 }
 
+/* Author style ends */
 
+.divider{
+    margin: 2em auto 2em auto;
+    padding: 2em;
+    border-bottom:1px solid #b4b4b4;
+    max-width: 70%;
+}
+
+.previous-and-next-btn{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2em auto 2em auto;
+    border-top:1px solid #b4b4b4;
+    border-bottom:1px solid #b4b4b4;
+    max-width: 70%;
+    padding: 1.7em;
+    transition: all 0.5s;
+}
+
+.previous-and-next-btn a{
+    text-decoration: none;
+    color: #807f7f;
+    padding: 7px 0 ;
+    border-bottom: 1px solid transparent;
+    transition: all 0.5s;
+}
+
+.previous-and-next-btn a:hover{
+    color: #333;
+    /* text-decoration: underline; */
+    border-bottom: 1px solid #333;
+    
+}
+
+.comment-section-container{
+    margin: 6em auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    transition: all 0.5s;
+    box-shadow: none;
+    background:rgb(244, 244, 244);
+    width: 50%;
+    /* max-width: 500px; */
+    padding: 2rem;
+    gap: 2em;
+    overflow: hidden;
+}
+
+.comment-section-container legend{
+    font-size: 1.6em;
+    padding: 0.5em;
+}
+
+.comment-section-container .comment-form-control{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+}
+
+.comment-section-container .form-control-main-container{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.comment-section-container .comment-form-control textarea, .comment-form-control input{
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    resize: none    ;
+}
+
+.comment-section-container .comment-form-control input{
+    background: var(--background-btn);
+    color: #fff;
+    cursor: pointer;
+}
+
+.comment-section-container .comment-form-control input:hover{
+    opacity: 0.8;
+}
+
+/* Commentted message start */
+.comments-count{
+    margin: 0 auto;
+    width: 50%;
+    display: flex;
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+
+}
+ .commentted-message-container{
+    margin: 0 auto;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 50%;
+    padding: 2em;
+    margin-bottom: 3em;
+    gap: 40px;
+    background: #f5f5f5;
+    border-left: 2px solid #f50062;
+}
+
+.reply-comment .author-image-container img, .commentted-message-container .author-image-container img{
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.reply-comment .author-details .county-reply, .commentted-message-container .author-details .county-reply{
+    color: #7e7e7e;
+    margin-left: 7px;
+}
+
+.reply-comment .author-details strong, ul li a, .commentted-message-container > .author-details strong, ul li a{
+    font-size: 1.2rem;
+}
+
+.reply-comment .author-details span, .commentted-message-container .author-details span, .author-bio{
+    font-size: 1rem;
+    color: #585858;
+    margin: 0.7rem 0;
+}
+
+.reply-comment .author-details ul, .commentted-message-container .author-details ul{
+    list-style-type: none;
+    display: flex;
+    gap: 30px;
+    margin-top: 0.5rem;
+}
+
+.reply-comment .author-details ul li a, .commentted-message-container .author-details ul li a{
+    text-decoration: none;
+}
+
+.reply-comment .author-details ul li a .fa, .commentted-message-container .author-details ul li a .fa{
+    padding: 0 8px;
+    font-size: 1.2rem;
+    transition: all 0.5s;
+}
+
+.reply-comment .author-details ul li a .fa:hover, .commentted-message-container .author-details ul li a .fa:hover{
+   color: #5e5e5e; 
+}
+
+.reply-comment .author-details ul li .reply-btn:hover, .commentted-message-container .author-details ul li .reply-btn:hover{
+   color: #5e5e5e;
+   text-decoration: underline; 
+}
+
+
+/* Reply comment */
+.reply-comment{
+    margin: 0 auto;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 40%;
+    padding: 2em;
+    margin-bottom: 3em;
+    gap: 40px;
+    background: #f5f5f5;
+    border-left: 2px solid #ef598b63;
+    clear: both;
+    opacity: 0.7;
+}
+
+.reply-comment .author-details em{
+    font-weight: 600;
+}
+
+.reply-author-names span{
+    margin-left: 0.8em;
+}
+
+.read-more-comments
+{
+    margin: 0 auto;
+    width: 50%;
+    text-align: center;
+}
+
+.read-more-comments p a{
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #444444;
+}
+
+.read-more-comments p a:hover{
+    text-decoration: underline;
+}
+
+
+/* Reply form */
+.reply-form-container{
+    margin: 10px auto 2rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 40%;
+    background:rgb(240, 240, 240);
+    padding: 1em;
+    overflow: hidden;
+    gap: 1.2em;
+    transition: 0.5s;
+    display: none;
+}
+
+.reply-form-container textarea {
+    font-size: 1.2rem;
+    padding: 0.8rem;
+    width: 100%;
+    border-radius: 1%;
+    resize: none;
+}
+
+.reply-form-container  .submit-reply-container{
+    align-self: flex-end;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    gap: 2rem;
+}
+
+.reply-form-container .submit-reply-container button{
+    padding: 1rem 3rem;
+    border-radius: 5%;
+    transition: 0.5s;
+    color: #fff;
+    cursor: pointer;
+    font-size: medium;
+    
+}
+
+.reply-form-container .submit-reply-container button:last-child{
+    background: var(--background-btn);
+}
+
+.reply-form-container .submit-reply-container button:first-child{
+    background: #a9a8a8;
+}
+
+.reply-form-container .submit-reply-container button:hover{
+    opacity: 0.7;
+}
+
+
+/* Commentted message ends */
+
+/* Profile details section starts */
+
+.main-profile-container {
+    position: relative;
+    margin: 2em auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    gap: 2em;
+    padding: 2rem;
+}
+
+.main-profile-container h1{
+    align-self: start;
+    margin: 0 auto;
+    width: 70%;
+    text-transform: uppercase;
+}
+
+
+.user-profile-main-container{
+    display: flex;
+    grid-template-rows: 1fr 1fr;
+    justify-content: space-between;
+    align-items: start;
+    gap: 5em;
+}
+
+.main-profile-container .user-profile-image{
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    width: 45%;
+    max-width: 500px;
+    /* background: red; */
+    padding: 1rem;
+
+}
+
+.main-profile-container .user-profile-image h3{
+    text-transform: uppercase;
+    color: #333;
+}
+
+.user-profile-image .social-icon ul{
+    list-style-type: none;
+    display: flex;
+    gap: 2rem;
+}
+
+.user-profile-image .social-icon ul li a .fa-brands:hover, .social-icon ul li a .fa:hover{
+    color: #000;
+}
+
+.main-profile-container .user-profile-image .profile-image img{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5%;
+}
+
+.main-profile-container .user-profile-image .profile-image{
+    background: #fff;
+    width: 200px;
+    height: 200px;
+    border-radius: 5%;
+}
+
+.main-profile-container .user-profile-image .user-primary-info{
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+    font-size: 1.3rem;
+}
+
+.main-profile-container .user-profile-info{
+    position: sticky;
+    top: 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+    font-size: 1.3rem;
+    width: 60%;
+    max-width: 500px;
+    background: rgb(245, 245, 245);
+    border-left:2px solid #000000 ;
+    padding: 1rem;
+    border-radius: 5%;
+}
+
+.edit-profile-btn a{
+    display: inline-block;
+    padding: 15px;
+    text-decoration: none;
+    color: #fff;
+    background: var(--background-btn);
+    border: 1px solid transparent;
+    border-radius: 5%;
+    margin-top: 1rem;
+    font-size: 1.3rem;
+    transition: all 0.5s;
+}
+
+.edit-profile-btn a:hover{
+    color: #000000;
+    background: transparent;
+    border: 1px solid #ff105f;
+}
+
+.bio strong{
+    display: block;
+    margin-bottom: 1rem;
+}
+
+/* Edit profile */
+
+.edit-profile-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 3rem;
+    width: 80%;
+}
+
+.edit-profile-container .change-profile-photo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.edit-profile-container .change-profile-photo img{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-profile-container .change-profile-photo span{
+    display: block;
+    text-align: center;
+    color: #f00;
+}
+
+.edit-profile-container .change-profile-photo button {
+    background: var(--background-btn);
+    color: #fff;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: 0.5s;
+    border-radius: 5px;
+    display: none;
+}
+
+.edit-profile-container .change-profile-photo button:hover{
+    background: rgb(241, 60, 60);
+}
+
+.edit-profile-container .edit-details{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 40%;
+}
+
+.edit-profile-container .profile-form-control input, .profile-form-control textarea {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    transition: 0.5s;
+}
+
+.edit-profile-container .profile-form-control input:focus, .profile-form-control textarea:focus{
+    outline: 1px solid #000;
+}
+
+.edit-profile-container .profile-form-control label{
+    font-size: 1.2rem;
+}
+
+.edit-profile-container .profile-form-control input[type="submit"]{
+    background: var(--background-btn);
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.edit-profile-container .profile-form-control input[type="submit"]:hover{
+    opacity: 0.8;
+}
+
+.edit-profile-container .profile-form-control textarea{
+    resize: none;
+}
+
+/* Craete post */
+
+/* Profile details section ends */
 
 /* Footer style starts here */
+.scroll-top{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 7em;
+    z-index: 98.2;
+}
+
+.top-btn{
+    display: block;
+    padding: 1em 1.2em;
+    color: #000;
+    text-decoration: none;
+    background: rgb(208, 208, 208);
+    border-radius: 5%;
+    opacity: 0.7;
+    transition: all 0.5s;
+}
+
+.scroll-top a:hover{
+    opacity: 1;
+}
+
 footer{
     padding: 1.5rem;
     background: #000000;
-    /* position: fixed;  */
-    /* bottom: 0;  */
+    position: sticky; 
+    bottom: 0; 
     width: 100%;
     color: #dedede;
     display: flex;

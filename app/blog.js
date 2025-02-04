@@ -36,6 +36,13 @@ app.get('/user/home', routes.userHomeGetRoute);
 // Profile routes
 app.get('/user/profile', routes.userProfileGetRoute);
 
+// Edit profile routes
+app.get('/user/editprofile', routes.editProfileGetRoute);
+app.post('/user/profile', routes.editProfilePostRoute);
+
+// View user profile
+app.get('/user/viewprofile', routes.viewUserProfileGetRoute);
+
 // Write article routes
 app.get('/user/article', routes.articleGetRoute);
 

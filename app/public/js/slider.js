@@ -11,12 +11,12 @@ let images = [];
 
 // Set the values for the iamges to be slided
 
-images[0] = "./img/pic1.png";
-images[1] = "./img/pic2.png";
-images[2] = "./img/pic3.png";
-images[3] = "./img/pic4.jpg";
-images[4] = "./img/header-bg.jpeg";
-images[5] = "./img/header-bg2.avif";
+images[0] = "../img/pic1.png";
+images[1] = "../img/pic2.png";
+images[2] = "../img/pic3.png";
+images[3] = "../img/pic4.jpg";
+images[4] = "../img/header-bg.jpeg";
+images[5] = "../img/header-bg2.avif";
 
 // Function to change the image
 function changeImage() {
