@@ -372,7 +372,7 @@ main .blog-tagline img:hover{
 .blog-summary-title ul li{
     list-style-type:decimal;
     padding: 0.3rem;
-};
+}
 
 .blog-summary-read-more a{
     background: var(--background-btn);
@@ -382,7 +382,10 @@ main .blog-tagline img:hover{
     color: #ffffff;
     font-weight: 500;
     transition: all 0.5s ease;
-    border: 2px solid transparent;
+    border: 2px solid #fff;
+    margin-top: 1rem;
+    display: inline-block;
+
 }
 
 .blog-summary-read-more a:hover{
@@ -1129,8 +1132,6 @@ form .error{
 .edit-profile-container .profile-form-control textarea{
     resize: none;
 }
-
-/* Craete post */
 
 /* Profile details section ends */
 
