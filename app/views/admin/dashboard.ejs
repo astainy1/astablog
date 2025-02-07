@@ -1,0 +1,131 @@
+<%- include('./partials/__header.ejs') %>
+
+<%- include('./partials/__sidebar.ejs') %>
+
+            <!-- Main container -->
+            <section class="main-container">
+
+            <!-- Header starts -->
+            <header class="main-content-container">
+
+                <menu class="menu-search-container">
+                    <span class=" fa fa-bars menu-btn" id="toggle-btn"></span>
+                    <section class="search-icon">
+                        <span class="fa fa-search "></span>
+                        <input type="text" name="search" id="search-box" placeholder="Search ">
+                    </section>
+                </menu>
+
+
+                <section class="profile">
+                    <span id="profile-img">
+                        <img src="./img/profile.png" alt="user">
+                    </span>
+                    <div class="profile-details">
+                        <ul>
+                            <li>
+                                <a href="./admin/profile">Profile</a>
+                            </li>
+                            <li class="profile-divider"></li>
+                            <li>
+                                <a href="#" id="profile-logout">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </section>
+            </header>
+
+            <!-- // Header ends -->
+
+            <!-- Card -->
+             <section class="card-container">
+                <section class="card-heading">
+                    <h4>Dashboard</h4>
+                </section>
+                <section class="card-wrapper">
+
+                    <section class="card files-card">
+                        <section class="card-title">
+                            <h5>Files</h5>
+                            <strong>304</strong>
+                        </section>
+                        <section class="card-body">
+                            <i class="fa fa-file"></i>
+                        </section>
+                    </section>
+
+                    <section class="card audio-card">
+                        <section class="card-title">
+                            <h5>Audio</h5>
+                            <strong>524</strong>
+                        </section>
+                        <section class="card-body">
+                            <i class="fa fa-music"></i>
+                        </section>
+                    </section>
+
+                    <section class="card movies-card">
+                        <section class="card-title">
+                            <h5>Movies</h5>
+                            <strong>67</strong>
+                        </section>
+                        <section class="card-body">
+                            <i class="fa fa-film"></i>
+                        </section>
+                    </section>
+
+                    <section class="card images-card">
+                        <section class="card-title">
+                            <h5>Images</h5>
+                            <strong>920</strong>
+                        </section>
+                        <section class="card-body">
+                            <i class="fa fa-images"></i>
+                        </section>
+                    </section>
+
+                </section>
+             </section>
+             <!-- Card ends -->
+
+             <!-- Chart starts -->
+              <!-- <section class="chart-container">
+                
+                <section class="monthly-upload">
+                    <h4>Monthly Uploads</h4>
+                    <canvas class="chart1" id="chart1">
+
+                    </canvas>
+                </section>
+                
+                <section class="weekly-upload" >
+                    <h4>Weekly Upload</h4>
+                    <canvas class="chart2" id="chart2">
+
+                    </canvas>
+                </section>
+
+              </section> -->
+
+
+              <!-- <section class="chart-container">
+                
+                <section class="yearly-upload">
+                    <h4>Yearly Upload</h4>
+                    <section class="visual-total">
+                        <canvas class="chart4" id="chart4"></canvas>
+                    </section>
+                </section>
+                
+                <section class="upload-summary" >
+                    <h4>Visual Summary</h4>
+                    <section class="visual-total">
+                        <canvas class="chart3" id="chart3"></canvas>
+                    </section>
+                </section>
+
+              </section> -->
+
+              <!-- Chart ends -->
+<%- include('./partials/__footer.ejs') %>

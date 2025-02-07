@@ -16,7 +16,7 @@
     <title><%= title %></title>
 <!-- </head> -->
 <body>
-    <section class="main-container" id="main-container">
+    <section class="main-container" id=":?top">
       <header>
         <section class="nav-container">
           <nav class="header-menu">
@@ -36,14 +36,36 @@
               <li class="logo-white"><img src="./img/logo/logo-white.png" alt=""></li>
             </ul>
             <ul class="header-account-detail">
+              <section class="menu-large">
+                <li><a href="/">Home</a></li>
+                <li>
+                  <a href="/register" id="register-top-btn">Register</a>
+                </li>
+                <li><a href="/login">Login</a></li>
+              </section>
+
+              <li class="drop-down-menu" id="mobile-menu-btn">
+                <a
+                  id="open-menu-btn"
+                  class="fa fa-bars"
+                ></a>
+              </li>
+            </ul>
+          </nav>
+          <menu class="mobile-menu-container">
+            <section class="close-menu" id="close-menu-btn">
+              <span class="fa fa-times"></span>
+            </section>
+            <ul>
               <li><a href="/">Home</a></li>
               <li>
                 <a href="/register" id="register-top-btn">Register</a>
               </li>
               <li><a href="/login">Login</a></li>
             </ul>
-          </nav>
+          </menu>
         </section>
+
         <section class="header-image-container">
           <img name="imageSlider" alt="image slider" />
           <section class="header-title">

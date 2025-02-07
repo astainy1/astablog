@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- External style sheet -->
+     <link rel="stylesheet" href="./css/style.css">
+     <!-- Font awesome -->
+      <link rel="stylesheet" href="./css/fontawesome-free-6.6.0-web/css/fontawesome.min.css">
+      <link rel="stylesheet" href="./css/fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <title>Admin Dashboard | astaDrive</title>
+</head>
+<body>
+
+    <section class="main-wrapper-container">
+
+        <!-- sidebar starts -->
+        <aside class="sidebar-container">
+                <div class="logo">
+                    <h4>
+                        <a href="dashboard.html">astaDrive</a>
+                    </h4>
+                    <section class="mobile-menu" id="close-sidebar">
+                        <span class="fa fa-times"></span>
+                    </section>
+                </div>
+                <div class="divider"></div>
+                
+                <ul class="menu">
+                    <li class="active">
+                        
+                        <a href="dashboard.html">
+                            <i class="fa fa-tachometer-alt"></i>
+                            <span>Dashboard</span> 
+                        </a>
+                    </li>
+                    <li>
+                        
+                        <a href="file.html">
+                            <i class="fa fa-file"></i>
+                            <span>File</span>
+                        </a>
+                    </li>
+                    <li>
+                        
+                        <a href="audio.html">
+                            <i class="fa fa-music"></i>
+                            <span>Audio</span>
+                        </a>
+                    </li>
+                    <li>
+                        
+                        <a href="movie.html">
+                            <i class="fa fa-film"></i>
+                            <span>Movies</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="image.html">
+                            <i class="fa fa-images"></i>
+                            <span>Images</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="uploadfile.html">
+                            <i class="fa fa-upload"></i>
+                            <span>Upload File</span>
+                        </a>
+                    </li>
+                    
+                    <li class="help">
+                        <a href="mailto:astainyharris1@gmail.com">
+                            <i class="fa fa-question-circle"></i>
+                            <span> Help?</span>
+                        </a>
+                    </li>
+                </ul>
+                
+            </aside>
+            <!-- sidebar ends -->
+
+            <!-- Main container -->
+            <section class="main-container">
+
+            <!-- Header starts -->
+            <header class="main-content-container">
+
+                <menu class="menu-search-container">
+                    <span class=" fa fa-bars menu-btn" id="toggle-btn"></span>
+                    <section class="search-icon">
+                        <span class="fa fa-search "></span>
+                        <input type="text" name="search" id="search-box" value="Search ">
+                    </section>
+                </menu>
+
+
+                <section class="profile">
+                    <span id="profile-img">
+                        <img src="./img/profile.png" alt="user">
+                    </span>
+                    <div class="profile-details">
+                        <ul>
+                            <li>
+                                <a href="./profile.html"">Profile</a>
+                            </li>
+                            <li class="profile-divider"></li>
+                            <li>
+                                <a href="#" id="profile-logout">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </section>
+            </header>
+
+            <!-- // Header ends -->
+
+            <!-- Profile section starts -->
+
+                     <section class="profile-wrapper-container">
+                        <section class="profile-content-container">
+
+                            <section class="profile-image-section">
+
+                                <section class="profile-img">
+                                    <label for="file-upload" class="file-upload">
+                                        <img src="./img/profile.png" alt="user image" id="file-upload-preview" srcset="">
+                                        <input type="file" accept="image/jpeg, image/jpg, image/png" name="profileimge" id="file-upload" hidden>
+                                    </label>
+                                    <p id="tip-text">Click on the image above. </p>
+                                </section>
+                                
+                                <section class="add-image-container">
+                                    <button class="delete-image"> Remove </button>
+                                </section>
+
+                            </section>
+
+                            <form class="profile-content-section" id="edit-inputs">
+                                
+                                    <input type="text" id="username" name="username" value="@astainy_23445">
+                                    <input type="text" id="fullname" name="fullname" value="Christian A. Harris">
+                                    <input type="date" id="date" name="date">
+                                    <input type="text" id="address" name="address" value="Logan Town Broad Street">
+                                    <input type="email" name="email" id="email" value="astainyharris1@gmail.com">
+
+                                    <!-- <section class="password-reset">
+                                        <input type="password" id="password" name="password" value="Password">
+                                    </section> -->
+                                    <section class="edit-profile-btn">
+                                        <button type="submit" class="edit-profile"> Update </button>
+                                        <button type="submit" class="cancel"> Cancel </button>
+                                    </section>
+                            </form>
+
+                        </section>
+                    </section>
+
+            <!-- Profile section ends -->
+
+              <!-- Footer starts -->
+               <footer>
+                <p class="footer-info">
+                    <span>System Developed by <a href="https://mail.google.com/mail/?view=cm&fs=1&to=astainyharris1@email.com">Astainy</a></span>
+                </p>
+               </footer>
+               <!-- Footer ends -->
+        </section>
+    </section>
+        <!-- Modal start -->
+
+            <section class="logout-modal-backdrop">
+                <section class="modal-content">
+                    <section class="modal-header">
+                        <h4>Logout</h4>
+                        <span class="fa fa-times" id="times-btn"></span>
+                    </section>
+                    <section class="modal-body">
+                        <p>
+                            Ready to destroy your session? Click "Logout".
+                        </p>
+                    </section>
+                    <section class="modal-footer">
+                        <a href="#" class="logout-btn">Logout</a>
+                        <a class="cancel-btn" id="logout-cancel-btn">Cancel</a>
+                    </section>
+                </section>
+            </section>
+
+        <!-- Modal ends -->
+        
+        <!-- Script -->
+        <script>
+            const profileUpdateBtn = document.querySelector('form');
+
+            const fileInput = document.querySelector('#file-upload');
+            const filePreview = document.querySelector('#file-upload-preview');
+            const deleteImage = document.querySelector('.delete-image');
+
+            // Preview photo to be uploaded
+            
+            fileInput.addEventListener('change', () => {
+                try{
+                    const previewUploadedFile = fileInput.files;
+
+                    console.log(previewUploadedFile);
+
+                    if(previewUploadedFile){
+                        const readUploadedFile = new FileReader();
+                        // console.log(readUploadedFile)
+
+                        readUploadedFile.onload = (e) => {
+                        // console.log(e.target.result);
+
+                        filePreview.setAttribute('src', e.target.result || null);
+                    }
+                        readUploadedFile.readAsDataURL(previewUploadedFile[0]);
+                        deleteImage.style.display = 'block';
+                        document.getElementById('tip-text').style.display = 'none';
+                    }
+
+                    if(previewUploadedFile){
+
+                            const defaultImageURL = './img/profile.png';
+                            
+                            deleteImage.addEventListener('click', () => {
+                               
+                                filePreview.setAttribute('src', defaultImageURL);
+                                
+                                console.log(filePreview);
+                                deleteImage.style.display = 'none';
+                                document.getElementById('tip-text').style.display = 'block';
+
+                            })
+                        }
+                }catch (err){
+
+                        console.log('Trouble previewing file:', err.message);
+                }
+
+            })
+            
+            // Login page to be redirected to dashboard
+            profileUpdateBtn.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                window.location.href = './profile.html';
+            });
+
+            </script>
+            <!-- External script -->
+            <script type="module" src="./js/plugins/node_modules/chart.js/dist/chart.umd.js"></script>
+            <script src="./js/script.js"></script>
+
+</body>
+</html>

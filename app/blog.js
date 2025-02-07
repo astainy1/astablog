@@ -4,10 +4,16 @@ const app = express();
 const port = process.env.PORT || 4100;
 const path = require('path');
 const routes = require('./routes/routers.js');
+const errorRoutes = require('./middleware/error.js');
+const controllers = require('./controllers/auth.js');
 
 // Set up middleware for serving static file
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+//Disable express default X-Powered-By feature
+app.disable('X-Powered-By');
 
 // Listen to request and provide responses
 
@@ -15,20 +21,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', routes.homeGetRoute)
 
 // Login routes
-app.get('/login', routes.loginGetRoute);
-app.post('/user/home', routes.loginPostRoute);
+app.get('/login', controllers.loginGetRoute);
+app.post('/user/home', controllers.loginPostRoute);
 
 // Register routes
-app.get('/register', routes.registerGetRoute);
-app.post('/register', routes.registerPostRoute);
+app.get('/register', controllers.registerGetRoute);
+app.post('/register', controllers.registerPostRoute);
 
 // Account recovery routes
-app.get('/recoveraccount', routes.accoutRecoverGetRoute)
-app.post('/reset', routes.accoutRecoverPostRoute)
+app.get('/recoveraccount', controllers.accoutRecoverGetRoute)
+app.post('/reset', controllers.accoutRecoverPostRoute)
 
 // Password reset routes
-app.get('/reset', routes.resetPasswordGetRoute)
-app.post('/login', routes.resetPasswordPostRoute)
+app.get('/reset', controllers.resetPasswordGetRoute)
+app.post('/login', controllers.resetPasswordPostRoute)
 
 // Logged in user home routes 
 app.get('/user/home', routes.userHomeGetRoute);
@@ -50,16 +56,21 @@ app.get('/user/article', routes.articleGetRoute);
 app.get('/post', routes.viewpostGetRoute);
 
 
+// Admin Dashboard routes
+app.get('/astaAdmin', controllers.adminGetRoute);
 
+// Status 404 Route
+app.use(errorRoutes.notFoundGetRoute);
 
-
+// Status 500 Route
+app.use(errorRoutes.serverErrorRoute)
 
 // Run express server and configure to list on defined port
 app.listen(port, (err) => {
     if(err){
         console.log(`Sorry, there is an error: ${err.message}`);
     }else{
-        console.log(`App is listening on port: (http://localhost:${port})
-        Press Ctrl+C to stop the server`);
+        console.log(`Server is listening on port: (http://localhost:${port})
+        Press Ctrl + C to stop the server...`);
     }
 });

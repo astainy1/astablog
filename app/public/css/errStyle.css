@@ -1,0 +1,80 @@
+
+:root{
+    --background-btn: linear-gradient(to right, #ff105f, #ff00a6);
+}
+
+.header-image-container{
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.header-title-404{
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex: 1 0 100%;
+
+}
+
+.header-title-404 h2{
+    font-size: 3em;
+    color: #fff;
+}
+
+.error-container{
+    display: flex;
+    flex: 1 0 100%;
+    margin: 0 auto 0 auto;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'open sans', sans-serif;
+}
+
+.error-container h1{
+    display: block;
+    font-size: 5em;
+    font-weight: 800;
+    margin-top: 1em;
+}
+
+.error-container p{
+    font-size: 1.5rem;
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #444
+}
+
+.error-container .back-home a{
+    text-decoration: none;
+    background: var(--background-btn);
+    color: #fff;
+    padding: 1rem;
+    display: block;
+    border: 1px solid transparent;
+    border-radius: 5%;
+    transition: all 0.5s;
+}
+
+.error-container .back-home a:hover, .back-home a:focus{
+    border: 1px solid #ff105f;
+    background: transparent;
+    color: #000;
+}
+

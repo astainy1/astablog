@@ -32,7 +32,7 @@
     <title><%= title %></title>
     <!-- </head> -->
     <body style="background: #f9f9f9; font-family: 'open sans', sans-serif;">
-      <section class="main-container" >
+      <section class="main-container" id=":?top">
         <header>
           <section class="nav-container">
             <nav class="header-menu">
@@ -54,16 +54,44 @@
                 </li>
               </ul>
               <ul class="header-account-detail">
-                <li><a href="/user/home">Home</a></li>
-                <li class="drop-down-menu" id="show-menu-btn">
+                <section class="menu-large">
+                  <li><a href="/user/home">Home</a></li> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                  <li class="drop-down-menu" id="show-menu-btn">
+                    <a
+                      id="register-top-btn"
+                      class="fa fa-user"
+                    ></a>
+                  </li>
+                </section>
+
+                <li class="drop-down-menu" id="mobile-menu-btn">
                   <a
-                    href="#"
-                    id="register-top-btn"
-                    class="fa fa-user"
+                    
+                    id="open-menu-btn"
+                    class="fa fa-bars"
                   ></a>
                 </li>
               </ul>
             </nav>
+            <menu class="mobile-menu-container">
+              <section class="close-menu" id="close-menu-btn">
+                <span class="fa fa-times"></span>
+              </section>
+              <ul>
+                <li>
+                  <a href="/user/home">Home</a>
+                </li>
+                <li>
+                  <a href="/user/profile">Profile</a>
+                </li>
+                <li>
+                  <a href="/user/article">Write</a>
+                </li>
+                <li>
+                  <a href="/login">Logout</a>
+                </li>
+              </ul>
+            </menu>
           </section>
             <ul class="drop-down-items" id="menu">
               <li>

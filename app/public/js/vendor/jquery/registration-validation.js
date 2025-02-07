@@ -27,18 +27,26 @@ $(function () {
       },
       password: {
         required: true,
-        minlength: 5,
+        minlength: 8,
+        strongPassword: true,
       },
     },
     // Specify validation error messages
     messages: {
-      username: "This field is required!",
+
+      username: "This field is required.",
       registercheckbox: "Agree to terms.",
+      
       password: {
-        required: "This field is required!",
+        required: "This field is required.",
         minlength: "Password must be at least 5 characters long.",
+        strongPassword: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
       },
-      email: "Enter a valid email.",
+
+      email: {
+        required: "This field is required.",
+        email: "Enter a valid email.",
+      } 
       // checkbox: 'You must agree to this terms and conditions.'
     },
     // Make sure the form is submitted to the destination defined

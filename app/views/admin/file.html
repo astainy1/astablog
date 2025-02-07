@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- External style sheet -->
+     <link rel="stylesheet" href="./css/style.css">
+     <!-- Font awesome -->
+      <link rel="stylesheet" href="./css/fontawesome-free-6.6.0-web/css/fontawesome.min.css">
+      <link rel="stylesheet" href="./css/fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <title>Admin Dashboard | astaDrive</title>
+</head>
+<body>
+
+    <section class="main-wrapper-container">
+
+        <!-- sidebar starts -->
+        <aside class="sidebar-container">
+                <div class="logo">
+                    <h4>
+                        <a href="dashboard.html">astaDrive</a>
+                    </h4>
+                    <section class="mobile-menu" id="close-sidebar">
+                        <span class="fa fa-times"></span>
+                    </section>
+                </div>
+                <div class="divider"></div>
+                
+                <ul class="menu">
+                    <li class="active">
+                        
+                        <a href="dashboard.html">
+                            <i class="fa fa-tachometer-alt"></i>
+                            <span>Dashboard</span> 
+                        </a>
+                    </li>
+                    <li>
+                        
+                        <a href="file.html">
+                            <i class="fa fa-file"></i>
+                            <span>File</span>
+                        </a>
+                    </li>
+                    <li>
+                        
+                        <a href="audio.html">
+                            <i class="fa fa-music"></i>
+                            <span>Audio</span>
+                        </a>
+                    </li>
+                    <li>
+                        
+                        <a href="movie.html">
+                            <i class="fa fa-film"></i>
+                            <span>Movies</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="image.html">
+                            <i class="fa fa-images"></i>
+                            <span>Images</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="uploadfile.html">
+                            <i class="fa fa-upload"></i>
+                            <span>Upload File</span>
+                        </a>
+                    </li>
+                    
+                    <li class="help">
+                        <a href="mailto:astainyharris1@gmail.com">
+                            <i class="fa fa-question-circle"></i>
+                            <span> Help?</span>
+                        </a>
+                    </li>
+                </ul>
+                
+            </aside>
+            <!-- sidebar ends -->
+
+            <!-- Main container -->
+            <section class="main-container">
+
+            <!-- Header starts -->
+            <header class="main-content-container">
+
+                <menu class="menu-search-container">
+                    <span class=" fa fa-bars menu-btn" id="toggle-btn"></span>
+                    <section class="search-icon">
+                        <span class="fa fa-search "></span>
+                        <input type="text" name="search" id="search-box" placeholder="Search ">
+                    </section>
+                </menu>
+
+
+                <section class="profile">
+                    <span id="profile-img">
+                        <img src="./img/profile.png" alt="user">
+                    </span>
+                    <div class="profile-details">
+                        <ul>
+                            <li>
+                                <a href="./profile.html"">Profile</a>
+                            </li>
+                            <li class="profile-divider"></li>
+                            <li>
+                                <a href="#" id="profile-logout">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </section>
+            </header>
+
+            <!-- // Header ends -->
+
+            <!-- Card -->
+             <section class="card-container">
+                
+                <section class="card-heading">
+                    <h4>Files Uploaded</h4>
+                </section>
+                <section class="card-wrapper">
+
+
+             </section>
+
+              <!-- Footer starts -->
+               <footer>
+                <p class="footer-info">
+                    <span>System Developed by <a href="https://mail.google.com/mail/?view=cm&fs=1&to=astainyharris1@email.com">Astainy</a></span>
+                </p>
+               </footer>
+               <!-- Footer ends -->
+        </section>
+    </section>
+        <!-- Modal start -->
+
+            <section class="logout-modal-backdrop">
+                <section class="modal-content">
+                    <section class="modal-header">
+                        <h4>Logout</h4>
+                        <span class="fa fa-times" id="times-btn"></span>
+                    </section>
+                    <section class="modal-body">
+                        <p>
+                            Ready to destroy your session? Click "Logout".
+                        </p>
+                    </section>
+                    <section class="modal-footer">
+                        <a href="#" class="logout-btn">Logout</a>
+                        <a class="cancel-btn" id="logout-cancel-btn">Cancel</a>
+                    </section>
+                </section>
+            </section>
+
+        <!-- Modal ends -->
+        
+    <!-- External script -->
+    <script type="module" src="./js/plugins/node_modules/chart.js/dist/chart.umd.js"></script>
+     <script src="./js/script.js"></script>
+
+</body>
+</html>
