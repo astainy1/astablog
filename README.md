@@ -1,3 +1,5 @@
+*** February 7, 2015 ***
+
 # astablog
 
 ### A web application that displays information posted to the public by contributors around the global community. Information posted on this website is available to all after being scrutinized and vetted by the Administrative Association of the platform. You are encouraged to contribute as many times as you wish just by creating an account. 

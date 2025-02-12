@@ -1,7 +1,9 @@
+// Middleware to throw error
+
 const express = require('express');
 const app = express();
 
-exports.notFoundGetRoute = (req, res, next) => {
+const notFound = function notFoundGetRoute(req, res, next){
 
     res.status(404);
     res.render('404', {title: 'Not Found | astaBlog'});
@@ -9,7 +11,7 @@ exports.notFoundGetRoute = (req, res, next) => {
     return next();
 }
 
-exports.serverErrorRoute = (err, req, res, next) => {
+const serverError = function serverErrorRoute(err, req, res, next){
     
     if(err){
         console.log(`Server Error: ${err.message}`);
@@ -20,4 +22,10 @@ exports.serverErrorRoute = (err, req, res, next) => {
     
     return next();
 
+}
+
+
+module.exports = {
+    notFound,
+    serverError
 }

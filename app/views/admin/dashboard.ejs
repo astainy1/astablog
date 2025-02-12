@@ -1,40 +1,7 @@
 <%- include('./partials/__header.ejs') %>
 
 <%- include('./partials/__sidebar.ejs') %>
-
-            <!-- Main container -->
-            <section class="main-container">
-
-            <!-- Header starts -->
-            <header class="main-content-container">
-
-                <menu class="menu-search-container">
-                    <span class=" fa fa-bars menu-btn" id="toggle-btn"></span>
-                    <section class="search-icon">
-                        <span class="fa fa-search "></span>
-                        <input type="text" name="search" id="search-box" placeholder="Search ">
-                    </section>
-                </menu>
-
-
-                <section class="profile">
-                    <span id="profile-img">
-                        <img src="./img/profile.png" alt="user">
-                    </span>
-                    <div class="profile-details">
-                        <ul>
-                            <li>
-                                <a href="./admin/profile">Profile</a>
-                            </li>
-                            <li class="profile-divider"></li>
-                            <li>
-                                <a href="#" id="profile-logout">Logout</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                </section>
-            </header>
+<%- include('./partials/__navbar.ejs') %>
 
             <!-- // Header ends -->
 
@@ -47,41 +14,41 @@
 
                     <section class="card files-card">
                         <section class="card-title">
-                            <h5>Files</h5>
+                            <h5>Users</h5>
                             <strong>304</strong>
                         </section>
                         <section class="card-body">
-                            <i class="fa fa-file"></i>
+                            <i class="fa fa-users"></i>
                         </section>
                     </section>
 
                     <section class="card audio-card">
                         <section class="card-title">
-                            <h5>Audio</h5>
+                            <h5>Article</h5>
                             <strong>524</strong>
                         </section>
                         <section class="card-body">
-                            <i class="fa fa-music"></i>
+                            <i class="fa fa-book"></i>
                         </section>
                     </section>
 
                     <section class="card movies-card">
                         <section class="card-title">
-                            <h5>Movies</h5>
+                            <h5>Comments</h5>
                             <strong>67</strong>
                         </section>
                         <section class="card-body">
-                            <i class="fa fa-film"></i>
+                            <i class="fa fa-comments"></i>
                         </section>
                     </section>
 
                     <section class="card images-card">
                         <section class="card-title">
-                            <h5>Images</h5>
+                            <h5>Reply</h5>
                             <strong>920</strong>
                         </section>
                         <section class="card-body">
-                            <i class="fa fa-images"></i>
+                            <i class="fa fa-reply"></i>
                         </section>
                     </section>
 

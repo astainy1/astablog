@@ -1,0 +1,102 @@
+<%- include('./partials/__header.ejs') %>
+
+<%- include('./partials/__sidebar.ejs') %>
+<%- include('./partials/__navbar.ejs') %>
+
+            <!-- Profile section starts -->
+
+                     <section class="profile-wrapper-container">
+                        <section class="profile-content-container">
+
+                            <section class="profile-image-section">
+
+                                <section class="profile-img">
+                                    <label for="file-upload" class="file-upload">
+                                        <img src="../admin/img/profile.png" alt="user image" id="file-upload-preview" srcset="">
+                                        <input type="file" accept="image/jpeg, image/jpg, image/png" name="profileimge" id="file-upload" hidden>
+                                    </label>
+                                    <p id="tip-text">Click on the image above. </p>
+                                </section>
+                                
+                                <section class="add-image-container">
+                                    <button class="delete-image"> Remove </button>
+                                </section>
+
+                            </section>
+
+                            <form class="profile-content-section" id="edit-inputs">
+                                
+                                    <input type="text" id="username" name="username" value="@astainy_23445">
+                                    <input type="text" id="fullname" name="fullname" value="Christian A. Harris">
+                                    <input type="date" id="date" name="date">
+                                    <input type="text" id="address" name="address" value="Logan Town Broad Street">
+                                    <input type="email" name="email" id="email" value="astainyharris1@gmail.com">
+
+                                    <!-- <section class="password-reset">
+                                        <input type="password" id="password" name="password" value="Password">
+                                    </section> -->
+                                    <section class="edit-profile-btn">
+                                        <button type="submit" class="edit-profile"> Update </button>
+                                        <button type="button" class="cancel"> <a href="/asta-admin/profile" style="color:#fff; text-decoration: none;">Cancel</a> </button>
+                                    </section>
+                            </form>
+
+                        </section>
+                    </section>
+
+            <!-- Profile section ends -->
+
+        
+        <!-- Script -->
+        <script>
+            const profileUpdateBtn = document.querySelector('form');
+
+            const fileInput = document.querySelector('#file-upload');
+            const filePreview = document.querySelector('#file-upload-preview');
+            const deleteImage = document.querySelector('.delete-image');
+
+            // Preview photo to be uploaded
+            
+            fileInput.addEventListener('change', () => {
+                try{
+                    const previewUploadedFile = fileInput.files;
+
+                    console.log(previewUploadedFile);
+
+                    if(previewUploadedFile){
+                        const readUploadedFile = new FileReader();
+                        // console.log(readUploadedFile)
+
+                        readUploadedFile.onload = (e) => {
+                        // console.log(e.target.result);
+
+                        filePreview.setAttribute('src', e.target.result || null);
+                    }
+                        readUploadedFile.readAsDataURL(previewUploadedFile[0]);
+                        deleteImage.style.display = 'block';
+                        document.getElementById('tip-text').style.display = 'none';
+                    }
+
+                    if(previewUploadedFile){
+
+                            const defaultImageURL = '../admin/img/profile.png';
+                            
+                            deleteImage.addEventListener('click', () => {
+                               
+                                filePreview.setAttribute('src', defaultImageURL);
+                                
+                                console.log(filePreview);
+                                deleteImage.style.display = 'none';
+                                document.getElementById('tip-text').style.display = 'block';
+
+                            })
+                        }
+                }catch (err){
+
+                        console.log('Trouble previewing file:', err.message);
+                }
+
+            })
+
+            </script>
+<%- include('./partials/__footer.ejs') %>

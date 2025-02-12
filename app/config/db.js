@@ -1,7 +1,9 @@
-const express = require('express');
-const app = express;
+// Database connection setup
+
 const mySQL = require('mysql2');
-require('dotenv').config; //Using environment variables
+
+//Using environment variables
+require('dotenv').config();
 
 const dbConnection = mySQL.createConnection(
     {
@@ -13,10 +15,12 @@ const dbConnection = mySQL.createConnection(
 );
 
 dbConnection.connect((err) => {
+    // console.log(process.env.DB_USER)
     if(err){
         console.log('Error connecting to database: ' + err.message);
+        return;
     }else{
-        console.log(`Successfully connected to database`)
+        console.log(`Successfully connected to database: ${process.env.DB_DATABASE}`);
     }
 });
 

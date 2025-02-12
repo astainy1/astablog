@@ -1,76 +1,61 @@
 const express = require('express');
 const app = express();
- require('dotenv').config();
+const flash = require('connect-flash');
+require('dotenv').config();
 const port = process.env.PORT || 4100;
 const path = require('path');
-const routes = require('./routes/routers.js');
-const errorRoutes = require('./middleware/error.js');
-const controllers = require('./controllers/auth.js');
+const bodyParser = require('body-parser');
+const session = require('express-session'); 
 
-// Set up middleware for serving static file
-app.set('view engine', 'ejs');
+//Custom modules
+const routes = require('./routes/index.js');
+const { notFound, serverError } = require('./middlewares/error.js');
+const authRoutes = require('./routes/auth.js');
+
+// Set up middleware for serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Set up view engine
+app.set('view engine', 'ejs');
 
-//Disable express default X-Powered-By feature
-app.disable('X-Powered-By');
+// Set up utility middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-// Listen to request and provide responses
+// Set up session middleware
+app.use(session({
+    secret: process.env.SESSION_SCRET_KEY,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {secure: false},
+}))
 
-// Default home routes
-app.get('/', routes.homeGetRoute)
+// app.use(session({
+//     secret: process.env.SESSION_SCRET_KEY,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false } // Set to true in production with HTTPS
+// }));
 
-// Login routes
-app.get('/login', controllers.loginGetRoute);
-app.post('/user/home', controllers.loginPostRoute);
+// Set up flash middleware 
+app.use(flash());
 
-// Register routes
-app.get('/register', controllers.registerGetRoute);
-app.post('/register', controllers.registerPostRoute);
+//Use auth routes
+app.use(authRoutes);
 
-// Account recovery routes
-app.get('/recoveraccount', controllers.accoutRecoverGetRoute)
-app.post('/reset', controllers.accoutRecoverPostRoute)
+// Use index routes
+app.use(routes);
 
-// Password reset routes
-app.get('/reset', controllers.resetPasswordGetRoute)
-app.post('/login', controllers.resetPasswordPostRoute)
+// Error middleware
+app.use(notFound);
+app.use(serverError);
 
-// Logged in user home routes 
-app.get('/user/home', routes.userHomeGetRoute);
-
-// Profile routes
-app.get('/user/profile', routes.userProfileGetRoute);
-
-// Edit profile routes
-app.get('/user/editprofile', routes.editProfileGetRoute);
-app.post('/user/profile', routes.editProfilePostRoute);
-
-// View user profile
-app.get('/user/viewprofile', routes.viewUserProfileGetRoute);
-
-// Write article routes
-app.get('/user/article', routes.articleGetRoute);
-
-// View Post routes
-app.get('/post', routes.viewpostGetRoute);
-
-
-// Admin Dashboard routes
-app.get('/astaAdmin', controllers.adminGetRoute);
-
-// Status 404 Route
-app.use(errorRoutes.notFoundGetRoute);
-
-// Status 500 Route
-app.use(errorRoutes.serverErrorRoute)
-
-// Run express server and configure to list on defined port
+// Run express server and configure to listen on defined port
 app.listen(port, (err) => {
-    if(err){
+    if (err) {
         console.log(`Sorry, there is an error: ${err.message}`);
-    }else{
-        console.log(`Server is listening on port: (http://localhost:${port})
-        Press Ctrl + C to stop the server...`);
+    } else {
+        console.log(`App is listening on port: http://localhost:${port}
+        Press Ctrl+C to stop the server`);
     }
 });
