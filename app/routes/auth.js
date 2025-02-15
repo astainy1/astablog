@@ -62,7 +62,7 @@ router.post("/login", (req, res) => {
         }
 
         if (validPassword) {
-          // console.log(userID);
+          // console.log(userID.is_admin);
             // Check if logged-in user is an Admin or regular user
           if (userID.is_admin === 1) {
 
@@ -70,9 +70,14 @@ router.post("/login", (req, res) => {
               id: userID.id,
               username: userID.username,
               email: userID.email,
+              isAdmin: userID.is_admin,
+              profilePicture: userID.profile_picture
             };
 
             console.log(`User ${userID.username} has successfully logged in!`);
+
+            // console.log('Is Admin: ', userID.is_admin);
+            console.log(`User details: ${userID.profile_picture} `);
 
             req.flash("success", "You have successfully logged in!");
             res.redirect(303, "/asta-admin");
@@ -83,9 +88,13 @@ router.post("/login", (req, res) => {
               id: userID.id,
               username: userID.username,
               email: userID.email,
+              isAdmin: userID.is_admin,
+              profilePicture: userID.profile_picture
             };
 
             console.log(`User ${userID.username} has successfully logged in!`);
+            // console.log('Is Admin: ', userID.is_admin);
+            console.log(`User details: ${userID.profile_picture} `);
 
             req.flash("success", "You have successfully logged in!");
             res.redirect(303, "/home");

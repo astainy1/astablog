@@ -78,3 +78,29 @@
     color: #000;
 }
 
+@media  screen and (max-width: 768px){
+
+    .header-image-container .header-title-404 h2{
+        font-size: 2rem;
+    }
+    .contact-email, .contact-number{
+        display: none !important;
+    }
+
+    .error-container h1{
+        font-size: 4rem;
+    }
+
+    .error-container p{
+        font-size: 1rem;
+        word-wrap: break-word;
+        line-height: 30px;
+        width: 80%;
+    }
+
+    .back-home{
+
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+}

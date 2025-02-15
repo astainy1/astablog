@@ -55,12 +55,11 @@
               </ul>
               <ul class="header-account-detail">
                 <section class="menu-large">
-                  <li><a href="/user/home">Home</a></li> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                  <li><a href="/home">Home</a></li> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                   <li class="drop-down-menu" id="show-menu-btn">
-                    <a
-                      id="register-top-btn"
-                      class="fa fa-user"
-                    ></a>
+                    <a href="#"
+                      id="register-top-btn" style="text-transform: capitalize;"
+                    ><%= userInfo %> &nbsp; <i class="fa fa-caret-down "></i></a>
                   </li>
                 </section>
 
@@ -79,13 +78,13 @@
               </section>
               <ul>
                 <li>
-                  <a href=/home">Home</a>
+                  <a href="/home">Home</a>
                 </li>
                 <li>
                   <a href="/user/profile">Profile</a>
                 </li>
                 <li>
-                  <a href="/user/article">Write</a>
+                  <a href="/create/article">Write</a>
                 </li>
                 <li>
                   <a href="/logout">Logout</a>
@@ -98,7 +97,7 @@
                 <a href="/user/profile">Profile</a>
               </li>
               <li>
-                <a href="/user/article">Write</a>
+                <a href="/create/article">Write</a>
               </li>
               <li>
                 <a href="/logout">Logout &rarr;</a>

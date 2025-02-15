@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Linking custom style sheet -->
     <link rel="stylesheet" href="../css/main.css" />
+    
+    <link rel="stylesheet" href="../css/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 
+    <link rel="stylesheet" href="../css/summernote-0.9.0-dist/summernote.min.css">
     <!-- Font Awesome icon link -->
     <!-- <link
       rel="stylesheet"
@@ -14,6 +17,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     /> -->
+
     <link
       rel="stylesheet"
       href="../css/fontawesome-free-6.6.0-web/css/all.min.css"
@@ -45,18 +49,16 @@
               <ul class="header-account-detail">
                 <section class="menu-large">
                   <li><a href="/home">Home</a></li> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            
                   <li class="drop-down-menu" id="show-menu-btn">
                     <a href="#"
-                      id="register-top-btn"
-                      class="fa fa-user"
-                    ></a>
+                      id="register-top-btn" style="text-transform: capitalize;"
+                    ><%= userInfo %> &nbsp; <i class="fa fa-caret-down "></i></a>
                   </li>
                 </section>
 
                 <li class="drop-down-menu" id="mobile-menu-btn">
-                  <a
-                    
-                    id="open-menu-btn"
+                  <a id="open-menu-btn"
                     class="fa fa-bars"
                   ></a>
                 </li>
@@ -74,7 +76,7 @@
                   <a href="/user/profile">Profile</a>
                 </li>
                 <li>
-                  <a href="/user/article">Write</a>
+                  <a href="/create/article">Write</a>
                 </li>
                 <li>
                   <a href="/logout">Logout</a>
@@ -87,7 +89,7 @@
                 <a href="/user/profile">Profile</a>
               </li>
               <li>
-                <a href="/user/article">Write</a>
+                <a href="/create/article">Write</a>
               </li>
               <li>
                 <a href="/logout">Logout &rarr;</a>

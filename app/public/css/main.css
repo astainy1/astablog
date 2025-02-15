@@ -1126,7 +1126,7 @@ form .error{
     width: 40%;
 }
 
-.edit-profile-container .profile-form-control input, .profile-form-control textarea {
+.edit-profile-container .profile-form-control input, .profile-form-control textarea{
     padding: 1rem;
     border: 1px solid #ccc;
     width: 100%;
@@ -1134,9 +1134,29 @@ form .error{
     border-radius: 5px;
     font-size: 1.2rem;
     transition: 0.5s;
+    color: #626262;
 }
 
-.edit-profile-container .profile-form-control input:focus, .profile-form-control textarea:focus{
+.article-title-container{
+    padding: 0.5rem;
+    width: 100%;
+}
+.article-title-container #article-title{
+    padding: 1rem;
+    border: none;
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 5px;
+    font-size: 3rem;
+    font-weight: 700;
+    transition: 0.5s;
+    color: #232323;
+    resize: none !important;
+}
+
+
+.edit-profile-container .profile-form-control input:focus, .profile-form-control textarea:focus, .article-title-container #article-title:focus{
     outline: 1px solid #000;
 }
 
@@ -1158,6 +1178,7 @@ form .error{
 
 .edit-profile-container .profile-form-control textarea{
     resize: none;
+    color: #626262;
 }
 
 /* Profile details section ends */
@@ -1433,19 +1454,6 @@ footer .icons a .fa-brands:hover{
     .commentted-message-container .author-details .social-icon a{
         font-size: 1em;
     }
-
-
-    /* .recent-post-main-container{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        gap: 2rem;
-        padding: 3rem;
-        box-shadow: -0.4em -0.4em 0.2em 0.1em rgba(0,0,0,0.02),
-        0.2em 0em 0.1em 0.1em rgba(0,0,0,0.01);
-        overflow: hidden;
-    } */
     
     .recent-post-main-container h3{
         font-size: 1em;
@@ -1518,6 +1526,21 @@ footer .icons a .fa-brands:hover{
     }
     .edit-profile-container .profile-form-control label{
         font-size: 1rem;
+    }
+
+
+    .article-title-container #article-title{
+        font-size: 1.6rem;
+    }
+
+    .editor-form-container .publish-article-btn{
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+        font-weight: 500;
+    }
+
+    .editor-form-container .heading{
+        font-size: 1.9rem;
     }
 
     .scroll-top{
@@ -1605,6 +1628,7 @@ footer .icons a .fa-brands:hover{
         text-align: right;
         /* margin-right: 1rem; */
         padding: 0.6rem 1rem ;
+        font-size: 1.45rem;
         transition: 0.3s;
     }
 

@@ -4,12 +4,15 @@
       <!-- Header ends here--->
        
       <section class="main-profile-container"  id="main-container"style="background: #f9f9f9; overflow: hidden;">
-        <!-- Sidebar content start -->
-        <form method="post" class="edit-profile-container">
+
+        <span style="color: red; text-align: center;font-size: 0.9rem;"><%= message %> </span>
+
+
+        <form method="post" class="edit-profile-container" enctype="multipart/form-data">
             <h3> Edit Profile</h3>
             <section class="change-profile-photo" >
                 <label for="file">
-                    <img  src="../img/author/author8.jpg" alt="author-profile" id="photo-preview" srcset="">
+                    <img  src="<%= userDetails && userDetails.profile_picture ? '../uploads/profile/' + userDetails.profile_picture : '../img/author/default_profile_image.jpg' %>" alt="<%= userDetails.username %> profile image" id="photo-preview" srcset="">
                     <input type="file" name="profilePhoto"  id="file" accept=".jpg, .jpeg, .png" hidden>
                 </label>
                 <span id="hint">Click on the image</span>
@@ -20,38 +23,38 @@
 
                 <section class="profile-form-control">
                     <label for="user-name">Username</label>
-                    <input type="text" name="uName" id="user-name">
+                    <input type="text" name="username" id="user-name" value="<%= userDetails.username %>">
                 </section>
                 
                 <section class="profile-form-control">
                     <label for="full-name">Full Name</label>
-                    <input type="text" name="fName" id="Full-name">
+                    <input type="text" name="full_name" id="Full-name" value="<%= userDetails.full_name %>">
                 </section>
 
                 <section class="profile-form-control">
                     <label for="facebook-id">Facebook ID</label>
-                    <input type="url" name="socialmediaID" id="facebook-id">
+                    <input type="url" name="facebookID" id="facebook-id">
                 </section>
 
                 <section class="profile-form-control">
                     <label for="twitter-id">Twitter ID</label>
-                    <input type="url" name="socialmediaID" id="twitter-id">
+                    <input type="url" name="twitterID" id="twitter-id">
                 </section>
 
                 <section class="profile-form-control">
                     <label for="facebook-id">Email ID</label>
-                    <input type="url" name="socialmediaID" id="facebook-id">
+                    <input type="url" name="profilemail" id="facebook-id">
                 </section>
 
                 <section class="profile-form-control">
                     <label for="address">Address</label>
-                    <input type="text" name="address" id="address">
+                    <input type="text" name="location" id="address" value="<%= userDetails.location %>">
                 </section>
 
                 <section class="profile-form-control">
                     <label for="bio">Bio</label>
                     <!-- <textarea name="bio" id="bio" col="6" row="6"></textarea> -->
-                    <textarea name="bio" id="" cols="25" rows="10"></textarea>
+                    <textarea name="bio" id="" cols="10" rows="4" ><%= userDetails.bio %></textarea>
 
                 </section>
 
@@ -61,8 +64,6 @@
             </section>
         </form>
         <!-- <section class="user-profile-main-container">
-
-
           
         </section> -->
 
@@ -100,7 +101,7 @@
             // let currentFile = newFile[0].name;
             // newSRC = `../img/author/author8.jpg`;
             // {currentFile} =  newSRC 
-            photoPlaceholder.setAttribute('src', `../img/author/author8.jpg`);
+            photoPlaceholder.setAttribute('src', `../img/author/default_profile_image.jpg`);
             console.log('File is removed: ', newFile[0].name);
         })
     }

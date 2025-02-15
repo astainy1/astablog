@@ -14,7 +14,7 @@ const notFound = function notFoundGetRoute(req, res, next){
 const serverError = function serverErrorRoute(err, req, res, next){
     
     if(err){
-        console.log(`Server Error: ${err.message}`);
+        console.log(`Server Error: ${err.stack}`);
     }
 
     res.status(500);

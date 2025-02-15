@@ -5,17 +5,27 @@
        
       <section class="main-profile-container"  id="main-container"style="background: #f9f9f9;">
         <!-- Sidebar content start -->
-        <h1> </h1>
+        <span style="color: red; text-align: center;font-size: 0.9rem;"><%= message %> </span>
 
         <section class="user-profile-main-container">
 
+          <% for (let userDetails of userDetail) { %>
           <section class="user-profile-image">
             <section class="profile-image">
-              <img src="../img/author/author8.jpg" alt="User profile image">
+
+              <img src="<%= userDetails && userDetails.profile_picture ? '../uploads/profile/' + userDetails.profile_picture : '../img/author/default_profile_image.jpg' %>"  alt="<%= userDetails.username %> profile image">
+
             </section>
-            <section class="user-primary-info">            
-              <p><strong>Full Name</strong> <br> Christian Astainy Harris</p>
-              <p><strong>Username</strong> <br> @Astainy</p>
+            <section class="user-primary-info">      
+              
+              <% if(userDetails.full_name !== null) { %>
+              <p><strong>Full Name</strong> <br> <%= userDetails.full_name %> </p>
+              <% } else { %>
+                <p><strong><a href="/edit/profile" style="font-weight: 300; text-decoration: none;">Add Full Name</a></strong> <br> </p>
+              <% } %>
+
+              <p><strong>Username</strong> <br> @<%= userDetails.username %></p>
+
               <section><strong>Profession</strong> <br><span>Graphic Designer</span> | <span>Web Developer</span></section>
             </section>
             
@@ -26,7 +36,7 @@
                   ><i class="fa-brands fa-facebook-f"></i></a
                 ></li>
                 <li>
-                  <a href="#"
+                  <a href="mailto:<%= userDetails.email%>"
                   ><i class="fa fa-envelope"></i></a
                 ></li>
                 <li>
@@ -44,13 +54,22 @@
           <section class="user-profile-info">
 
             <section class="bio">
+              <% if(userDetails.bio !== null) { %>
               <strong>Bio</strong>
-              <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis nemo asperiores similique eius ipsam magni sunt, ratione consequatur, voluptatem incidunt repudiandae nesciunt accusamus quidem eum voluptate eveniet sequi ducimus odio?</p>
+              <p><%= userDetails.bio %></p>
+              <% } else { %>
+                
+              <p><strong><a href="/edit/profile" style="font-weight: 300; text-decoration: none;">Add Bio</a></strong> </p>
+              <% } %>
             </section>
             
-            <p><strong>Address</strong> <br><address>Logan Town Broad Street, Bushrod Island, Monrovia, Liberia</address></p>
+            <% if(userDetails.location !== null ) { %>
+            <p><strong>Address</strong> <br><address><%= userDetails.location %></address></p>
+            <% } else { %>
+              <p><strong><a href="/edit/profile" style="font-weight: 300; text-decoration: none;">Add Address</a></strong> </p>
+            <% } %>
           </section>
-          
+          <% } %>
         </section>
 
       </section>
