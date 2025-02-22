@@ -5,55 +5,86 @@
        
       <section class="main-profile-container"  id="main-container"style="background: #f9f9f9;">
         <!-- Sidebar content start -->
-
+        <% if(viewUserDetails) { %>
         <section class="user-profile-main-container">
           <section class="user-profile-image">
             <!-- <h3> Astainy Profile</h3> -->
             <section class="profile-image">
-              <img src="../img/author/author8.jpg" alt="User profile image">
+
+              <% if(viewUserDetails && viewUserDetails.profile_picture) { %>
+                <img src="<%= '../uploads/profile/' + viewUserDetails.profile_picture %>" alt="<%= viewUserDetails.username %> Image">
+            <% }else { %>
+        
+                <img src="../img/author/default_profile_image.jpg" alt="Author Image">
+                
+            <% } %>
+
             </section>
-            <section class="user-primary-info">            
-              <p><strong>Full Name</strong> <br> Christian Astainy Harris</p>
-              <p><strong>Username</strong> <br> @Astainy</p>
-              <section><strong>Profession</strong> <br><span>Graphic Designer</span> | <span>Web Developer</span></section>
+            <section class="user-primary-info">  
+              <% if(viewUserDetails.full_name === null || viewUserDetails.full_name === '') { %>          
+                <p style="display: none;"><strong></strong> <br></p>
+              <% } else { %>
+                <p><strong>Full Name</strong> <br> <%= viewUserDetails.full_name %></p>
+              <% } %>
+              <p><strong>Username</strong> <br> @<%= viewUserDetails.username %></p>
+              
+              <% if(viewUserDetails.profession === null || viewUserDetails.profession === '') { %> 
+
+              <% } else{ %>
+              <section><strong>Profession</strong> <br><span><%= viewUserDetails.profession %></span> </section>
+              <% } %>
             </section>
             
             <section class="social-icon">
               <ul>
+                <% if(viewUserDetails.facebook_id === null || viewUserDetails.facebook_id === '') { %>
+                
+                <% } else { %>
+                  <li>
+                    <a href="<%= viewUserDetails.facebook_id %>"
+                    ><i class="fa-brands fa-facebook-f"></i></a
+                  ></li>
+                <% } %>
+
                 <li>
-                  <a href="#"
-                  ><i class="fa-brands fa-facebook-f"></i></a
-                ></li>
-                <li>
-                  <a href="#"
+                  <a href="mailto:<%= viewUserDetails.email %>"
                   ><i class="fa fa-envelope"></i></a
                 ></li>
+
+                <% if(viewUserDetails.twitter_id === null || viewUserDetails.twitter_id === '') { %>
+                
+                  <% } else { %>
                 <li>
-                  <a href="#"
+                  <a href="<%= viewUserDetails.twitter_id %>"
                   ><i class="fa-brands fa-twitter"></i></a
                 ></li>
+                <% } %>
               </ul>
             </section>
 
-            <!-- <section class="edit-profile-btn">
-              <a href="/user/profile/edit">Edit Profile</a>
-            </section> -->
           </section>
 
           <section class="user-profile-info">
-
             <section class="bio">
+              <% if(viewUserDetails.bio === null || viewUserDetails.bio === '') { %>
+
+              <% } else { %>
               <strong>Bio</strong>
-              <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis nemo asperiores similique eius ipsam magni sunt, ratione consequatur, voluptatem incidunt repudiandae nesciunt accusamus quidem eum voluptate eveniet sequi ducimus odio?</p>
+              <p><%= viewUserDetails.bio %></p>
+              <% } %>
             </section>
+          
+            <% if(viewUserDetails.location === null || viewUserDetails.location === '') { %>
             
-            <p><strong>Address</strong> <br><address>Logan Town Broad Street, Bushrod Island, Monrovia, Liberia</address></p>
+            <% } else { %>
+            <p><strong>Address</strong> <br><address><%= viewUserDetails.location %></address></p>
+            <% } %>
           </section>
           
         </section>
-
+        <% } %>
       </section>
-    </section>
-  
+    </section> 
+  <section style="margin-bottom: 4.1em;"></section>
 
     <%- include('./partials/__footer') %>

@@ -5,61 +5,42 @@
     </section>
     <section class="recent-news">
         <h3 class="recent-post-text"> Recent Post</h3>
+        <% for(let post of articles) { %>
         <section class="recent-news-container">
-            <img src="../img/pic1.png" alt="photo of a lady">
+            <% if(post && post.image) { %>
+                <img src="<%= '../uploads/post/' + post.image %>">
+            <% }else { %>
+
+                <img src="../img/default_no_image.jpg" alt="Article Photo">
+                
+            <% } %>
             <section class="recent-news-text">
                 <h4>
-                    <a href="/post">Professor Albert joint research on mobile money in Tanzania</a>
+                    <a href="/post/<%= post.id %>"><%= post.title.substring(0, 50) %>......</a>
                 </h4>
                 <section class="recent-news-date-container">
-                    <span class="recent-news-date">Jan 20, 2025</span>
-                    <span class="recent-news-author">By &nbsp; Astainy Harris</span>
+                    <% let monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %>
+
+                    <% let getDateAt = new Date(post.created_at) %>
+
+                    <% let postedAt = {
+                        month: monthArr[getDateAt.getMonth()],
+                        day: getDateAt.getDate(),
+                        year: getDateAt.getFullYear()
+                    } %>
+
+                    <% postedAt.day < 10 ? postedAt.day = '0' + postedAt.day : postedAt.day %>
+                    
+                    <span class="recent-news-date"><%= postedAt.month %> <%= postedAt.day %>, <%= postedAt.year %></span>
+                    <% if(post.full_name) { %>
+                    <span class="recent-news-author">By &nbsp; <%= post.username %></span>
+                    <% } %>
+                        
                 </section>
 
             </section>
         </section>
-
-        <section class="recent-news-container">
-            <img src="../img/pic3.png" alt="photo of a lady">
-            <section class="recent-news-text">
-                <h4>
-                    <a href="#">Professor Tom comments on voluntary recalls by snack brands</a>
-                </h4>
-                <section class="recent-news-date-container">
-                    <span class="recent-news-date">Jan 18, 2025</span>
-                    <span class="recent-news-author">By &nbsp; Astainy Harris</span>
-                </section>
-
-            </section>
-        </section>
-
-        <section class="recent-news-container">
-            <img src="../img/pic2.png" alt="photo of a lady">
-            <section class="recent-news-text">
-                <h4>
-                    <a href="#">A Global MBA for the next generation of business leaders</a>
-                </h4>
-                <section class="recent-news-date-container">
-                    <span class="recent-news-date">Jan 16, 2025</span>
-                    <span class="recent-news-author">By &nbsp; Astainy Harris</span>
-                </section>
-
-            </section>
-        </section>
-
-        <section class="recent-news-container">
-            <img src="../img/pic4.jpg" alt="photo of a lady">
-            <section class="recent-news-text">
-                <h4>
-                    <a href="#">WHO general Global Conference for the next generation</a>
-                </h4>
-                <section class="recent-news-date-container">
-                    <span class="recent-news-date">Jan 15, 2025</span>
-                    <span class="recent-news-author">By &nbsp; Astainy Harris</span>
-                </section>
-
-            </section>
-        </section>
+        <% } %>
 
     </section>
 </aside>

@@ -6,6 +6,8 @@ CREATE TABLE users (
  email VARCHAR(100) NOT NULL UNIQUE,
  password VARCHAR(255) NOT NULL,
  full_name VARCHAR(100),
+ facebook_id VARCHAR(100),
+ twitter_id VARCHAR(100),
  profile_picture VARCHAR(255),
  bio TEXT,
  location VARCHAR(100),

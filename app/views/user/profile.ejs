@@ -18,31 +18,51 @@
             </section>
             <section class="user-primary-info">      
               
-              <% if(userDetails.full_name !== null) { %>
-              <p><strong>Full Name</strong> <br> <%= userDetails.full_name %> </p>
-              <% } else { %>
+              <% if(userDetails.full_name === null || userDetails.full_name === '') { %>
                 <p><strong><a href="/edit/profile" style="font-weight: 300; text-decoration: none;">Add Full Name</a></strong> <br> </p>
+
+              <% } else { %>
+                <p><strong>Full Name</strong> <br> <%= userDetails.full_name %> </p>
               <% } %>
 
-              <p><strong>Username</strong> <br> @<%= userDetails.username %></p>
+              <p><strong>Username</strong> <br> <%= userDetails && userDetails.username ? userDetails.username : '@' + userDetails.username %></p>
 
-              <section><strong>Profession</strong> <br><span>Graphic Designer</span> | <span>Web Developer</span></section>
+              <section><strong>Profession</strong> <br><span><%= userDetails.profession %></span></section>
             </section>
             
             <section class="social-icon">
               <ul>
-                <li>
-                  <a href="#"
-                  ><i class="fa-brands fa-facebook-f"></i></a
-                ></li>
+
                 <li>
                   <a href="mailto:<%= userDetails.email%>"
                   ><i class="fa fa-envelope"></i></a
                 ></li>
+
+                <% if(userDetails.facebook_id === null || userDetails.facebook_id === '') { %>
                 <li>
-                  <a href="#"
-                  ><i class="fa-brands fa-twitter"></i></a
-                ></li>
+                  <a href="#" onclick="alert('Please add your Facebook ID.');"
+                  ><i class="fa-brands fa-facebook-f"></i></a
+                >
+                </li>
+                <% } else { %>
+                  <li>
+                    <a href="<%= userDetails.facebook_id %>"
+                    ><i class="fa-brands fa-facebook-f"></i></a
+                  ></li>
+                <% } %>
+
+                <% if(userDetails.facebook_id === null || userDetails.facebook_id === '') { %>
+                  <li>
+                    <a href="#" onclick="alert('Please add your Twitter ID.');"
+                    ><i class="fa-brands fa-twitter"></i></a
+                  ></li>
+                <% } else { %>
+                  <li>
+                    <a href="<%= userDetails.twitter_id %>"
+                    ><i class="fa-brands fa-twitter"></i></a
+                  ></li>
+                <% } %>
+
               </ul>
             </section>
 
@@ -54,19 +74,19 @@
           <section class="user-profile-info">
 
             <section class="bio">
-              <% if(userDetails.bio !== null) { %>
-              <strong>Bio</strong>
-              <p><%= userDetails.bio %></p>
+              <% if(userDetails.bio === null || userDetails.bio === '') { %>
+                <p><strong><a href="/edit/profile" style="font-weight: 300; text-decoration: none;">Add Bio</a></strong> </p>
               <% } else { %>
-                
-              <p><strong><a href="/edit/profile" style="font-weight: 300; text-decoration: none;">Add Bio</a></strong> </p>
+                <strong>Bio</strong>
+                <p><%= userDetails.bio %></p>
               <% } %>
             </section>
             
-            <% if(userDetails.location !== null ) { %>
-            <p><strong>Address</strong> <br><address><%= userDetails.location %></address></p>
-            <% } else { %>
+            <% if(userDetails.location === null || userDetails.location === '') { %>
               <p><strong><a href="/edit/profile" style="font-weight: 300; text-decoration: none;">Add Address</a></strong> </p>
+            <% } else { %>
+              <p><strong>Address</strong> <br><address><%= userDetails.location %></address></p>
+              
             <% } %>
           </section>
           <% } %>

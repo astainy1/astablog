@@ -6,6 +6,7 @@ $(function () {
   // It has the name attribute "registration"
   $("form[name='registration']").validate({
 
+
     onkeyup: function(element) {
         var validator = this;
         setTimeout(function() {

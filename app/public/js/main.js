@@ -15,7 +15,7 @@ let isDisplaying = false;
 // Menu open and close
 closeMenuBtn.addEventListener("click", () => {
 
-  document.querySelector(".mobile-menu-container").style.right = "-40%";
+  document.querySelector(".mobile-menu-container").style.right = "-50%";
 });
 openMenuBtn.addEventListener("click", () => {
 
@@ -40,10 +40,10 @@ window.addEventListener("scroll", () => {
 
   if (document.body.scrollTop > 1500 || document.documentElement.scrollTop > 1500) {
     scrollTopContainer.style.display = "block";
-    console.log("Scroll is greater than 40");
+    // console.log("Scroll is greater than 40");
   } else {
     scrollTopContainer.style.display = "none";
-    console.log("Scroll is lesser than 40");
+    // console.log("Scroll is lesser than 40");
   }
 });
 
@@ -56,7 +56,7 @@ menuBtn.addEventListener("click", () => {
     menu.style.display = "flex";
     isDisplaying = true;
     document.onscroll = () => {
-      console.log("User is scrolling is taking effect");
+      // console.log("User is scrolling is taking effect");
       menu.style.display = "none";
       isDisplaying = false;
     };

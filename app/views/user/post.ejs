@@ -10,164 +10,136 @@
       <article class="blog-summary-title" id="noshadow">
 
         <section class="main-title-text">
-          <a href="/post" class="blog-tagline">
-            <img src="img/pic1.png" alt="Photo of an emotional woman" />
-            <span>
-              Professor Astainy joint research on emotional distraction in
-              Liberia women
-            </span>
+          <a href="/post/<%= post.post_id %>" class="blog-tagline">
+            <% if(post.post_image) { %>
+              <img src="<%= '../uploads/post/' + post.post_image %>">
+              <% }else { %>
+
+                <img src="../img/default_no_image.jpg" alt="Photo">
+
+                <% } %>
+                  <span>
+                    <%= post.post_title %>
+                  </span>
           </a>
-          <section class="blog-action-container" >
-          <!-- <section class="blog-action-container" style="margin-bottom: 1rem; display: flex; gap: 3rem;"> -->
-            <a href="#" class="blog-action-center">
-              <span class="date blog-action-center">Jan 20, 2025</span></a> /
-            <a href="/user/viewprofile" class="blog-action-center"><span class="author">By Astainy Harris</span></a> /
-            <a href="#comments" class="blog-action-center"><span class="fa fa-comment comment-count"> &nbsp;
-                5</span></a>
+          <section class="blog-action-container">
+            <!-- <section class="blog-action-container" style="margin-bottom: 1rem; display: flex; gap: 3rem;"> -->
+
+            <% let monthArr=['Jan', 'Feb' , 'Mar' , 'Apr' , 'May' , 'Jun' , 'Jul' , 'Aug' , 'Sep' , 'Oct' , 'Nov'
+              , 'Dec' ] %>
+
+              <% let getDateAt = new Date(post.post_created_at) %>
+
+                <% let postedAt = { month: monthArr[getDateAt.getMonth()], 
+                  day: getDateAt.getDate(), 
+                  year: getDateAt.getFullYear() } %>
+
+                  <% postedAt.day < 10 ? postedAt.day='0' + postedAt.day : postedAt.day %>
+
+                    <span class="recent-news-date">
+                      <%= postedAt.month %>
+                        <%= postedAt.day %>, <%= postedAt.year %>
+                    </span>
+
+                    <% if(post.post_author) { %>
+                      <span class="recent-news-author">By &nbsp; <%= post.post_author %></span>
+                      <% } %>
+                        <a href="#comments" class="blog-action-center"><span class="fa fa-comment comment-count">
+                            &nbsp;
+                            <%= totalComment.totalComments %>
+                          </span></a>
 
           </section>
+          <%- post.post_body %>
         </section>
 
-        <p class="blog-summary-main-content">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis
-          in, quidem illo esse quos praesentium illum voluptatibus qui
-          repudiandae, maiores culpa omnis ratione aut? Quisquam vel
-          voluptatibus temporibus placeat aspernatur!....
-        </p>
-
-        <p class="blog-summary-main-content">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores
-          repudiandae quos quam? Magnam architecto, animi accusamus aliquid
-          neque atque sapiente in vel? Doloribus accusamus esse dicta iure
-          sit dolorem dolorum! Eligendi, aliquid ratione. Natus sapiente
-          deleniti repellendus, fugiat minus velit quidem tenetur fugit
-          facere quod doloremque ea modi non quibusdam sint id labore
-          distinctio atque voluptates excepturi dolor doloribus blanditiis?
-          Libero amet iusto debitis exercitationem provident? Et iste illum,
-          vitae provident facilis tempora repellendus facere similique
-          dolores quaerat dolorem obcaecati voluptatum autem iure
-          accusantium fugiat possimus porro hic assumenda nobis.
-        </p>
-        <h5> When, while the lovely valley teems with </h5> <br>
-        <p class="blog-summary-main-content">
-          vapour around me, and the meridian sun strikes the upper surface of the
-          impenetrable foliage of my trees, and but a few stray gleams steal into the inner sanctuary, I throw myself
-          down among the tall grass by the trickling stream; and, as I lie close to the earth, a thousand unknown plants
-          are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the
-          countless indescribable forms of the insects and flies, then I feel the presence of the Almighty, who formed
-          us in his own image, and the breath of that universal love which bears and sustains us, as it floats around us
-          in an eternity of blist.
-
-        </p> <br>
-        <blockquote>
-          <p>
-            I sink under the weight of the splendour of these visions!A wonderful serenity has taken possession of my
-            entire soul, like these sweet mornings of spring which
-
-          </p>
-        </blockquote>
-        <p class="blog-summary-main-content">
-          I sink under the weight of the splendour of these visions!A wonderful serenity has taken possession of my
-          entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the
-          charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear
-          friend, so absorbed in the exquis
-
-        </p>
-        <br>
-
-        <h6>I throw myself down among the tall grass</h6> <br>
-
-        <p class="blog-summary-main-content">
-          I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a
-          greater artist than now. When, while the lovely valley teems with vapour around me, and the meridian sun
-          strikes the upper surface of the impenetrable foliage of my trees, and but a few stray gleams steal into the
-          inner sanctuary, I throw myself down among the tall grass by the trickling stream; and, as I lie close to the
-          earth, a thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks,
-          and grow familiar with the countless indescribable forms of the insects and
-          <br>
-        </p>
-
-        <h6>Text, that where it came from it</h6> <br>
-
-        <p class="blog-summary-main-content">
-          Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
-          texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A
-          small river named Duden flows by their place and supplies it with the necessary regelialia. It is a
-          paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing
-          has no control about the blind texts it is an almost unorthographic life One day however a small line of blind
-          text by the name of Lorem Ipsum decided to leave for the far World of Grammar. The Big Oxmox advised her not
-          to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Littl
-        </p>
-        <br>
-        <ul>
-          <li>Far far away, behind the word mountain</li>
-          <li>When she reached the first hills</li>
-          <li>A small river named Duden flows</li>
-          <li>A small river named Duden flows by their plat.</li>
-          <li>Far far away, behind the word mountain</li>
-        </ul>
-        <br>
-
-        <p class="blog-summary-main-content">
-          Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they
-          abused her for their projects again and again. And if she hasn’t been rewritten, then they are still using
-          her.Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the
-          blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language
-          ocean. A small river named Duden flows by their plate.
-        </p>
       </article>
+
     </main>
 
   </section>
 
   <!-- Author section -->
   <section class="author-info-on-post-main-container" id="author">
-    
+
     <section class="author-image-container">
-      <a href="/user/viewprofile"><img src="../img/author/author8.jpg" alt="Author img"></a>
+      <a href="/viewprofile/<%= post.post_author_id %>?<%= post.post_author %>">
+        <% if(post && post.post_author_profile_picture) { %>
+          <img src="<%= '../uploads/profile/' + post.post_author_profile_picture %>"
+            alt="<%= post.post_author %> Image">
+          <% }else { %>
+
+            <img src="../img/author/default_profile_image.jpg" alt="Author Image">
+
+            <% } %>
+      </a>
     </section>
 
     <section class="author-details">
-      <strong>Astainy Harris</strong>
-      <p class="author-profession">
-        <span>Graphic Designer</span> |
-        <span>Web Developer</span>
-      </p>
-      <p class="author-bio">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Nobis modi, iure voluptas.
-      </p>
-      <section class="social-icon">
-        <ul>
-          <li>
-            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-          </li>
-          <li>
-            <a href="#"><i class="fa fa-envelope"></i></a>
-          </li>
-          <li>
-            <a href="#"><i class="fa-brands fa-twitter"></i></a>
-          </li>
-        </ul>
-      </section>
+
+      <% if(post.post_author) { %>
+        <a href="/viewprofile/<%= post.post_author_id %>?<%= post.post_author %>" style="text-decoration: none;">
+          <strong>
+            <%= post.post_author %>
+          </strong>
+          <% } %>
+
+        </a>
+
+        <p class="author-profession">
+              <span>
+                <%= post.post_author_profession || 'Unknow profession' %>
+              </span>
+        </p>
+        <p class="author-bio">
+          <%= post.post_author_bio %>
+        </p>
+        <section class="social-icon">
+          <ul>
+            <% if(post.post_author_facebook===null || post.post_author_facebook==='' ) {%>
+              <li>
+                <a href="/viewprofile/<%= post.post_author_id %>" style="text-decoration: none;">Profile</a>
+              </li>
+              <% } else { %>
+                <li>
+                  <a href="<%= post.post_author_facebook %>"><i class="fa-brands fa-facebook-f"></i></a>
+                </li>
+                <% } %>
+
+                  <li>
+                    <a href="mailto:<%= post.post_author_email %>"><i class="fa fa-envelope"></i></a>
+                  </li>
+
+                  <% if(post.post_author_twitter===null || post.post_author_twitter==='' ) {%>
+
+                    <% } else { %>
+                      <li>
+                        <a href="<%= post.post_author_twitter %>"><i class="fa-brands fa-twitter"></i></a>
+                      </li>
+                      <% } %>
+          </ul>
+        </section>
     </section>
   </section>
   <!-- Author section ends -->
   <!-- <section class="divider"></section> -->
-  <section class="previous-and-next-btn">
-    <section class="previous"> <a href="#" class="fa fa-arrow-left"> &nbsp; Previous</a></section>
+  <section class="previous-and-next-btn" style="border-top: none;">
+    <!-- <section class="previous"> <a href="#" class="fa fa-arrow-left"> &nbsp; Previous</a></section>
     <section class="next"> <a href="#" class="fa fa-arr"> Next &nbsp;<span class="fa fa-arrow-right"></span> </a>
-    </section>
+    </section> -->
   </section>
   <!-- <section class="divider"></section> -->
 
   <!-- Comment section starts -->
-  <form class="comment-section-container">
-    <legend>Leave a Reply</legend>
+  <form method="post" class="comment-section-container">
+    <span style="color: red; text-align: center;font-size: 0.9rem;">
+      <%= message %>
+    </span>
+    <legend>Leave a Comment ?</legend>
     <section class="form-control-main-container">
       <section class="comment-form-control">
         <textarea class="comment-textarea" name="comment" id="comment-area" cols="50" rows="10"
-          placeholder="Write your reply to this post"></textarea>
+          placeholder="Write your comment..."></textarea>
       </section>
       <section class="comment-form-control">
         <input type="submit" value="Submit">
@@ -177,333 +149,195 @@
   <!-- Comment section ends -->
   <!-- Comment counts starts -->
   <section class="comments-count" id="comments">
-    <h3>Comments (5)</h3>
+
+    <h3>Comments (<%= totalComment.totalComments %>)</h3>
+
   </section>
   <!-- Comment counts ends -->
   <!-- Commented start -->
-  <section class="commentted-message-container">
-    <section class="author-image-container">
-      <img src="../img/author/author8.jpg" alt="Author img">
-    </section>
-    <section class="author-details">
-      <strong>Astainy Harris</strong>
-      <p class="author-bio">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod numquam ducimus assumenda velit cumque architecto
-        hic nobis voluptate enim, aspernatur in delectus vitae exercitationem porro fuga placeat? Temporibus, eum
-        voluptate.
-      </p>
-      <section class="social-icon">
-        <ul>
-          <!-- <li>
+  <% for(let comment of postComments) {%>
+    <% if(comment?.comment_text) { %>
+        <section class="commentted-message-container" data-comment-id="<%= comment.comment_id %>">
+          <section class="author-image-container">
+
+            <% if(comment && comment.comment_author_profile_picture) { %>
+              <img src="<%= '../uploads/profile/' + comment.comment_author_profile_picture %>"
+                alt="<%= post.post_author %> Image">
+              <% }else { %>
+
+                <img src="../img/author/default_profile_image.jpg" alt="Author Image">
+
+                <% } %>
+
+          </section>
+          <section class="author-details">
+            <a href="/viewprofile/<%= comment.comment_author_id %>" style="text-decoration: none; color: #525050;">
+              <strong>
+                <%= comment.comment_author %>
+              </strong>
+            </a>
+            <p class="author-bio">
+              <%= comment.comment_text %>
+            </p>
+            <section class="social-icon">
+              <ul>
+                <!-- <li>
               <a href="#"
               ><i class="fa-brands fa-facebook-f"></i></a
             ></li> -->
-          <li>
-            <a href="#"><i class="fa fa-thumbs-up"></i>4</a>
-          </li>
-          <li>
-            <a href="#"><i class="fa fa-thumbs-down"></i>1</a>
-          </li>
+                <li>
+                  <a href="#like" onclick="alert('Feature not is available. Contact system developer.')"><i class="fa fa-thumbs-up"></i>0</a>
+                </li>
+                <li>
+                  <a href="#dislike" onclick="alert('Feature not is available. Contact system developer.')"><i class="fa fa-thumbs-down"></i>0</a>
+                </li>
+                <li>
+                  <a class="reply-btn" style="cursor: pointer;">- <i>Reply</i> </a><span class="county-reply">(1)</span>
+                </li>
+              </ul>
 
-          <li>
-            <a class="reply-btn" style="cursor: pointer;">- <i>Reply</i> </a><span class="county-reply">(1)</span>
-          </li>
-        </ul>
-      </section>
-    </section>
-  </section>
+            </section>
+          </section>
+        </section>
 
-  <!-- Reply form starts -->
-  <form action="/user/post" method="post" class="reply-form-container" id="reply-form">
-    <textarea name="reply" id="reply" cols="30" rows="7" placeholder="Write reply here" required></textarea>
-    <section class="submit-reply-container">
-      <button type="button" id="reply-cancel-btn">Cancel</button>
-      <button type="submit" id="reply-submit-btn">Reply</button>
-    </section>
+        <!-- Reply form starts -->
+        <form action="/post/<%= post.post_id %>/reply" method="post" class="reply-form-container" id="reply-form">
+          <span style="color: red; text-align: center; font-size: 0.9rem;">
+            <%= replyMessage %>
+          </span>
 
-  </form>
-  <!-- Reply form ends -->
-  <!-- Commented ends -->
+          <input type="hidden" name="parent_comment_id" value="<%= comment.comment_id %>">
+          <textarea name="reply_comment" id="reply" cols="30" rows="7" placeholder="Write reply here"
+            required></textarea>
 
-  <!-- Reply section starts -->
-  <section class="reply-comment">
-    <section class="author-image-container">
-      <img src="../img/author/author6.png" alt="Author img">
-    </section>
-    <section class="author-details">
-      <section class="reply-author-names">
-        <em>- Blessing </em> &nbsp; <span>replies to &nbsp;<em>@Astainy</em></span>
-      </section>
-      <p class="author-bio">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod numquam ducimus assumenda velit cumque architecto
-        hic nobis voluptate enim, aspernatur in delectus vitae exercitationem porro fuga placeat? Temporibus, eum
-        voluptate.
-      </p>
-      <section class="social-icon">
-        <ul>
-          <li>
-            <a href="#"><i class="fa fa-thumbs-up"></i>2</a>
-          </li>
-          <li>
-            <a href="#"><i class="fa fa-thumbs-down"></i>0</a>
-          </li>
+          <section class="submit-reply-container">
+            <button type="submit" id="reply-submit-btn">Reply</button>
+          </section>
+        </form>
+        <!-- Reply form ends -->
+        <!-- Commented ends -->
 
-          <li>
-            <a class="reply-btn">- <i>Reply</i> </a><span class="count-reply">(0)</span>
-          </li>
-        </ul>
-      </section>
-    </section>
-  </section>
-  <!-- Reply to section ends -->
+        <!-- Reply section starts -->
+        <% if(comment?.reply_text) { %>
+        <section class="reply-comment">
+          <section class="author-image-container">
+            <% if(comment && comment.reply_author_profile_picture) { %>
+              <img src="<%= '../uploads/profile/' + comment.reply_author_profile_picture %>" alt="<%= comment.reply_author_username %> picture">
+              <% }else { %>
+            <img src="../img/author/default_profile_image.jpg" alt="<%= comment.reply_author_username%> picture">
+            <% } %>
+          </section>
+          <section class="author-details">
+            <section class="reply-author-names">
+              <% console.log(comment.reply_author_username) %>
+              <a href="/viewprofile/<%= comment.reply_author_id %>" style="text-decoration: none; color: #525050;">
+                <em>- <%= comment.reply_author_username %> </em> &nbsp; <span>replies to &nbsp;
+              </a>
+              <a href="/viewprofile/<%= comment.comment_author_id %>" style="text-decoration: none; color: #525050;">
+                <em><%='@' + comment.comment_author  ||  comment.comment_author%></em></span>
+              </a>
+              
+              <span class="reply-time">
+                <% comment.reply_created_at %>
+              </span>
+            </section>
+            <p class="author-bio">
+              <%= comment.reply_text %>
+            </p>
+            <section class="social-icon">
+              <ul>
+                <li>
+                  <a href="#like" onclick="alert('Feature not is available. Contact system developer.')"><i class="fa fa-thumbs-up"></i>0</a>
+                </li>
+                <li>
+                  <a href="#dislike" onclick="alert('Feature not is available. Contact system developer.')"><i class="fa fa-thumbs-down"></i>0</a>
+                </li>
 
-  <!-- Commented start -->
-  <section class="commentted-message-container">
-    <section class="author-image-container">
-      <img src="../img/author/author7.png" alt="Author img">
-    </section>
-    <section class="author-details">
-      <strong>Abraham Kekeleh</strong>
-      <p class="author-bio">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem quasi ratione dolorem. Alias deserunt, non,
-        pariatur nulla sit quam cupiditate rem ipsam dolorum veritatis, ullam quos sapiente ab dolor hic!
-        Tenetur incidunt praesentium quas eum. Excepturi voluptates ratione fugiat optio est possimus nemo dignissimos,
-        ex consequatur quas eaque laboriosam quis distinctio molestias itaque, modi delectus voluptate officiis autem
-        ipsa incidunt.
-      </p>
-      <section class="social-icon">
-        <ul>
-          <!-- <li>
-              <a href="#"
-              ><i class="fa-brands fa-facebook-f"></i></a
-            ></li> -->
-          <li>
-            <a href="#"><i class="fa fa-thumbs-up"></i>0</a>
-          </li>
-          <li>
-            <a href="#"><i class="fa fa-thumbs-down"></i>0</a>
-          </li>
+                <li>
+                  <a href="#reply" class="reply-btn" onclick="alert('You cannot reply to this person')">- <i>Reply</i> </a><span class="count-reply">(0)</span>
+                </li>
+              </ul>
+            </section>
+          </section>
+        </section>
+        <% } else{ %>
+        <% } %>
 
-          <li>
-            <a class="reply-btn">- <i>Reply</i> </a><span class="county-reply">(0)</span>
-          </li>
-        </ul>
-      </section>
-    </section>
-  </section>
-  <!-- Commented ends -->
+        <!-- Reply form starts -->
+        <form action="/post/<%= post.post_id %>/reply" method="post" class="reply-form-container inner-reply-form"
+          id="reply-form">
+          <span style="color: red; text-align: center;font-size: 0.9rem;">
+            <%= replyMessage %>
+          </span>
+          <textarea name="reply_comment" id="reply" cols="30" rows="7" placeholder="Write reply here"
+            required></textarea>
 
-  <!-- Commented start -->
-  <section class="commentted-message-container">
-    <section class="author-image-container">
-      <img src="../img/author/author2.png" alt="Author img">
-    </section>
-    <section class="author-details">
-      <strong>Momodu Kumeh</strong>
-      <p class="author-bio">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem quasi ratione dolorem. Alias deserunt, non,
-        pariatur nulla sit quam cupiditate rem ipsam dolorum veritatis, ullam quos sapiente ab dolor hic!
-        Tenetur incidunt praesentium quas eum. Excepturi voluptates ratione fugiat optio est possimus nemo dignissimos,
-        ex consequatur quas eaque laboriosam quis distinctio molestias itaque, modi delectus voluptate officiis autem
-        ipsa incidunt.
-      </p>
-      <section class="social-icon">
-        <ul>
-          <!-- <li>
-              <a href="#"
-              ><i class="fa-brands fa-facebook-f"></i></a
-            ></li> -->
-          <li>
-            <a href="#"><i class="fa fa-thumbs-up"></i>1</a>
-          </li>
-          <li>
-            <a href="#"><i class="fa fa-thumbs-down"></i>0</a>
-          </li>
-
-          <li>
-            <a class="reply-btn">- <i>Reply</i> </a><span class="county-reply">(2)</span>
-          </li>
-        </ul>
-      </section>
-    </section>
-  </section>
-  <!-- Commented ends -->
-
-  <!-- Reply section starts -->
-  <section class="reply-comment">
-    <section class="author-image-container">
-      <img src="../img/author/author1.jpeg" alt="Author img">
-    </section>
-    <section class="author-details">
-      <section class="reply-author-names">
-        <em>- James</em> &nbsp; <span>replies to &nbsp;<em>@Momodu</em></span>
-      </section>
-      <p class="author-bio">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, adipisci ad dolore cupiditate quo quibusdam unde
-        totam architecto dicta cum. Beatae doloremque autem illum eius at sequi sunt distinctio quis.
-        Temporibus illum praesentium, iusto recusandae dignissimos commodi cum, ea error eius in tempora rerum similique
-        sed dolore aliquid expedita fugit porro iure maiores qui amet non! Dicta ut debitis veniam!
-
-      </p>
-      <section class="social-icon">
-        <ul>
-          <li>
-            <a href="#"><i class="fa fa-thumbs-up"></i>3</a>
-          </li>
-          <li>
-            <a href="#"><i class="fa fa-thumbs-down"></i>0</a>
-          </li>
-
-          <li>
-            <a class="reply-btn">- <i>Reply</i> </a><span class="count-reply">(0)</span>
-          </li>
-        </ul>
-      </section>
-    </section>
-  </section>
-  <!-- Reply to section ends -->
-
-  <!-- Reply section starts -->
-  <section class="reply-comment">
-    <section class="author-image-container">
-      <img src="../img/author/author4.png" alt="Author img">
-    </section>
-    <section class="author-details">
-      <section class="reply-author-names">
-        <em>- John</em> &nbsp; <span>replies to &nbsp;<em>@Momodu</em></span>
-      </section>
-      <p class="author-bio">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod numquam ducimus assumenda velit cumque architecto
-        hic nobis voluptate enim, aspernatur in delectus vitae exercitationem porro fuga placeat? Temporibus, eum
-        voluptate.
-      </p>
-      <section class="social-icon">
-        <ul>
-          <li>
-            <a href="#"><i class="fa fa-thumbs-up"></i>2</a>
-          </li>
-          <li>
-            <a href="#"><i class="fa fa-thumbs-down"></i>0</a>
-          </li>
-
-          <li>
-            <a class="reply-btn">- <i>Reply</i> </a><span class="count-reply">(0)</span>
-          </li>
-        </ul>
-      </section>
-    </section>
-  </section>
-  <!-- Reply to section ends -->
-
-  <section class="read-more-comments">
-    <p> <a href="">See More Comments...</a></p>
-  </section>
-  <div style="margin-bottom: 10em"></div>
-  <div style="margin-bottom: 16em"></div>
-
-  <!-- Recent Post -->
-  <section class="recent-post-main-container">
-    <h3 class="recent-post-title">Recent Post</h3>
-    <section class="recent-post-container">
-      <section class="recent-news-container">
-        <img src="../img/pic2.png" alt="photo of a lady">
-        <section class="recent-news-text">
-          <h4>
-            <a href="/post">Just a few weeks away to win the big prize from this company</a>
-          </h4>
-          <section class="recent-news-date-container">
-            <span class="recent-news-date">Jan 20, 2025</span>
-            <span class="recent-news-author">By &nbsp; Astainy Harris</span>
+          <section class="submit-reply-container">
+            <button type="submit" id="reply-submit-btn">Reply</button>
           </section>
 
-        </section>
-      </section>
+        </form>
+        <!-- Reply form ends -->
+        <!-- Reply to section ends -->
+        <% } else{ %>
+          <p style="text-align: center">No Comment! </p>
+        <% } %>
+        <% } %>
 
-      <section class="recent-news-container">
-        <img src="../img/pic3.png" alt="photo of a lady">
+            <!-- <section class="read-more-comments">
+        <p> <a href="">See More Comments...</a></p>
+      </section> -->
 
-        <section class="recent-news-text">
-          <h4>
-            <a href="/post">Professor Albert joint research on mobile money in Liberia</a>
-          </h4>
-          <section class="recent-news-date-container">
-            <span class="recent-news-date">Jan 20, 2025</span>
-            <span class="recent-news-author">By &nbsp; Astainy Harris</span>
-          </section>
+            <div style="margin-bottom: 10em"></div>
+            <div style="margin-bottom: 16em"></div>
 
-        </section>
-      </section>
+            <!-- Recent Post -->
 
-      <section class="recent-news-container">
-        <img src="../img/pic4.jpg" alt="photo of a lady">
+            <%- include('./partials/__recent_post.ejs') %>
+              </section>
+              <script defer>
 
-        <section class="recent-news-text">
-          <h4>
-            <a href="/post">UN Doctor offer free treatement for children under 10 years in Liberia</a>
-          </h4>
-          <section class="recent-news-date-container">
-            <span class="recent-news-date">Jan 20, 2025</span>
-            <span class="recent-news-author">By &nbsp; Astainy Harris</span>
-          </section>
+                document.addEventListener("DOMContentLoaded", () => {
+                  const replyButtons = document.querySelectorAll(".reply-btn");
 
-        </section>
-      </section>
+                  replyButtons.forEach((button) => {
+                    button.addEventListener("click", function () {
+                      // Find the nearest comment container
+                      const commentContainer = this.closest(".commentted-message-container");
+                      if (!commentContainer) return console.log("No comment container found");
 
+                      // Get the comment ID from the data attribute
+                      const commentId = commentContainer.dataset.commentId;
+                      console.log("Selected Comment ID: ", commentId);
 
-      <section class="recent-news-container">
-        <img src="../img/George_Weah.jpg" alt="photo of a lady">
+                      // Find the reply form
+                      const replyForm = commentContainer.nextElementSibling;
+                      if (!replyForm || !replyForm.classList.contains("reply-form-container")) {
+                        return console.log("Reply form not found");
+                      }
 
-        <section class="recent-news-text">
-          <h4>
-            <a href="/post">Former President George M. Weah speak to the issue concerning</a>
-          </h4>
-          <section class="recent-news-date-container">
-            <span class="recent-news-date">Jan 20, 2025</span>
-            <span class="recent-news-author">By &nbsp; Astainy Harris</span>
-          </section>
+                      // Assign the comment ID to the hidden input inside the reply form
+                      const hiddenInput = replyForm.querySelector('input[name="parent_comment_id"]');
+                      if (hiddenInput) {
+                        hiddenInput.value = commentId;
+                      } else {
+                        console.error("Hidden input for comment_id not found in form");
+                      }
 
-        </section>
-      </section>
+                      // Hide all other reply forms
+                      document.querySelectorAll(".reply-form-container").forEach((form) => {
+                        if (form !== replyForm) {
+                          form.style.display = "none";
+                        }
+                      });
 
-
-      <section class="recent-news-container">
-        <img src="../img/header-bg2.avif" alt="photo of a lady">
-
-        <section class="recent-news-text">
-          <h4>
-            <a href="/post">Advance your tech skill and land a high paying job in the tech envorn</a>
-          </h4>
-          <section class="recent-news-date-container">
-            <span class="recent-news-date">Jan 20, 2025</span>
-            <span class="recent-news-author">By &nbsp; Astainy Harris</span>
-          </section>
-
-        </section>
-      </section>
-
-    </section>
-  </section>
-  </section>
+                      // Toggle the display of the selected reply form
+                      replyForm.style.display =
+                        replyForm.style.display === "flex" ? "none" : "flex";
+                    });
+                  });
+                });
 
 
-  <script defer>
-    const replyBtn = document.querySelector('.reply-btn');
-    const replyForm = document.querySelector('#reply-form');
-    const replySubmitBtn = document.querySelector('#reply-submit-btn');
-    const replyCancelBtn = document.querySelector('#reply-cancel-btn')
-
-    replyBtn.addEventListener('click', () => {
-      replyForm.style.display = 'flex';
-      console.log(replyBtn);
-    })
-
-    replySubmitBtn.addEventListener('click', () => {
-      replyForm.style.display = 'none';
-    });
-
-    replyCancelBtn.addEventListener('click', () => {
-      replyForm.style.display = 'none';
-    });
-
-  </script>
-  <%- include('./partials/__footer') %>
+              </script>
+              <%- include('./partials/__footer') %>

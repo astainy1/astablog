@@ -28,22 +28,22 @@
                 
                 <section class="profile-form-control">
                     <label for="full-name">Full Name</label>
-                    <input type="text" name="full_name" id="Full-name" value="<%= userDetails.full_name %>">
+                    <input type="text" name="full_name" id="full-name" value="<%= userDetails.full_name %>">
                 </section>
 
                 <section class="profile-form-control">
                     <label for="facebook-id">Facebook ID</label>
-                    <input type="url" name="facebookID" id="facebook-id">
+                    <input type="url" name="facebookID" id="facebook-id" value="<%= userDetails.facebook_id %>">
                 </section>
 
                 <section class="profile-form-control">
                     <label for="twitter-id">Twitter ID</label>
-                    <input type="url" name="twitterID" id="twitter-id">
+                    <input type="url" name="twitterID" id="twitter-id" value="<%= userDetails.twitter_id %>">
                 </section>
 
                 <section class="profile-form-control">
-                    <label for="facebook-id">Email ID</label>
-                    <input type="url" name="profilemail" id="facebook-id">
+                    <label for="profession">Profession</label>
+                    <input type="text" name="profession" id="profession" value="<%= userDetails.profession %>">
                 </section>
 
                 <section class="profile-form-control">
@@ -53,8 +53,7 @@
 
                 <section class="profile-form-control">
                     <label for="bio">Bio</label>
-                    <!-- <textarea name="bio" id="bio" col="6" row="6"></textarea> -->
-                    <textarea name="bio" id="" cols="10" rows="4" ><%= userDetails.bio %></textarea>
+                    <textarea name="bio" id="bio" cols="10" rows="4" ><%= userDetails.bio %></textarea>
 
                 </section>
 

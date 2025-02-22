@@ -1,0 +1,49 @@
+<section class="recent-post-main-container">
+  <% if(recentPost) { %>
+    <h3 class="recent-post-title">Recent Post</h3>
+    <section class="recent-post-container">
+      <% for(let recentPostList of recentPost) { %>
+      <section class="recent-news-container">
+        <a href="/post/<%= recentPostList.id %>">
+         <% if(recentPostList && recentPostList.image) { %>
+                <img src="<%= '../uploads/post/' + recentPostList.image %>">
+            <% }else { %>
+
+                <img src="../img/default_no_image.jpg" alt="<%= recentPostList.username %> Post Image">
+                
+            <% } %>
+          </a>
+        <section class="recent-news-text">
+          <h4>
+            <a href="/post/<%= recentPostList.id %>"><%= recentPostList.title.substring(0, 30)%>....</a>
+          </h4>
+          <section class="recent-news-date-container">
+            <% let monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %>
+
+            <% let getDateAt = new Date(recentPostList.updated_at) %>
+
+            <% let postedAt = {
+                month: monthArr[getDateAt.getMonth()],
+                day: getDateAt.getDay(),
+                year: getDateAt.getFullYear()
+            } %>
+
+            <% postedAt.day < 10 ? postedAt.day = '0' + postedAt.day : postedAt.day %>
+            
+            <span class="recent-news-date"><%= postedAt.month %> <%= postedAt.day %>, <%= postedAt.year %></span>
+            <% if(recentPostList.username) { %>
+                
+            <span class="recent-news-author">By &nbsp; <%= recentPostList.username %></span>
+            <% } %>
+            
+          </section>
+
+        </section>
+      </section>
+      <% } %>
+    </section>
+
+  <% } else { %>
+    <h2>No Recent Article </h2>
+  <% } %>
+  </section>

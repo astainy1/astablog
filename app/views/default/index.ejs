@@ -9,77 +9,54 @@
 
             <!-- Main content starts here -->
             <main>
-
+                <% for(let posts of articles) { %>
                 <section class="blog-summary-title">
 
                     <section class="main-title-text">
-                            <a href="/home" class="blog-tagline">
-                                <img src="img/pic1.png" alt="Photo of an emotional woman">
-                               <span> Professor Astainy joint research on emotional distraction in Liberia women </span>
-                            </a>
+                        <a href="/post/<%=posts.id %>" class="blog-tagline">
+                            <% if(posts && posts.image) { %>
+                              <img src="<%= '../uploads/post/' + posts.image %>">
+                          <% }else { %>
+                  
+                              <img src="../img/default_no_image.jpg" alt="Article Photo">
+                              
+                          <% } %>
+                            <span>
+                             <%= posts.title %>
+                            </span>
+                          </a>
                             <section class="blog-action-container">
-                                <a href="#" class="blog-action-center">
-                                    <span class="date">Jan 20, 2025</span> /
-                                    <span class="author">By Astainy Harris</span>/
-                                    <span class="fa fa-comment comment-count"> &nbsp; 3</span>
+                                <% let postedMonthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %>
+
+          <% let getDatePostedAt = new Date(posts.created_at) %>
+
+          <% let FullDatePostedAt = {
+              month: postedMonthArr[getDatePostedAt.getMonth()],
+              day: getDatePostedAt.getDate(),
+              year: getDatePostedAt.getFullYear()
+          } %>
+
+          <% FullDatePostedAt.day < 10 ? FullDatePostedAt.day = '0' + FullDatePostedAt.day : FullDatePostedAt.day %>
+
+          <a href="/post/<%= posts.id %>" class="blog-action-center">
+            <span class="recent-news-date"><%= FullDatePostedAt.month %> <%= FullDatePostedAt.day %>, <%= FullDatePostedAt.year %></span> /
+                    <% if(posts.username) { %>
+                        
+                    <span class="recent-news-author">By &nbsp; <%= posts.username %></span>
+                    <% } %> /
+                    <span class="fa fa-comment comment-count"> &nbsp; <% if(posts.totalComments) { %><%= posts.totalComments %><% } else { %><%= 0 %><% } %></span>
                                 </a>
                             </section>
                     </section>
                     <p class="blog-summary-main-content">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis in, quidem illo esse quos praesentium illum voluptatibus qui repudiandae, maiores culpa omnis ratione aut? Quisquam vel voluptatibus temporibus placeat aspernatur!....
+                        <%- posts.body.substring(0, 500) %>....
                     </p>
                     <section class="blog-summary-read-more">
-                        <a href="/post">Read More</a>
+                        <a href="/post/<%= posts.id %>">Read More</a>
                     </section>
                 </section>
 
-
-                <section class="blog-summary-title second">
-
-                    <section class="main-title-text">
-                        <a href="#" class="blog-tagline">
-                                <img src="img/pic3.png" alt="Photo of an emotional woman">
-                               <span> Professor Tom comments on voluntary recalls by snack brands </span>
-                        </a>
-                        <section class="blog-action-container">
-                            <a href="#" class="blog-action-center">
-                                <span class="date">Jan 18, 2025</span> /
-                                <span class="author">By Astainy Harris</span>/
-                                <span class="fa fa-comment  comment-count"> &nbsp; 2</span>
-                            </a>
-                        </section>
-                    </section>
-                    <p class="blog-summary-main-content">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis in, quidem illo esse quos praesentium illum voluptatibus qui repudiandae, maiores culpa omnis ratione aut? Quisquam vel voluptatibus temporibus placeat aspernatur!....
-                    </p>
-                    <section class="blog-summary-read-more">
-                        <a href="#">Read More</a>
-                    </section>
-                </section>
-
-
-                <section class="blog-summary-title second">
-
-                    <section class="main-title-text">
-                        <a href="#" class="blog-tagline">
-                                <img src="img/pic2.png" alt="Photo of an emotional woman">
-                               <span> A Global MBA for the next generation of business leaders </span>
-                        </a>
-                        <section class="blog-action-container">
-                            <a href="#" class="blog-action-center">
-                                <span class="date">Jan 16, 2025</span> /
-                                <span class="author">By Astainy Harris</span>/
-                                <span class="fa fa-comment  comment-count"> &nbsp; 7</span>
-                            </a>
-                        </section>
-                    </section>
-                    <p class="blog-summary-main-content">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis in, quidem illo esse quos praesentium illum voluptatibus qui repudiandae, maiores culpa omnis ratione aut? Quisquam vel voluptatibus temporibus placeat aspernatur!....
-                    </p>
-                    <section class="blog-summary-read-more">
-                        <a href="#">Read More</a>
-                    </section>
-                </section>
+                <% } %>
 
             </main>
         </section>
