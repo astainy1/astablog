@@ -43,6 +43,31 @@
 <!-- External script -->
 <script type="module" src="../admin/js/plugins/node_modules/chart.js/dist/chart.umd.js"></script>
 <script src="../admin/js/script.js"></script>
+<script src="../js/vendor/jquery/jquery.js"></script>
+<script src="../js/vendor/jquery/jquery-3.7.1.min.js"></script>
+<script src="../admin/js/plugins/jquery.dataTables.min.js"></script>
+<script src="../admin/js/plugins/dataTables.bootstrap4.min.js"></script>
+<script src="../admin/js/plugins/dataTables.responsive.min.js"></script>
+<script src="../admin/js/plugins/responsive.bootstrap4.min.js"></script>
+
+<script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+      });
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+
 
 </body>
 </html>

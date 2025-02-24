@@ -6,31 +6,34 @@
             <!-- Profile section starts -->
 
                      <section class="profile-wrapper-container">
-                        <section class="profile-content-container">
+                        <form method="post" enctype="multipart/form-data" class="profile-content-container">
 
                             <section class="profile-image-section">
 
                                 <section class="profile-img">
                                     <label for="file-upload" class="file-upload">
-                                        <img src="../admin/img/profile.png" alt="user image" id="file-upload-preview" srcset="">
-                                        <input type="file" accept="image/jpeg, image/jpg, image/png" name="profileimge" id="file-upload" hidden>
+                                        <% if(userInfo?.profile_picture) { %>
+                                        <img src="<%= '../uploads/profile/admin/' + userInfo.profile_picture %>" alt="<%= userInfo.username %> image" style="object-fit: cover;" id="file-upload-preview" srcset="">
+                                        <% } else { %>
+                                            <img src="../img/author/default_profile_image.jpg" style="object-fit: cover;" alt="user image" id="file-upload-preview" srcset="">
+                                        <% } %>
+                                        <input type="file" accept="image/jpeg, image/jpg, image/png"  name="profileimge" id="file-upload" hidden>
                                     </label>
                                     <p id="tip-text">Click on the image above. </p>
                                 </section>
                                 
                                 <section class="add-image-container">
-                                    <button class="delete-image"> Remove </button>
+                                    <button type="button" class="delete-image"> Remove </button>
                                 </section>
 
                             </section>
 
-                            <form class="profile-content-section" id="edit-inputs">
+                            <section class="profile-content-section" id="edit-inputs">
                                 
-                                    <input type="text" id="username" name="username" value="@astainy_23445">
-                                    <input type="text" id="fullname" name="fullname" value="Christian A. Harris">
-                                    <input type="date" id="date" name="date">
-                                    <input type="text" id="address" name="address" value="Logan Town Broad Street">
-                                    <input type="email" name="email" id="email" value="astainyharris1@gmail.com">
+                                    <input type="text" id="username" name="username" value="<%= userInfo.username %>">
+                                    <input type="text" id="fullname" name="fullname" value="<%= userInfo.full_name %>">
+                                    <input type="text" id="address" name="address" value="<%= userInfo.location %>">
+                                    <input type="email" name="email" id="email" value="<%= userInfo.email %>">
 
                                     <!-- <section class="password-reset">
                                         <input type="password" id="password" name="password" value="Password">
@@ -39,9 +42,9 @@
                                         <button type="submit" class="edit-profile"> Update </button>
                                         <button type="button" class="cancel"> <a href="/asta-admin/profile" style="color:#fff; text-decoration: none;">Cancel</a> </button>
                                     </section>
-                            </form>
+                                </section>
 
-                        </section>
+                        </form>
                     </section>
 
             <!-- Profile section ends -->

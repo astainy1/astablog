@@ -9,9 +9,14 @@
                         <form method="post" class="profile-content-container">
 
                             <section class="profile-image-section">
-
+                                <% console.log(userInfo) %>
                                 <section class="profile-img">
-                                    <img src="../admin/img/profile.png" alt="user image" srcset="">
+                                    <% if(userInfo?.profile_picture) {%>
+                                        <img src="<%= '../uploads/profile/admin/' + userInfo.profile_picture %>" style="object-fit: cover;" alt="<%= userInfo.username %> image" srcset="">
+                                        
+                                    <% } else { %>
+                                    <img src="../img/author/default_profile_image.jpg" style="object-fit: cover;" alt="<%= userInfo.username %> image" srcset="">
+                                    <% } %>
                                 </section>
                                 
                                 <section class="profile-description">
@@ -22,14 +27,27 @@
 
                             <section class="profile-content-section">
                                 
-                                <p class="username"> @astainy_23445 </p>
-                                <p class="fullname"> Christian A. Harris </p>
-                                <p class="dob">July 09, 1878</p>
-                                <p class="address">Logan Town, Broad Street</p>
-                                <p class="email">astainyharris1@gmail.com</p>
-                                <p class="password">***********</p>
+                                <p class="username"> <%= userInfo.username %> </p>
+                                <% console.log(userInfo.full_name) %>
+                                <% if(userInfo.full_name === null || userInfo.full_name === '') {%>
+                                    <p class="fullname"> <a href="/asta-admin/editprofile" style="text-decoration: none;"> Add Name</a> </p>
+                                <% } else { %>
+                                    <p class="fullname"> <%= userInfo.full_name %> </p>
+                                <% } %>
 
+                                <% if(userInfo?.location) {%>
+                                <p class="address"><%= userInfo.location %></p>
+                                <% } else { %>
+                                    <p class="address"><a href="/asta-admin/editprofile" style="text-decoration: none;"> Add Address</a></p>
+
+                                <% } %>
+                                <p class="email"><a href="mailto:<%=userInfo.email%>" style="text-decoration: none; color: #201f1f;"><%= userInfo.email %></a></p>
+                                
+                                <% if(userInfo?.full_name && userInfo?.location) { %>
                                 <button type="submit" class="edit-profile"> Edit </button>
+                                <% } else { %>
+                                    <button type="submit" class="edit-profile" style="display: none;"> Edit </button>
+                                <% }%>
                             </section>
 
                         </form>

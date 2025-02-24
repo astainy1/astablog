@@ -27,7 +27,16 @@
 
               <p><strong>Username</strong> <br> <%= userDetails && userDetails.username ? userDetails.username : '@' + userDetails.username %></p>
 
-              <section><strong>Profession</strong> <br><span><%= userDetails.profession %></span></section>
+              <% if(userDetails?.profession) { %>
+              <section><strong>Profession</strong> <br>
+                <span><%= userDetails.profession %></span>
+              </section>
+              <% } else { %>
+                <section><strong><span><a href="/edit/profile" style="font-weight: 300; text-decoration: none;">Add Profession</a></span></strong> <br>
+                  
+                </section>
+                
+              <% } %>
             </section>
             
             <section class="social-icon">

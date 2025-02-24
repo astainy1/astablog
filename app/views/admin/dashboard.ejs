@@ -15,7 +15,7 @@
                     <section class="card files-card">
                         <section class="card-title">
                             <h5>Users</h5>
-                            <strong>304</strong>
+                            <strong><%= totalUsers > 9 ? totalUsers : '0' + totalUsers %></strong>
                         </section>
                         <section class="card-body">
                             <i class="fa fa-users"></i>
@@ -25,7 +25,7 @@
                     <section class="card audio-card">
                         <section class="card-title">
                             <h5>Article</h5>
-                            <strong>524</strong>
+                            <strong><%= totalArticles > 9 ? totalArticles : '0' + totalArticles %></strong>
                         </section>
                         <section class="card-body">
                             <i class="fa fa-book"></i>
@@ -35,7 +35,7 @@
                     <section class="card movies-card">
                         <section class="card-title">
                             <h5>Comments</h5>
-                            <strong>67</strong>
+                            <strong><%= totalComments > 9 ? totalComments : '0' + totalComments %></strong>
                         </section>
                         <section class="card-body">
                             <i class="fa fa-comments"></i>
@@ -45,7 +45,7 @@
                     <section class="card images-card">
                         <section class="card-title">
                             <h5>Reply</h5>
-                            <strong>920</strong>
+                            <strong><%= totalReply.toString().padStart(2, '0') %></strong>
                         </section>
                         <section class="card-body">
                             <i class="fa fa-reply"></i>

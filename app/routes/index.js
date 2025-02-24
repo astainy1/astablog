@@ -568,19 +568,181 @@ router.post('/post/:id/reply', isAuth.isLoggedIn, (req, res) => {
   }
 });
 
-//Admin page
+//Admin pages
+
+// Admin dashboard
 router.get("/asta-admin", isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
   
-  res.render("admin/dashboard", { title: "Admin Dashboard | astablog" });
+  // Get user id stored in session
+  const userID = req.session.userFound;
+  console.log('Admin ID: ', userID);
+  // Get user details from database
+  const userDetails = `SELECT * FROM users WHERE id = ?`;
+
+  // Get total number of users, artcles, comments and reactions
+  const totalUsers = `SELECT COUNT(*) AS totalUsers FROM users`;
+  const totalArticles = `SELECT COUNT(*) AS totalArticles FROM posts`;
+  const totalComments = `SELECT COUNT(*) AS totalComments FROM comments WHERE parent_comment_id IS NULL`;
+  const totalReply = `SELECT COUNT(*) AS totalReply FROM comments WHERE parent_comment_id IS NOT NULL`;
+
+  db.query(totalUsers, (err, users) => {
+    if (err) {
+      console.error("Error fetching total users:", err);
+      return res.status(500);
+    }
+    db.query(totalArticles, (err, articles) => {
+      if (err) {
+        console.error("Error fetching total articles:", err);
+        return res.status(500);
+      }
+      db.query(totalComments, (err, comments) => {
+        if (err) {
+          console.error("Error fetching total comments:", err);
+          return res.status(500);
+        }
+        db.query(totalReply, (err, replies) => {
+          if (err) {
+            console.error("Error fetching total reactions:", err);
+            return res.status(500);
+          }
+
+          db.query(userDetails, [userID.id], (err, result) => {
+            if (err) {
+              console.error("Error fetching user details:", err);
+              return res.status(500);
+            }
+      
+            res.render("admin/dashboard", {
+              title: "Admin Dashboard | astablog",
+              totalUsers: users[0].totalUsers,
+              totalArticles: articles[0].totalArticles,
+              totalComments: comments[0].totalComments,
+              totalReply: replies[0].totalReply,
+              userInfo: result[0],
+            });
+
+          })
+
+        })})
+  });
+  });
 });
 
+// Admin Article List
 router.get(
   "/asta-admin/articles",
   isAuth.isLoggedIn,
   isAdmin.isAdmin,
   (req, res) => {
-    res.render("admin/article", { title: "Admin Article List | astaBlog" });
+
+  // Get user id stored in session
+  const userID = req.session.userFound;
+  // console.log('Admin ID: ', userID);
+  // Get user details from database
+  const userDetails = `SELECT * FROM users WHERE id = ?`;
+  db.query(userDetails, [userID.id], (err, result) => {
+    if (err) {
+      console.error("Error fetching user details:", err.stack || err);
+      return res.status(500);
+    }
+      console.log(result);
+      res.render("admin/article", {
+        title:  "Admin Article List | astaBlog",
+        userInfo: result[0],
+      });
+    })
   }
 );
+
+// Admin comments
+router.get('/asta-admin/comments', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
+
+  // Get user id stored in session
+  const userID = req.session.userFound;
+  // console.log('Admin ID: ', userID);
+  // Get user details from database
+  const userDetails = `SELECT * FROM users WHERE id = ?`;
+  db.query(userDetails, [userID.id], (err, result) => {
+    if (err) {
+      console.error("Error fetching user details:", err.stack || err);
+      return res.status(500);
+    }
+      console.log(result);
+      res.render('admin/comments', {
+        title:  "Admin Comments List | astaBlog",
+        userInfo: result[0],
+      });
+    })
+
+})
+
+// Admin Replies
+
+router.get('/asta-admin/replies', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
+
+  // Get user id stored in session
+  const userID = req.session.userFound;
+  // console.log('Admin ID: ', userID);
+  // Get user details from database
+  const userDetails = `SELECT * FROM users WHERE id = ?`;
+  db.query(userDetails, [userID.id], (err, result) => {
+    if (err) {
+      console.error("Error fetching user details:", err.stack || err);
+      return res.status(500);
+    }
+      console.log(result);
+      res.render('admin/replies', {
+        title:  "Admin Replies List | astaBlog",
+        userInfo: result[0],
+      });
+    })
+
+})
+
+// Admin users list
+
+router.get('/asta-admin/users', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
+
+  // Get user id stored in session
+  const userID = req.session.userFound;
+  // console.log('Admin ID: ', userID);
+  // Get user details from database
+  const userDetails = `SELECT * FROM users WHERE id = ?`;
+  db.query(userDetails, [userID.id], (err, result) => {
+    if (err) {
+      console.error("Error fetching user details:", err.stack || err);
+      return res.status(500);
+    }
+      console.log(result);
+      res.render('admin/users', {
+        title:  "Admin users List | astaBlog",
+        userInfo: result[0],
+      });
+    })
+
+})
+
+// Admin page Settings
+
+router.get('/asta-admin/settings', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
+
+  // Get user id stored in session
+  const userID = req.session.userFound;
+  // console.log('Admin ID: ', userID);
+  // Get user details from database
+  const userDetails = `SELECT * FROM users WHERE id = ?`;
+  db.query(userDetails, [userID.id], (err, result) => {
+    if (err) {
+      console.error("Error fetching user details:", err.stack || err);
+      return res.status(500);
+    }
+      console.log(result);
+      res.render('admin/settings', {
+        title:  "Admin Settings | astaBlog",
+        userInfo: result[0],
+      });
+    })
+
+})
 
 module.exports = router;

@@ -11,12 +11,17 @@
                             <span class="fa fa-search "></span>
                             <input type="text" name="search" id="search-box" placeholder="Search ">
                         </section>
+                        <!-- <section><a href="/home" style="text-decoration: none; color: gray;">Visti Site &srarr; </a></section> -->
                     </menu>
     
     
                     <section class="profile">
                         <span id="profile-img">
-                            <img src="../admin/img/profile.png" alt="user">
+                           <% if(userInfo?.profile_picture) { %>
+                            <img src="<%= '../uploads/profile/admin/' + userInfo.profile_picture %>" alt="user">
+                            <% } else { %>
+                            <img src="../img/author/default_profile_image.jpg" alt="<%= userInfo.username %> image">
+                            <% } %>
                         </span>
                         <div class="profile-details">
                             <ul>

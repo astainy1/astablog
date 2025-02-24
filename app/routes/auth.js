@@ -2,12 +2,27 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const path = require("path");
+const fs = require('fs');
+const multer = require('multer');
 const db = require("../config/db");
 const saltRounds = 12;
 const isAuth = require('../middlewares/isLoggedIn');
 // const passport = require("passport");
 // const LocalStrategy = require("passport-local");
 const { body, validationResult } = require("express-validator");
+
+const profileUpload = multer({
+    storage: multer.diskStorage({
+        destination: function (req, file, cb){
+            cb(null, 'public/uploads/profile/admin');
+        },
+        filename: function (req, file, cb) {
+            // cb(null, Date.now() + path.extname(file.originalname)); 
+            cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
+        }
+    })
+});
 
 //Default page: Login routes
 router.get("/login", (req, res) => {
@@ -295,20 +310,86 @@ router.post("/new/password", (req, res) => {
 
 // Admin Section Routes
 router.get('/asta-admin/profile', isAuth.isLoggedIn, (req, res) => {
-  res.render('admin/profile', {title: 'Admin Profile | astablog'});
+
+
+    // Get user id stored in session
+    const userID = req.session.userFound;
+    // console.log('Admin ID: ', userID);
+    // Get user details from database
+    const userDetails = `SELECT * FROM users WHERE id = ?`;
+    db.query(userDetails, [userID.id], (err, result) => {
+      if (err) {
+        console.error("Error fetching user details:", err.stack || err);
+        return res.status(500);
+      }
+        // console.log(result);
+        res.render("admin/profile", {
+          title:  "Admin Profile | astablog",
+          userInfo: result[0],
+          userDetails: userID.username,
+        });
+      })
   
 });
 
 router.post('/asta-admin/profile', isAuth.isLoggedIn, (req, res) => {
-  res.redirect(303, '/asta-admin/edit-profile');
+  res.redirect(303, '/asta-admin/editprofile');
 });
 
-router.get('/asta-admin/edit-profile', isAuth.isLoggedIn, (req, res) => {
-  res.render('admin/editprofile', {title: 'Edit profile | astablog'})
+router.get('/asta-admin/editprofile', isAuth.isLoggedIn, (req, res) => {
+
+   // Get user id stored in session
+   const userID = req.session.userFound;
+
+
+   // console.log('Admin ID: ', userID);
+   // Get user details from database
+   const userDetails = `SELECT * FROM users WHERE id = ?`;
+   db.query(userDetails, [userID.id], (err, result) => {
+     if (err) {
+       console.error("Error fetching user details:", err.stack || err);
+       return res.status(500);
+     }
+
+     
+       // console.log(result);
+       res.render("admin/editprofile", {
+         title:  "Edit profile | astablog",
+         userInfo: result[0],
+       });
+     })
+
 })
 
-router.post('/asta-admin/edit-profile', isAuth.isLoggedIn, (req, res) => {
-  res.redirect(303, '/asta-admin/profile')
+router.post('/asta-admin/editprofile', isAuth.isLoggedIn, profileUpload.single('profileimge'), (req, res) => {
+
+  // Get user id stored in session
+  const userID = req.session.userFound;
+
+  //Get Admin profile picture 
+  const profileimge = req.file;
+  const adminProfilePicture = profileimge ? req.file.filename : userID.profilePicture;
+
+  //Get profile details
+  const {email, username, fullname, address} = req.body;
+  
+  console.log('Profile Details: ', email, username, fullname, address);
+  console.log('Profile Image: ', adminProfilePicture);
+
+  //Insert admin info into users table
+  const adminInfoSertion = `UPDATE users SET email = ?, username = ?, full_name = ?, location = ?, profile_picture = ? WHERE id = ?`;
+
+  db.query(adminInfoSertion, [email, username, fullname, address, adminProfilePicture, userID.id], (err, rows) => {
+    if(err){
+      console.error('Error inserting data into user table: ', err.stack || err.message);
+      res.status(500);
+      return;
+    }
+    console.log(`User ${userID.username} has successfully updated his profile `);
+    res.redirect(303, '/asta-admin/profile');
+
+  })
+
 })
 
 // Logout route
