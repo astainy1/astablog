@@ -2,13 +2,13 @@
 
 # astablog
 
-### A web application that displays information posted to the public by contributors around the global community. Information posted on this website is available to all after being scrutinized and vetted by the Administrative Association of the platform. You are encouraged to contribute as many times as you wish just by creating an account. 
-
-### You are welcome to clone this repository and experiment with it as we all learn new things together in this every envolving technological world. 
-
-### Feedback will be appreciated; please feel free to  send feedback. 
-
-### A remain, Christian Astainy Harris, 
-### A Full-Web Developer with great experience in the web development environment. 
+ASTA – Informative Article Platform
+Project Overview:
+ASTA is a web application designed to help researchers and readers access informative articles written by professional or experienced writers who sign up on the platform. The platform enables users to:
+•	Read and engage with articles.
+•	Comment on posts and react to them.
+•	Writers can reply to comments, creating an interactive environment.
+Additionally, an admin dashboard will allow platform administrators to manage users, posts, and site settings.
+This project also serves as a demonstration of my skills in HTML, CSS, Node.js, Express, MySQL, and related tools.
 
 Get in touch **[astainyharris1@gmail.com]** | +231770167961
