@@ -26,12 +26,12 @@ const profileUpload = multer({
 
 //Default page: Login routes
 router.get("/login", (req, res) => {
-  // Get an array of flash messages by passing the key to req.flash()
-  // { messages: req.flash('info') }
+
   res.render("default/login", {
     title: "Login | astablog",
     message: req.flash("error"),
   });
+
 });
 
 router.post("/login", (req, res) => {
@@ -39,7 +39,7 @@ router.post("/login", (req, res) => {
 
   if (!email || !password) {
 
-    console.log("Please enter your email address and password");
+    // console.log("Please enter your email address and password");
     req.flash("error", "Email and password are required.");
     res.redirect(303, "/login");
 
@@ -67,6 +67,7 @@ router.post("/login", (req, res) => {
       //Get user information from database result
       const userID = rows[0];
 
+      //Compare encrypted password with plain password
       bcrypt.compare(password, userID.password, (err, validPassword) => {
         if (err) {
 
@@ -79,6 +80,8 @@ router.post("/login", (req, res) => {
         if (validPassword) {
           // console.log(userID.is_admin);
             // Check if logged-in user is an Admin or regular user
+
+            // Check is user is Admin
           if (userID.is_admin === 1) {
 
             req.session.userFound = {
@@ -89,16 +92,16 @@ router.post("/login", (req, res) => {
               profilePicture: userID.profile_picture
             };
 
-            console.log(`User ${userID.username} has successfully logged in!`);
+            // console.log(`User ${userID.username} has successfully logged in!`);
 
             // console.log('Is Admin: ', userID.is_admin);
-            console.log(`User details: ${userID.profile_picture} `);
+            // console.log(`User details: ${userID.profile_picture} `);
 
             req.flash("success", "You have successfully logged in!");
             res.redirect(303, "/asta-admin");
 
           } else {
-
+            // Else user is regular user
             req.session.userFound = {
               id: userID.id,
               username: userID.username,
@@ -107,9 +110,9 @@ router.post("/login", (req, res) => {
               profilePicture: userID.profile_picture
             };
 
-            console.log(`User ${userID.username} has successfully logged in!`);
+            // console.log(`User ${userID.username} has successfully logged in!`);
             // console.log('Is Admin: ', userID.is_admin);
-            console.log(`User details: ${userID.profile_picture} `);
+            // console.log(`User details: ${userID.profile_picture} `);
 
             req.flash("success", "You have successfully logged in!");
             res.redirect(303, "/home");
@@ -183,7 +186,7 @@ router.post(
               res.redirect(303, "/register");
               return;
             } else {
-              // const isAdmin = true; //fleg to set admin
+              // const isAdmin = true; //fleg to register admin
               const hashPassword = hash;
               const insertQuery = `INSERT INTO users (username, email, password) VALUES (?,?,?)`;
 
@@ -341,7 +344,6 @@ router.get('/asta-admin/editprofile', isAuth.isLoggedIn, (req, res) => {
    // Get user id stored in session
    const userID = req.session.userFound;
 
-
    // console.log('Admin ID: ', userID);
    // Get user details from database
    const userDetails = `SELECT * FROM users WHERE id = ?`;
@@ -373,8 +375,8 @@ router.post('/asta-admin/editprofile', isAuth.isLoggedIn, profileUpload.single('
   //Get profile details
   const {email, username, fullname, address} = req.body;
   
-  console.log('Profile Details: ', email, username, fullname, address);
-  console.log('Profile Image: ', adminProfilePicture);
+  // console.log('Profile Details: ', email, username, fullname, address);
+  // console.log('Profile Image: ', adminProfilePicture);
 
   //Insert admin info into users table
   const adminInfoSertion = `UPDATE users SET email = ?, username = ?, full_name = ?, location = ?, profile_picture = ? WHERE id = ?`;

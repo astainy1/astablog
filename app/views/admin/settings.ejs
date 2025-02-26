@@ -6,12 +6,60 @@
 
             <!-- Card -->
             <section class="card-container">
-
                 <section class="card-heading">
-                    <h4>Settings</h4> 
+                    <h4>Settings</h4>
                 </section>
-                <section class="card-wrapper">
+                <div class="slider-container" >
+                    <h2>Upload Header Image</h2>
+                
+                    <!-- Upload Form -->
+                    <form id="uploadForm" enctype="multipart/form-data" >
+                        <label for="sliderImage" class="upload-label">
+                            <input type="file" id="sliderImage" name="sliderImage" accept="image/*" hidden>
+                            <div class="upload-icon">
+                                <img src="../img/upload-icon.png" alt="Upload" />
+                            </div>
+                            <span id="image_name">Click to upload image</span>
+                        </label>
+                        <br>
+                        <!-- Add input fields for title and description -->
+                         <section class="title_container">  
+                            <section>
+                            <label for="title">SubTitle:</label>
+                            <input type="text" id="sub_title" name="sub_title" required>
+                            </section>
+
+                            <section>
+                            <label for="description">Main Title:</label>
+                            <input type="text" id="main_title" name="main_title" required></input>
+                            </section>
+
+                        </section>
+                        
+
+                        <div id="errorMessages" style="color: red;"></div>
+                        <div id="successMessages" style="color: green;"></div>
+                        <button type="submit">Upload</button>
+                    </form>
+                
+                    <!-- Display Uploaded Images -->
+                    
+                </div>
+                    <!-- Display Uploaded Images -->
+<% if (sliderData.length > 0) { %>
+    <div class="slider-images">
+        <% sliderData.forEach((slide, index) => { %>
+            <div class="image-card">
+                <img src="<%= slide.image_path %>" alt="Slider Image">
+                <span><%= slide.subtitle.substring(0, 15) %>...</span>
+                <h6><%= slide.maintitle.substring(0, 15) %>...</h6>
+                <button class="delete-btn" onclick="deleteImage('<%= slide.image_path %>')">✖</button>
+            </div>
+        <% }) %>
+    </div>
+<% } else { %>
+    <p style="width: 100%; text-align: center;">No image uploaded yet.</p>
+<% } %>
 
 
-                </section>
 <%- include('./partials/__footer.ejs') %>

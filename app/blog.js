@@ -18,6 +18,8 @@ const authRoutes = require('./routes/auth.js');
 // Set up middleware for serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static('public/uploads'));
+
 
 // Set up view engine
 app.set('view engine', 'ejs');

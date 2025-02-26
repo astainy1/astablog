@@ -59,7 +59,7 @@
       $('#example2').DataTable({
         "paging": true,
         "lengthChange": false,
-        "searching": false,
+        "searching": true,
         "ordering": true,
         "info": true,
         "autoWidth": false,
@@ -68,6 +68,97 @@
     });
   </script>
 
+<!-- JavaScript to Handle Modal Data -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
 
+<script>
+
+  $(document).ready(function() {
+      $(".viewUserBtn").click(function() {
+          // Get user details from the button attributes
+          const fullName = $(this).data("fullname");
+          const username = $(this).data("username");
+          const email = $(this).data("email");
+          const profilePic = $(this).data("profile");
+          const totalPost = $(this).data("totalpost");
+
+          // Populate the modal with user data
+          $("#modalFullName").text(fullName);
+          $("#modalUsername").text(username);
+          $("#modalEmail").text(email);
+          $("#modalProfilePic").attr("src", profilePic);
+          $("#modalTotalPost").text(totalPost);
+
+          // Show the Bootstrap modal
+          $("#userInfoModal").modal("show");
+      });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const uploadForm = document.getElementById("uploadForm");
+    const fileInput = document.getElementById("sliderImage");
+    const subTitle = document.getElementById('sub_title'); 
+    const mainTitle = document.getElementById('main_title'); 
+    
+    // Display file name in input field
+
+    fileInput.addEventListener("change", function () {
+        const fileName = fileInput.files[0].name;
+        document.getElementById("image_name").textContent = fileName;
+    });
+
+    uploadForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("sliderImage", fileInput.files[0]);
+            // Prepare form data
+        formData.append('sub_title', subTitle.value); // Append subtitle
+        formData.append('main_title', mainTitle.value); // Append main title
+
+        fetch("/api/upload-slider", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Display success message
+                // alert("Upload successful.");
+                //Delay the page from reloading for 2 seconds
+                document.getElementById("successMessages").textContent = data.message;
+      
+                setTimeout(function () {
+                    location.reload();
+                }, 2000);
+            } else {
+                // Display error message
+                document.getElementById("errorMessages").textContent = data.message;
+                // alert("Upload failed.");
+            }
+        })
+        .catch(error => console.error("Upload error:", error));
+    });
+});
+
+function deleteImage(imageUrl) {
+    fetch("/api/delete-slider", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageUrl })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload(); // Reload to update image list
+        } else {
+            alert("Delete failed.");
+        }
+    })
+    .catch(error => console.error("Delete error:", error));
+}
+
+</script>
 </body>
 </html>

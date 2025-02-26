@@ -1,43 +1,50 @@
-// Testing connection
-// alert("Connection established")
+document.addEventListener("DOMContentLoaded", function() {
+  const imageSlider = document.querySelector("img#slider-image"); 
 
-const imageSlider = document.imageSlider;
-console.log("Image slider", imageSlider);
+  const subTitle = document.querySelector("#slider-subtitle"); 
+  const mainTitle = document.querySelector("#slider-maintitle"); 
 
-// Set the idexes to every image
-const sliderTime = 3500;
-let i = 0;
-let images = [];
+//   console.log(subTitle, mainTitle);
 
-// Set the values for the iamges to be slided
 
-images[0] = "../img/pic1.png";
-images[1] = "../img/pic2.png";
-images[2] = "../img/pic3.png";
-images[3] = "../img/pic4.jpg";
-images[4] = "../img/header-bg.jpeg";
-images[5] = "../img/header-bg2.avif";
+  // this ID is set in HTML
+  let images = [];
+  let i = 0;
+  const sliderTime = 3500;
 
-// Function to change the image
-function changeImage() {
-  if (i < images.length - 1) {
-    // Increment i by 1 every time
 
-    i++;
-    // console.log(`I is now: ${i}`);
-    // console.log("Image slider", imageSlider);
 
-    /*  Set the image source attribute to the image path 
-    for every time i increment to one based on the image index */
+  // Fetch images from backend
+  fetch('/api/sliders')
+      .then(response => response.json())
+      .then(data => {
+          images = data.images;
+          // console.log("Fetched images:", images); // Debugging
+          if (images.length > 0) {
+              changeImage(); // Start slider
 
-    imageSlider.src = images[i];
-  } else {
-    // reset i to zero if i is not less than images.length
-    i = 0;
-    // console.log(`I is being reset to: ${i}`);
+          }
+      })
+      .catch(error => console.error("Error loading slider images:", error));
+
+  // Function to change the image
+  function changeImage() {
+    // console.log("Fetched images:", images);
+      if (images.length === 0) return;
+
+      if (i < images.length - 1) {
+          i++;
+      } else {
+          i = 0;
+      }
+
+      // Setting image source
+      imageSlider.src = images[i].imagePath;
+
+      // Setting image title
+      mainTitle.innerHTML = images[i].maintitle;
+      subTitle.innerHTML = images[i].subtitle;
+    //   console.log(subTitle);
+      setTimeout(changeImage, sliderTime);
   }
-  // Change image after a specific set time
-  setTimeout(changeImage, sliderTime);
-}
-// Invoke function when window load
-window.onload = changeImage();
+});

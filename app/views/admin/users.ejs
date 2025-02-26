@@ -1,18 +1,120 @@
 <%- include('./partials/__header.ejs') %>
+<%- include('./partials/__sidebar.ejs') %>
+<%- include('./partials/__navbar.ejs') %>
 
-    <%- include('./partials/__sidebar.ejs') %>
-        <%- include('./partials/__navbar.ejs') %>
-            <!-- // Header ends -->
+<!-- Card -->
+<section class="card-container">
+    <section class="card-heading">
+        <h4>Users</h4>
+    </section>
 
-            <!-- Card -->
-            <section class="card-container">
+    <!-- Table -->
+    <div class="wrapper">
+        <div class="content-wrapper" style="margin-left: 0;">
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Users Table</h1>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                <section class="card-heading">
-                    <h4>Users</h4> 
-                </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">List of Registered Users</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Profile Picture</th>
+                                            <th>Full Name</th>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Number of Articles</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (allUser.length > 0) { %>
+                                            <% allUser.forEach(user => { %>
+                                                <tr>
+                                                    <td>
+                                                        <img src="<%= user.profile_picture ? '../uploads/profile/' + user.profile_picture : '../img/author/default_profile_image.jpg' %>" 
+                                                             alt="<%= user.username %> image" 
+                                                             style="border-radius: 50%; width: 50px; height: 50px;">
+                                                    </td>
+                                                    <td><%= user.full_name %></td>
+                                                    <td><%= user.username %></td>
+                                                    <td><%= user.email %></td>
+                                                    <td><%= user.totalPost %></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-success viewUserBtn"
+                                                                data-id="<%= user.id %>"
+                                                                data-fullname="<%= user.full_name %>"
+                                                                data-username="<%= user.username %>"
+                                                                data-email="<%= user.email %>"
+                                                                data-profile="<%= user.profile_picture ? '../uploads/profile/' + user.profile_picture : '../img/author/default_profile_image.jpg' %>"
+                                                                data-totalpost="<%= user.totalPost %>">
+                                                            View
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger">Delete</button>
+                                                    </td>
+                                                </tr>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="6" class="text-center">No Users Found</td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Profile Picture</th>
+                                            <th>Full Name</th>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Number of Articles</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
 
-
-                    <%- include('./partials/__table.ejs') %>
+<!--  User Info Modal (Bootstrap) -->
+<div class="modal fade" id="userInfoModal" tabindex="-1" aria-labelledby="userInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userInfoModalLabel">User Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <img id="modalProfilePic" src="" alt="Profile Picture" class="rounded-circle mb-3" style="width: 80px; height: 80px;">
+                </div>
+                <p><strong>Full Name:</strong> <span id="modalFullName"></span></p>
+                <p><strong>Username:</strong> <span id="modalUsername"></span></p>
+                <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                <p><strong>Number of Articles:</strong> <span id="modalTotalPost"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <%- include('./partials/__footer.ejs') %>

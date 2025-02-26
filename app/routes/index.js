@@ -9,7 +9,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const { body, validationResult } = require("express-validator");
 const multer = require('multer');
-
+const fs = require('fs');
 const db = require("../config/db");
 const isAuth = require("../middlewares/isLoggedIn");
 
@@ -24,7 +24,7 @@ const upload = multer({
         },
         filename: function (req, file, cb) {
             // cb(null, Date.now() + path.extname(file.originalname)); 
-            cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
+            cb(null, Date.now() + path.extname(file.originalname)); 
         }
     })
 });
@@ -43,6 +43,19 @@ const uploadArticleImage = multer({
   })
 });
 
+
+// Header images uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'public/uploads/sliders/'); 
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const uploadHeaderImage = multer({ storage });
+
 /*
     Default home pages.
     These pages will be rendered for users who have not logged-in to the platform.
@@ -53,12 +66,12 @@ const uploadArticleImage = multer({
 router.get("/", (req, res) => {
 
   //Retrieve all articles from Database and display on the default home page
-  const articles = `SELECT * FROM users INNER JOIN posts WHERE users.id = posts.user_id`;
+  const articles = `SELECT * FROM users INNER JOIN posts WHERE users.id = posts.user_id ORDER BY posts.created_at DESC`;
 
   db.query(articles, [], (err, rows) => {
     if(err){
-      res.status(500)
-      return console.error('Error fetching articles from posts table: ', err);
+      console.error('Error fetching articles from posts table: ', err.stack || err.message);
+      return res.status(500);
     }
 
     if(!rows.length){
@@ -70,7 +83,7 @@ router.get("/", (req, res) => {
     const commentsQuery = `SELECT post_id, COUNT(*) AS totalComments FROM comments WHERE post_id IN (?) GROUP BY post_id`;
     db.query(commentsQuery, [postIds], (err, comments) => {
       if (err) {
-        console.error("Error fetching comments:", err);
+        console.error("Error fetching comments:", err.stack || err.message || err);
         return res.status(500);
       }
 
@@ -116,7 +129,7 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
   const articlesQuery = `SELECT * FROM users INNER JOIN posts ON users.id = posts.user_id`;
   db.query(articlesQuery, (err, articles) => {
     if (err) {
-      console.error("Error fetching articles:", err);
+      console.error("Error fetching articles:", err.stack || err.message);
       return res.status(500);
     }
 
@@ -159,7 +172,6 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
   });
 });
 
-
 // Logged-in page: Profile routes
 router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
   //Retrive user details stored in session.
@@ -169,8 +181,7 @@ router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
   const userDetails = `SELECT full_name, username, email, profile_picture, bio, location, facebook_id, twitter_id, profession FROM users WHERE id = ?`;
   db.query(userDetails, [userName.id], (err, result) => {
     if (err) {
-      console.error("Error retriving user data from database: ", err.message);
-      req.flash("error", "Something went wrong. Please try again.");
+      console.error("Error retriving user data from database: ", err.stack || err.message);
       req.flash("error", "Something went wrong. Please try again.");
       return res.redirect(303, "/user/profile");
     } else {
@@ -201,7 +212,7 @@ router.get("/edit/profile", isAuth.isLoggedIn, (req, res) => {
         console.error('Error retrieving user details: ' + err.stack); 
         res.redirect(303, '/user/profile');
     }else{
-        console.log(results[0]);
+        // console.log(results[0]);
         const dbResults = results[0];
 
         res.render("user/editprofile", {
@@ -239,7 +250,7 @@ router.post("/edit/profile", isAuth.isLoggedIn, upload.single('profilePhoto'), (
     }else{
 
       if(!result.length === 0){
-        console.log('User profile updated ', result);
+        // console.log('User profile updated ', result);
         res.redirect(303, "/user/profile");
       }else{
         console.log('User profile updated  with same info');
@@ -292,7 +303,7 @@ router.post("/create/article", isAuth.isLoggedIn, uploadArticleImage.single('art
   const userID = req.session.userFound.id;
   // console.log(userID);
 
-     // Sanitize the content before saving it to the database
+     // Sanitize summernote CKEditor content before sending to the database
      const cleanContent = sanitizeHtml(editordata, {
       allowedTags: [
         'p', 'b', 'i', 'u', 'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 
@@ -318,10 +329,9 @@ router.post("/create/article", isAuth.isLoggedIn, uploadArticleImage.single('art
   const { article_title} = req.body;
   const articleImage = req.file ? req.file.filename : null;
   
-  console.log(article_title, cleanContent, articleImage, userID);
+  // console.log(article_title, cleanContent, articleImage, userID);
     try {
   
-
     if(!article_title && !editordata){
 
       console.log('Please fill out the input fileds');
@@ -336,7 +346,7 @@ router.post("/create/article", isAuth.isLoggedIn, uploadArticleImage.single('art
               [article_title, cleanContent, articleImage, userID], 
               (error, results) => {
                 if (error) {
-                  console.error("Error creating article:", error);
+                  console.error("Error creating article:", error.stack);
                   req.flash('error', 'Something went wrong. Please try again.');
                   return res.status(500).send("Internal Server Error");
                 }
@@ -410,19 +420,17 @@ router.get('/post/:id?', isAuth.isLoggedIn, (req, res) => {
   `;
     db.query(allArticle, [postId], (err, result) => {
       if(err){
-        console.log(`Error retrieving data from post table: ${err.stack}`);
+        console.error(`Error retrieving data from post table: ${err.stack}`);
         res.status(500);
       }else{
         if(result.length > 0){
+
           // Process the result into structured data
           const post = result[0];
           const postComments = result;
+
           // const postCommentsReplies = result;
           // console.log(postCommentsReplies)
-
-          // const comments = result.filter((comment) => {
-          //   comment.comment_id
-          // } );
 
           // const reactions = result.filter((reaction) => reaction.reaction_type);
 
@@ -511,7 +519,7 @@ try {
         console.error('Error inserting comment into comment table: ', err.stack);
         res.status(500);
       }else{
-        console.log(`User with ID ${user_id} has successfully commented on post with ID ${id}`);
+        // console.log(`User with ID ${user_id} has successfully commented on post with ID ${id}`);
         res.redirect(`/post/${id}`)
       }
     })
@@ -534,9 +542,9 @@ router.post('/post/:id/reply', isAuth.isLoggedIn, (req, res) => {
     const {reply_comment, parent_comment_id} = req.body;
     const {id} = req.params; 
     const user_id = req.session.userFound.id;
-    console.log('Parent ID: ', parent_comment_id);
-    console.log(req.body)
-    console.log('Reply Message: ', reply_comment);
+    // console.log('Parent ID: ', parent_comment_id);
+    // console.log(req.body)
+    // console.log('Reply Message: ', reply_comment);
     //Check if replay is empty
     if(!reply_comment || !parent_comment_id || !id){
       console.log('Empty reply message. Please write a reply message.');
@@ -553,7 +561,7 @@ router.post('/post/:id/reply', isAuth.isLoggedIn, (req, res) => {
           res.status(500);
           return;
         }else{
-                console.log(`User with ID ${user_id} has reply to post with ID ${id} user comment ${parent_comment_id}. Here is the reply: ${reply_comment}`);
+                // console.log(`User with ID ${user_id} has reply to post with ID ${id} user comment ${parent_comment_id}. Here is the reply: ${reply_comment}`);
                 res.redirect(`/post/${id}?reply`);
                 return;
         }
@@ -575,7 +583,7 @@ router.get("/asta-admin", isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
   
   // Get user id stored in session
   const userID = req.session.userFound;
-  console.log('Admin ID: ', userID);
+  // console.log('Admin ID: ', userID);
   // Get user details from database
   const userDetails = `SELECT * FROM users WHERE id = ?`;
 
@@ -645,7 +653,7 @@ router.get(
       console.error("Error fetching user details:", err.stack || err);
       return res.status(500);
     }
-      console.log(result);
+      // console.log(result);
       res.render("admin/article", {
         title:  "Admin Article List | astaBlog",
         userInfo: result[0],
@@ -667,7 +675,7 @@ router.get('/asta-admin/comments', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res
       console.error("Error fetching user details:", err.stack || err);
       return res.status(500);
     }
-      console.log(result);
+      // console.log(result);
       res.render('admin/comments', {
         title:  "Admin Comments List | astaBlog",
         userInfo: result[0],
@@ -690,7 +698,7 @@ router.get('/asta-admin/replies', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res)
       console.error("Error fetching user details:", err.stack || err);
       return res.status(500);
     }
-      console.log(result);
+      // console.log(result);
       res.render('admin/replies', {
         title:  "Admin Replies List | astaBlog",
         userInfo: result[0],
@@ -700,27 +708,150 @@ router.get('/asta-admin/replies', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res)
 })
 
 // Admin users list
-
+// Admin users list
 router.get('/asta-admin/users', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
-
-  // Get user id stored in session
+  
+  // Get user ID stored in session
   const userID = req.session.userFound;
-  // console.log('Admin ID: ', userID);
+
   // Get user details from database
-  const userDetails = `SELECT * FROM users WHERE id = ?`;
-  db.query(userDetails, [userID.id], (err, result) => {
+  const userDetailsQuery = `SELECT * FROM users WHERE id = ?`;
+  db.query(userDetailsQuery, [userID.id], (err, userResult) => {
     if (err) {
       console.error("Error fetching user details:", err.stack || err);
-      return res.status(500);
+      return res.status(500).send("Internal Server Error");
     }
-      console.log(result);
-      res.render('admin/users', {
-        title:  "Admin users List | astaBlog",
-        userInfo: result[0],
-      });
-    })
 
-})
+    // Get all non-admin users
+    const allUsersQuery = `SELECT * FROM users WHERE is_admin = 0`;
+    db.query(allUsersQuery, [], (err, users) => {
+      if (err) {
+        console.error("Error querying all users:", err.stack || err);
+        return res.status(500).send("Internal Server Error");
+      }
+
+      // Get post counts per user
+      const postCountQuery = `SELECT user_id, COUNT(*) AS totalPost FROM posts GROUP BY user_id`;
+      db.query(postCountQuery, [], (err, postCounts) => {
+        if (err) {
+          console.error("Error getting total articles for each user:", err.stack || err);
+          return res.status(500).send("Internal Server Error");
+        }
+
+        // Create a lookup object for post counts
+        const postCountMap = {};
+        postCounts.forEach(row => {
+          postCountMap[row.user_id] = row.totalPost;
+        });
+
+        // Merge post counts into user data (ensuring no duplicates)
+        users.forEach(user => {
+          user.totalPost = postCountMap[user.id] || 0; // Default to 0 if no posts
+        });
+
+        // Render the page
+        res.render('admin/users', {
+          title: "Admin Users List | astaBlog",
+          userInfo: userResult[0] || {}, 
+          allUser: users,
+        });
+      });
+    });
+  });
+});
+
+
+
+// Admin route to handle image upload
+// router.post('/asta-admin/upload-slider', uploadHeaderImage.single('sliderImage'), (req, res) => {
+  
+  router.post("/api/upload-slider", uploadHeaderImage.single("sliderImage"), (req, res) => {
+
+      // Get user id stored in session
+  const userID = req.session.userFound;
+
+  const sub_title = req.body.sub_title;
+  const main_title = req.body.main_title;
+  
+  // console.log(sub_title, main_title);
+  
+      // Check if a file was uploaded and if the required fields are present
+      if (!req.file) {
+          return res.json({ success: false, message: "No file uploaded" });
+      }
+      if(!req.body.sub_title){
+        return res.json({ success: false, message: "Please provide Sub Title" });
+      }
+      if(!req.body.main_title){
+        return res.json({ success: false, message: "Please provide Main Title" });
+      }
+
+      const imagePath = "/uploads/sliders/" + req.file.filename;
+      const query = "INSERT INTO header_images (image_path, uploaded_by, subtitle, maintitle) VALUES (?, ?, ?, ?)";
+  
+      db.query(query, [imagePath,userID.id, sub_title, main_title ], (err) => {
+          if (err) {
+              console.error("Database insert error:", err);
+              return res.json({ success: false });
+          }
+          res.json({ success: true, imagePath, message: 'Image uploaded successfully.' });
+      });
+  });
+  
+
+// API route for image slider
+router.get('/api/sliders', (req, res) => {
+  const getSliders = `SELECT * FROM header_images ORDER BY uploaded_at DESC`;
+
+  db.query(getSliders, (err, results) => {
+      if (err) {
+          console.error('Error fetching slider images:', err.stack || err.message || err);
+          return res.status(500).json({ error: 'Database error' });
+      }
+      // console.log(results);
+      // Construct full image URLs
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      // Store subtile, maintitle and image url in an object
+      const slider = results.map(row => ({
+        imagePath: `${baseUrl}${row.image_path}`,
+        subtitle: row.subtitle,
+        maintitle: row.maintitle,
+      }));
+      // console.log(sliderData);
+      // res.json(sliderData);
+      // const imagePaths = results.map(row => `${baseUrl}${row.image_path}`);
+
+      // const imageSubtitle = results.map(row => row.subtitle);
+      // const imageMainTitle = results.map(row => row.maintitle);
+      // console.log(imageSubtitle, imageMainTitle);
+
+      res.json({ images: slider });
+  });
+});
+
+// API route for deleting images
+router.post("/api/delete-slider", (req, res) => {
+  const { imageUrl } = req.body;
+
+  // Extract filename from URL
+  const filename = imageUrl.split("/uploads/sliders/")[1];
+  const filePath = path.join(__dirname, "../public/uploads/sliders", filename);
+
+  // Delete from database
+  const query = "DELETE FROM header_images WHERE image_path = ?";
+  db.query(query, ["/uploads/sliders/" + filename], (err) => {
+      if (err) {
+          console.error("Database delete error:", err);
+          return res.json({ success: false });
+      }
+
+      // Delete from filesystem
+      fs.unlink(filePath, (fsErr) => {
+          if (fsErr) console.error("File delete error:", fsErr);
+          res.json({ success: true });
+      });
+  });
+});
 
 // Admin page Settings
 
@@ -736,12 +867,43 @@ router.get('/asta-admin/settings', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res
       console.error("Error fetching user details:", err.stack || err);
       return res.status(500);
     }
-      console.log(result);
+
+    // Retrieve all images
+    const getSliders = `SELECT * FROM header_images ORDER BY uploaded_at DESC`;
+
+    db.query(getSliders, (err, results) => {
+        if (err) {
+            console.error('Error fetching slider images:', err.stack || err.message || err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        // console.log(results);
+        // Construct full image URLs
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        const sliderData = results.map(row => ({
+            image_path: `${baseUrl}${row.image_path}`,
+            subtitle: row.subtitle || '',
+            maintitle: row.maintitle || '',
+        }));
+
+        // const baseUrl = `${req.protocol}://${req.get('host')}`;
+        // const imagePaths = results.map(row => `${baseUrl}${row.image_path}`);
+        // const subTitle = results.map(row => row.subtitle);
+        // const mainTitle = results.map(row => row.maintitle);
+  
+              
+      // console.log(result);
       res.render('admin/settings', {
         title:  "Admin Settings | astaBlog",
         userInfo: result[0],
+        sliderData,
       });
+
+    });
+
+
     })
+
+      
 
 })
 

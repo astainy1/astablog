@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>DataTables</h1>
+            <h1>Users Table</h1>
           </div>
           <div class="col-sm-6">
             
@@ -24,29 +24,31 @@
 
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">DataTable with default features</h3>
+              <h3 class="card-title">List of Registered Users</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Rendering engine</th>
-                  <th>Browser</th>
-                  <th>Platform(s)</th>
-                  <th>Engine version</th>
-                  <th>CSS grade</th>
+                  <th>Full Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Number of Articles</th>
+                  <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 4.0
+                  <td>Christian A. Harris</td>
+                  <td>Astainy
                   </td>
-                  <td>Win 95+</td>
+                  <td>astainyharris1@gmail.com</td>
                   <td> 4</td>
-                  <td>X</td>
+                  <td>
+                    <button type="button" class="btn btn-success">View</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                  </td>
                 </tr>
                 <tr>
                   <td>Trident</td>
@@ -94,7 +96,11 @@
                   <td>Firefox 1.0</td>
                   <td>Win 98+ / OSX.2+</td>
                   <td>1.7</td>
-                  <td>A</td>
+                  <td>
+                    <button type="button" class="btn btn-success">View</button>
+                    <!-- <button type="button" class="btn btn-secondary">Ban</button> -->
+                    <button type="button" class="btn btn-danger">Delete</button>
+                  </td>
                 </tr>
                 <tr>
                   <td>Gecko</td>
@@ -449,11 +455,11 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                  <th>Rendering engine</th>
-                  <th>Browser</th>
-                  <th>Platform(s)</th>
-                  <th>Engine version</th>
-                  <th>CSS grade</th>
+                  <th>Full Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Number of Articles</th>
+                  <th>Action</th>
                 </tr>
                 </tfoot>
               </table>
