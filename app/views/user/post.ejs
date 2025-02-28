@@ -22,17 +22,16 @@
                     <%= post.post_title %>
                   </span>
           </a>
-          <section class="blog-action-container">
+          <section class="blog-action-container" data-post-id="<%= post.post_id %>" id="reaction_container">
             <!-- <section class="blog-action-container" style="margin-bottom: 1rem; display: flex; gap: 3rem;"> -->
 
             <% let monthArr=['Jan', 'Feb' , 'Mar' , 'Apr' , 'May' , 'Jun' , 'Jul' , 'Aug' , 'Sep' , 'Oct' , 'Nov'
               , 'Dec' ] %>
 
-              <% let getDateAt = new Date(post.post_created_at) %>
+              <% let getDateAt=new Date(post.post_created_at) %>
 
-                <% let postedAt = { month: monthArr[getDateAt.getMonth()], 
-                  day: getDateAt.getDate(), 
-                  year: getDateAt.getFullYear() } %>
+                <% let postedAt={ month: monthArr[getDateAt.getMonth()], day: getDateAt.getDate(), year:
+                  getDateAt.getFullYear() } %>
 
                   <% postedAt.day < 10 ? postedAt.day='0' + postedAt.day : postedAt.day %>
 
@@ -49,6 +48,15 @@
                             <%= totalComment.totalComments %>
                           </span></a>
 
+                        <!-- <div class="reaction_main_container" style="display: flex; justify-content: center; align-items: center; gap: 30px;">  -->
+
+                        <a href="#like" class="blog-action-center" data-type="like" id="reaction_btn"><i
+                            class="fa fa-thumbs-up" id="react_post"> <span class="like-count"></span> </i></a>
+
+                        <!-- <a href="#like" class="blog-action-center" data-type="dislike" id="reaction_btn"><i
+                            class="fa fa-thumbs-down" id="react_post"> <span class="dislike-count"> </span> </i></a> -->
+
+                        <!-- </div> -->
           </section>
           <%- post.post_body %>
         </section>
@@ -87,9 +95,9 @@
         </a>
 
         <p class="author-profession">
-              <span>
-                <%= post.post_author_profession || 'Unknow profession' %>
-              </span>
+          <span>
+            <%= post.post_author_profession || 'Unknow profession' %>
+          </span>
         </p>
         <p class="author-bio">
           <%= post.post_author_bio %>
@@ -116,7 +124,7 @@
                       <li>
                         <a href="<%= post.post_author_twitter %>"><i class="fa-brands fa-twitter"></i></a>
                       </li>
-                      <% } %>
+                    <% } %>
           </ul>
         </section>
     </section>
@@ -157,86 +165,90 @@
   <!-- Commented start -->
   <% for(let comment of postComments) {%>
     <% if(comment?.comment_text) { %>
-        <section class="commentted-message-container" data-comment-id="<%= comment.comment_id %>">
-          <section class="author-image-container">
+      <section class="commentted-message-container" data-comment-id="<%= comment.comment_id %>">
+        <section class="author-image-container">
 
-            <% if(comment && comment.comment_author_profile_picture) { %>
-              <img src="<%= '../uploads/profile/' + comment.comment_author_profile_picture %>"
-                alt="<%= post.post_author %> Image">
-              <% }else { %>
+          <% if(comment && comment.comment_author_profile_picture) { %>
+            <img src="<%= '../uploads/profile/' + comment.comment_author_profile_picture %>"
+              alt="<%= post.post_author %> Image">
+            <% }else { %>
 
-                <img src="../img/author/default_profile_image.jpg" alt="Author Image">
+              <img src="../img/author/default_profile_image.jpg" alt="Author Image">
 
-                <% } %>
+              <% } %>
 
-          </section>
-          <section class="author-details">
-            <a href="/viewprofile/<%= comment.comment_author_id %>" style="text-decoration: none; color: #525050;">
-              <strong>
-                <%= comment.comment_author %>
-              </strong>
-            </a>
-            <p class="author-bio">
-              <%= comment.comment_text %>
-            </p>
-            <section class="social-icon">
-              <ul>
-                <!-- <li>
+        </section>
+        <section class="author-details">
+          <a href="/viewprofile/<%= comment.comment_author_id %>" style="text-decoration: none; color: #525050;">
+            <strong>
+              <%= comment.comment_author %>
+            </strong>
+          </a>
+          <p class="author-bio">
+            <%= comment.comment_text %>
+          </p>
+          <section class="social-icon">
+            <ul>
+              <!-- <li>
               <a href="#"
               ><i class="fa-brands fa-facebook-f"></i></a
             ></li> -->
-                <li>
-                  <a href="#like" onclick="alert('Feature is not available. Contact system developer.')"><i class="fa fa-thumbs-up"></i>0</a>
-                </li>
-                <li>
-                  <a href="#dislike" onclick="alert('Feature is not  available. Contact system developer.')"><i class="fa fa-thumbs-down"></i>0</a>
-                </li>
-                <li>
-                  <a class="reply-btn" style="cursor: pointer;">- <i>Reply</i> </a><span class="county-reply">(1)</span>
-                </li>
-              </ul>
+              <li>
+                <a href="#like" onclick="alert('Feature is not available. Contact system developer.')"><i
+                    class="fa fa-thumbs-up"></i>0</a>
+              </li>
+              <li>
+                <a href="#dislike" onclick="alert('Feature is not  available. Contact system developer.')"><i
+                    class="fa fa-thumbs-down"></i>0</a>
+              </li>
+              <li>
+                <a class="reply-btn" style="cursor: pointer;">- <i>Reply</i> </a><span class="county-reply">(1)</span>
+              </li>
+            </ul>
 
-            </section>
           </section>
         </section>
+      </section>
 
-        <!-- Reply form starts -->
-        <form action="/post/<%= post.post_id %>/reply" method="post" class="reply-form-container" id="reply-form">
-          <span style="color: red; text-align: center; font-size: 0.9rem;">
-            <%= replyMessage %>
-          </span>
+      <!-- Reply form starts -->
+      <form action="/post/<%= post.post_id %>/reply" method="post" class="reply-form-container" id="reply-form">
+        <span style="color: red; text-align: center; font-size: 0.9rem;">
+          <%= replyMessage %>
+        </span>
 
-          <input type="hidden" name="parent_comment_id" value="<%= comment.comment_id %>">
-          <textarea name="reply_comment" id="reply" cols="30" rows="7" placeholder="Write reply here"
-            required></textarea>
+        <input type="hidden" name="parent_comment_id" value="<%= comment.comment_id %>">
+        <textarea name="reply_comment" id="reply" cols="30" rows="7" placeholder="Write reply here" required></textarea>
 
-          <section class="submit-reply-container">
-            <button type="submit" id="reply-submit-btn">Reply</button>
-          </section>
-        </form>
-        <!-- Reply form ends -->
-        <!-- Commented ends -->
+        <section class="submit-reply-container">
+          <button type="submit" id="reply-submit-btn">Reply</button>
+        </section>
+      </form>
+      <!-- Reply form ends -->
+      <!-- Commented ends -->
 
-        <!-- Reply section starts -->
-        <% if(comment?.reply_text) { %>
+      <!-- Reply section starts -->
+      <% if(comment?.reply_text) { %>
         <section class="reply-comment">
           <section class="author-image-container">
             <% if(comment && comment.reply_author_profile_picture) { %>
-              <img src="<%= '../uploads/profile/' + comment.reply_author_profile_picture %>" alt="<%= comment.reply_author_username %> picture">
+              <img src="<%= '../uploads/profile/' + comment.reply_author_profile_picture %>"
+                alt="<%= comment.reply_author_username %> picture">
               <% }else { %>
-            <img src="../img/author/default_profile_image.jpg" alt="<%= comment.reply_author_username%> picture">
-            <% } %>
+                <img src="../img/author/default_profile_image.jpg" alt="<%= comment.reply_author_username%> picture">
+                <% } %>
           </section>
           <section class="author-details">
             <section class="reply-author-names">
-              <% console.log(comment.reply_author_username) %>
+
               <a href="/viewprofile/<%= comment.reply_author_id %>" style="text-decoration: none; color: #525050;">
                 <em>- <%= comment.reply_author_username %> </em> &nbsp; <span>replies to &nbsp;
               </a>
               <a href="/viewprofile/<%= comment.comment_author_id %>" style="text-decoration: none; color: #525050;">
-                <em><%='@' + comment.comment_author  ||  comment.comment_author%></em></span>
+                <em>
+                  <%='@' + comment.comment_author || comment.comment_author%>
+                </em></span>
               </a>
-              
+
               <span class="reply-time">
                 <% comment.reply_created_at %>
               </span>
@@ -247,97 +259,149 @@
             <section class="social-icon">
               <ul>
                 <li>
-                  <a href="#like" onclick="alert('Feature is not available. Contact system developer.')"><i class="fa fa-thumbs-up"></i>0</a>
+                  <a href="#like" onclick="alert('Feature is not available. Contact system developer.')"><i
+                      class="fa fa-thumbs-up"></i>0</a>
                 </li>
                 <li>
-                  <a href="#dislike" onclick="alert('Feature is not available. Contact system developer.')"><i class="fa fa-thumbs-down"></i>0</a>
+                  <a href="#dislike" onclick="alert('Feature is not available. Contact system developer.')"><i
+                      class="fa fa-thumbs-down"></i>0</a>
                 </li>
 
                 <li>
-                  <a href="#reply" class="reply-btn" onclick="alert('You cannot reply to this person')">- <i>Reply</i> </a><span class="count-reply">(0)</span>
+                  <a href="#reply" class="reply-btn" onclick="alert('You cannot reply to this person')">- <i>Reply</i>
+                  </a><span class="count-reply">(0)</span>
                 </li>
               </ul>
             </section>
           </section>
         </section>
         <% } else{ %>
-        <% } %>
+          <% } %>
 
-        <!-- Reply form starts -->
-        <form action="/post/<%= post.post_id %>/reply" method="post" class="reply-form-container inner-reply-form"
-          id="reply-form">
-          <span style="color: red; text-align: center;font-size: 0.9rem;">
-            <%= replyMessage %>
-          </span>
-          <textarea name="reply_comment" id="reply" cols="30" rows="7" placeholder="Write reply here"
-            required></textarea>
+            <!-- Reply form starts -->
+            <form action="/post/<%= post.post_id %>/reply" method="post" class="reply-form-container inner-reply-form"
+              id="reply-form">
+              <span style="color: red; text-align: center;font-size: 0.9rem;">
+                <%= replyMessage %>
+              </span>
+              <textarea name="reply_comment" id="reply" cols="30" rows="7" placeholder="Write reply here"
+                required></textarea>
 
-          <section class="submit-reply-container">
-            <button type="submit" id="reply-submit-btn">Reply</button>
-          </section>
+              <section class="submit-reply-container">
+                <button type="submit" id="reply-submit-btn">Reply</button>
+              </section>
 
-        </form>
-        <!-- Reply form ends -->
-        <!-- Reply to section ends -->
-        <% } else{ %>
-          <p style="text-align: center">No Comment! </p>
-        <% } %>
-        <% } %>
+            </form>
+            <!-- Reply form ends -->
+            <!-- Reply to section ends -->
+            <% } else{ %>
+              <p style="text-align: center">No Comment! </p>
+              <% } %>
+                <% } %>
 
-            <!-- <section class="read-more-comments">
+                  <!-- <section class="read-more-comments">
         <p> <a href="">See More Comments...</a></p>
       </section> -->
 
-            <div style="margin-bottom: 10em"></div>
-            <div style="margin-bottom: 16em"></div>
+                  <div style="margin-bottom: 10em"></div>
+                  <div style="margin-bottom: 16em"></div>
 
-            <!-- Recent Post -->
+                  <!-- Recent Post -->
 
-            <%- include('./partials/__recent_post.ejs') %>
-              </section>
-              <script defer>
+                  <%- include('./partials/__recent_post.ejs') %>
+                    </section>
+                    <script defer>
 
-                document.addEventListener("DOMContentLoaded", () => {
-                  const replyButtons = document.querySelectorAll(".reply-btn");
+                      document.addEventListener("DOMContentLoaded", () => {
+                        const replyButtons = document.querySelectorAll(".reply-btn");
 
-                  replyButtons.forEach((button) => {
-                    button.addEventListener("click", function () {
-                      // Find the nearest comment container
-                      const commentContainer = this.closest(".commentted-message-container");
-                      if (!commentContainer) return console.log("No comment container found");
+                        replyButtons.forEach((button) => {
+                          button.addEventListener("click", function () {
+                            // Find the nearest comment container
+                            const commentContainer = this.closest(".commentted-message-container");
+                            // if (!commentContainer) return console.log("No comment container found");
 
-                      // Get the comment ID from the data attribute
-                      const commentId = commentContainer.dataset.commentId;
-                      console.log("Selected Comment ID: ", commentId);
+                            // Get the comment ID from the data attribute
+                            const commentId = commentContainer.dataset.commentId;
+                            // console.log("Selected Comment ID: ", commentId);
 
-                      // Find the reply form
-                      const replyForm = commentContainer.nextElementSibling;
-                      if (!replyForm || !replyForm.classList.contains("reply-form-container")) {
-                        return console.log("Reply form not found");
-                      }
+                            // Find the reply form
+                            const replyForm = commentContainer.nextElementSibling;
+                            if (!replyForm || !replyForm.classList.contains("reply-form-container")) {
+                              return console.log("Reply form not found");
+                            }
 
-                      // Assign the comment ID to the hidden input inside the reply form
-                      const hiddenInput = replyForm.querySelector('input[name="parent_comment_id"]');
-                      if (hiddenInput) {
-                        hiddenInput.value = commentId;
-                      } else {
-                        console.error("Hidden input for comment_id not found in form");
-                      }
+                            // Assign the comment ID to the hidden input inside the reply form
+                            const hiddenInput = replyForm.querySelector('input[name="parent_comment_id"]');
+                            if (hiddenInput) {
+                              hiddenInput.value = commentId;
+                            } else {
+                              console.error("Hidden input for comment_id not found in form");
+                            }
 
-                      // Hide all other reply forms
-                      document.querySelectorAll(".reply-form-container").forEach((form) => {
-                        if (form !== replyForm) {
-                          form.style.display = "none";
-                        }
+                            // Hide all other reply forms
+                            document.querySelectorAll(".reply-form-container").forEach((form) => {
+                              if (form !== replyForm) {
+                                form.style.display = "none";
+                              }
+                            });
+
+                            // Toggle the display of the selected reply form
+                            replyForm.style.display =
+                              replyForm.style.display === "flex" ? "none" : "flex";
+                          });
+                        });
                       });
 
-                      // Toggle the display of the selected reply form
-                      replyForm.style.display =
-                        replyForm.style.display === "flex" ? "none" : "flex";
-                    });
-                  });
-                });
+                      // Reaction function
+                      document.addEventListener("DOMContentLoaded", function () {
+                        document.querySelectorAll("#reaction_container").forEach(container => {
+                          const postId = container.getAttribute("data-post-id");
 
+                          console.log(postId);
 
-              </script>
-              <%- include('./partials/__footer') %>
+                          // Fetch initial reaction count
+                          fetch(`/reactions/${postId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                              if (data.reactions) {
+                                console.log(data.reactions)
+                                container.querySelector(".like-count").innerText = data.reactions.like || 0;
+                                container.querySelector(".dislike-count").innerText = data.reactions.dislike || 0;
+                              }
+                            });
+
+                          // Handle reaction click
+                          container.querySelectorAll("#reaction_btn").forEach(button => {
+                            button.addEventListener("click", function () {
+                              console.log(button);
+                              const reactionType = this.getAttribute("data-type");
+                              console.log(reactionType);
+
+                              fetch("/react", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ post_id: postId, reaction_type: reactionType }),
+                              })
+                                .then(response => response.json())
+                                .then(data => {
+
+                                  console.log(data);
+
+                                  if (data.success) {
+                                    let countSpan = container.querySelector(`.${reactionType}-count`);
+                                    let currentCount = parseInt(countSpan.innerText);
+                                    console.log(currentCount);
+                                    countSpan.innerText = data.message === "Reaction removed" ? currentCount - 1 : currentCount + 1;
+                                  } else {
+                                    alert(data.message);
+                                  }
+                                })
+                                .catch(error => console.error("Error:", error));
+                            });
+                          });
+                        });
+                      });
+
+                    </script>
+                    <%- include('./partials/__footer') %>

@@ -83,8 +83,8 @@
        let readFile = new FileReader();
     if(newFile){
 
-        console.log('File is uploaded: ', newFile[0]);
-        console.log('File is uploaded: ', newFile[0].name);
+        // console.log('File is uploaded: ', newFile[0]);
+        // console.log('File is uploaded: ', newFile[0].name);
         readFile.onload = (event) => {
             photoPlaceholder.setAttribute('src', event.target.result);
         } 
@@ -101,7 +101,7 @@
             // newSRC = `../img/author/author8.jpg`;
             // {currentFile} =  newSRC 
             photoPlaceholder.setAttribute('src', `../img/author/default_profile_image.jpg`);
-            console.log('File is removed: ', newFile[0].name);
+            // console.log('File is removed: ', newFile[0].name);
         })
     }
    });

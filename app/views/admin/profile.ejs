@@ -9,7 +9,7 @@
                         <form method="post" class="profile-content-container">
 
                             <section class="profile-image-section">
-                                <% console.log(userInfo) %>
+                               
                                 <section class="profile-img">
                                     <% if(userInfo?.profile_picture) {%>
                                         <img src="<%= '../uploads/profile/admin/' + userInfo.profile_picture %>" style="object-fit: cover;" alt="<%= userInfo.username %> image" srcset="">
@@ -28,7 +28,7 @@
                             <section class="profile-content-section">
                                 
                                 <p class="username"> <%= userInfo.username %> </p>
-                                <% console.log(userInfo.full_name) %>
+                               
                                 <% if(userInfo.full_name === null || userInfo.full_name === '') {%>
                                     <p class="fullname"> <a href="/asta-admin/editprofile" style="text-decoration: none;"> Add Name</a> </p>
                                 <% } else { %>

@@ -45,6 +45,9 @@
                     <span class="recent-news-author">By &nbsp; <%= posts.username %></span>
                     <% } %> /
                     <span class="fa fa-comment comment-count"> &nbsp; <% if(posts.totalComments) { %><%= posts.totalComments %><% } else { %><%= 0 %><% } %></span>
+
+                    <a class="blog-action-center" data-type="like" id="reaction_btn"><i
+                        class="fa fa-thumbs-up" id="react_post"> <span class="like-count"></span> </i></a>
                                 </a>
                             </section>
                     </section>

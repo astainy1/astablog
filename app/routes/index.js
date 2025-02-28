@@ -16,7 +16,6 @@ const isAuth = require("../middlewares/isLoggedIn");
 // Middleware to protect admin routes
 const isAdmin = require("../middlewares/isLoggedIn");
 
-
 const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb){
@@ -28,7 +27,6 @@ const upload = multer({
         }
     })
 });
-
 
 // Article image uploads
 const uploadArticleImage = multer({
@@ -42,7 +40,6 @@ const uploadArticleImage = multer({
       }
   })
 });
-
 
 // Header images uploads
 const storage = multer.diskStorage({
@@ -495,6 +492,65 @@ router.get('/post/:id?', isAuth.isLoggedIn, (req, res) => {
 
 });
 
+//Logged-in page: Reaction to post api to send to the frontend
+router.post('/react', isAuth.isLoggedIn, (req, res) => {
+  const { post_id, reaction_type } = req.body;
+  const user_id = req.session.userFound.id;
+
+  const checkReaction = `SELECT * FROM reactions WHERE post_id = ? AND user_id = ?`;
+  
+  db.query(checkReaction, [post_id, user_id], (err, result) => {
+      if (err) {
+          console.error('Error checking reaction:', err);
+          return res.status(500).json({ error: 'Database error' });
+      }
+
+      if (result.length > 0) {
+          // If user has already reacted, remove the reaction
+          const deleteReaction = `DELETE FROM reactions WHERE post_id = ? AND user_id = ?`;
+          db.query(deleteReaction, [post_id, user_id], (err) => {
+              if (err) {
+                  console.error('Error removing reaction:', err);
+                  return res.status(500).json({ error: 'Database error' });
+              }
+              return res.json({ success: true, message: 'Reaction removed' });
+          });
+      } else {
+          // Insert new reaction
+          const insertReaction = `INSERT INTO reactions (post_id, user_id, reaction_type) VALUES (?, ?, ?)`;
+          db.query(insertReaction, [post_id, user_id, reaction_type], (err) => {
+              if (err) {
+                  console.error('Error inserting reaction:', err);
+                  return res.status(500).json({ error: 'Database error' });
+              }
+              return res.json({ success: true, message: 'Reaction added' });
+          });
+      }
+  });
+});
+
+//Logged-in page: Reaction count
+
+router.get('/reactions/:post_id', (req, res) => {
+  const post_id = req.params.post_id;
+
+  const getReactions = `SELECT reaction_type, COUNT(*) as count FROM reactions WHERE post_id = ? GROUP BY reaction_type`;
+
+  db.query(getReactions, [post_id], (err, results) => {
+      if (err) {
+          console.error('Error fetching reactions:', err);
+          return res.status(500).json({ error: 'Database error' });
+      }
+
+      const reactionCounts = { like: 0, dislike: 0 };
+      results.forEach(row => {
+          reactionCounts[row.reaction_type] = row.count;
+      });
+
+      res.json({ reactions: reactionCounts });
+  });
+});
+
 
 //Logged-in page: Comment
 router.post('/post/:id?', isAuth.isLoggedIn, (req, res) => {
@@ -707,7 +763,6 @@ router.get('/asta-admin/replies', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res)
 
 })
 
-// Admin users list
 // Admin users list
 router.get('/asta-admin/users', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
   
