@@ -425,7 +425,11 @@ router.get('/post/:id?', isAuth.isLoggedIn, (req, res) => {
           // Process the result into structured data
           const post = result[0];
           const postComments = result;
+          const getComment = result.filter((comments) => {
+            // console.log(comments);
+          });
 
+          console.log(result.length);
           // const postCommentsReplies = result;
           // console.log(postCommentsReplies)
 
@@ -472,7 +476,7 @@ router.get('/post/:id?', isAuth.isLoggedIn, (req, res) => {
                 post: result[0], // Pass the post data to the view
                 postComments: postComments,
                 postCommentsReplies: result,
-                reactions: result,
+                // reactions: result,
                 recentPost: row,
                 totalComment: commentRows[0],
                 message: req.flash('error'), replyMessage: req.flash('error'),

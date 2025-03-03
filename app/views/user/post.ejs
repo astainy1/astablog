@@ -50,7 +50,7 @@
 
                         <!-- <div class="reaction_main_container" style="display: flex; justify-content: center; align-items: center; gap: 30px;">  -->
 
-                        <a href="#like" class="blog-action-center" data-type="like" id="reaction_btn"><i
+                        <a href="#react" class="blog-action-center" data-type="like" id="reaction_btn"><i
                             class="fa fa-thumbs-up" id="react_post"> <span class="like-count"></span> </i></a>
 
                         <!-- <a href="#like" class="blog-action-center" data-type="dislike" id="reaction_btn"><i
@@ -87,7 +87,7 @@
 
       <% if(post.post_author) { %>
         <a href="/viewprofile/<%= post.post_author_id %>?<%= post.post_author %>" style="text-decoration: none;">
-          <strong>
+          <strong style="color: #492efc;">
             <%= post.post_author %>
           </strong>
           <% } %>
@@ -163,6 +163,7 @@
   </section>
   <!-- Comment counts ends -->
   <!-- Commented start -->
+
   <% for(let comment of postComments) {%>
     <% if(comment?.comment_text) { %>
       <section class="commentted-message-container" data-comment-id="<%= comment.comment_id %>">

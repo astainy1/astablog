@@ -47,6 +47,8 @@ This project also serves as a demonstration of my skills in HTML, CSS, Node.js, 
 ### 4. User Profiles
 - Allow users to view writer profiles, including their bio and published articles.
 
+# Features to be implemented later
+
 ### 5. Communication Features
 - Enable real-time comment updates, so replies appear without refreshing the page.
 - **Optional:** Provide private messaging or group discussions for better collaboration.
