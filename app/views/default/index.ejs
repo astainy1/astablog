@@ -4,7 +4,7 @@
         <!-- Header ends here--->
         <section class="main-content-container">
             <!-- Sidebar content start -->
-                <%- include('../user/partials/__sidebar.ejs') %>
+                <%- include('./partials/__sidebar.ejs') %>
             <!-- Sidebar content ends -->
 
             <!-- Main content starts here -->
@@ -47,7 +47,7 @@
                     <span class="fa fa-comment comment-count"> &nbsp; <% if(posts.totalComments) { %><%= posts.totalComments %><% } else { %><%= 0 %><% } %></span>
 
                     <a class="blog-action-center" data-type="like" id="reaction_btn"><i
-                        class="fa fa-thumbs-up" id="react_post"> <span class="like-count"></span> </i></a>
+                        class="fa fa-thumbs-up" id="react_post"> <%= posts.total_reaction %> <span class="like-count"></span> </i></a>
                                 </a>
                             </section>
                     </section>

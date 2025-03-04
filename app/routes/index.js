@@ -1,15 +1,15 @@
 // import node modules
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const path = require('path');
-const sanitizeHtml = require('sanitize-html');
-const saltRounds = 12;
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-const { body, validationResult } = require("express-validator");
-const multer = require('multer');
-const fs = require('fs');
+// const bcrypt = require("bcrypt");
+const path = require("path");
+const sanitizeHtml = require("sanitize-html");
+// const saltRounds = 12;
+// const passport = require("passport");
+// const LocalStrategy = require("passport-local");
+// const { body, validationResult } = require("express-validator");
+const multer = require("multer");
+const fs = require("fs");
 const db = require("../config/db");
 const isAuth = require("../middlewares/isLoggedIn");
 
@@ -17,38 +17,38 @@ const isAuth = require("../middlewares/isLoggedIn");
 const isAdmin = require("../middlewares/isLoggedIn");
 
 const upload = multer({
-    storage: multer.diskStorage({
-        destination: function (req, file, cb){
-            cb(null, 'public/uploads/profile');
-        },
-        filename: function (req, file, cb) {
-            // cb(null, Date.now() + path.extname(file.originalname)); 
-            cb(null, Date.now() + path.extname(file.originalname)); 
-        }
-    })
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "public/uploads/profile");
+    },
+    filename: function (req, file, cb) {
+      // cb(null, Date.now() + path.extname(file.originalname));
+      cb(null, Date.now() + path.extname(file.originalname));
+    },
+  }),
 });
 
 // Article image uploads
 const uploadArticleImage = multer({
   storage: multer.diskStorage({
-      destination: function (req, file, cb){
-          cb(null, 'public/uploads/post');
-      },
-      filename: function (req, file, cb) {
-          // cb(null, Date.now() + path.extname(file.originalname)); 
-          cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
-      }
-  })
+    destination: function (req, file, cb) {
+      cb(null, "public/uploads/post");
+    },
+    filename: function (req, file, cb) {
+      // cb(null, Date.now() + path.extname(file.originalname));
+      cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
+    },
+  }),
 });
 
 // Header images uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, 'public/uploads/sliders/'); 
+    cb(null, "public/uploads/sliders/");
   },
   filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname);
-  }
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
 
 const uploadHeaderImage = multer({ storage });
@@ -61,26 +61,34 @@ const uploadHeaderImage = multer({ storage });
 
 // Default page: home get routes
 router.get("/", (req, res) => {
-
   //Retrieve all articles from Database and display on the default home page
   const articles = `SELECT * FROM users INNER JOIN posts WHERE users.id = posts.user_id ORDER BY posts.created_at DESC`;
 
   db.query(articles, [], (err, rows) => {
-    if(err){
-      console.error('Error fetching articles from posts table: ', err.stack || err.message);
+    if (err) {
+      console.error(
+        "Error fetching articles from posts table: ",
+        err.stack || err.message
+      );
       return res.status(500);
     }
 
-    if(!rows.length){
-      return res.render("default/index", { title: "Home | astablog", articles: []});
+    if (!rows.length) {
+      return res.render("default/index", {
+        title: "Home | astablog",
+        articles: [],
+      });
     }
 
     // Retrieve total comment for each post respectively
-    const postIds = rows.map(article => article.id);
+    const postIds = rows.map((article) => article.id);
     const commentsQuery = `SELECT post_id, COUNT(*) AS totalComments FROM comments WHERE post_id IN (?) GROUP BY post_id`;
     db.query(commentsQuery, [postIds], (err, comments) => {
       if (err) {
-        console.error("Error fetching comments:", err.stack || err.message || err);
+        console.error(
+          "Error fetching comments:",
+          err.stack || err.message || err
+        );
         return res.status(500);
       }
 
@@ -102,13 +110,39 @@ router.get("/", (req, res) => {
         article.totalComments = commentsMap[article.id] || 0;
       });
 
-      // console.log(rows);
-      return res.render("default/index", {
-        title: "Home | astablog",
-        articles: rows});
-      })
-  })
-  
+      //Get total reaction of each post
+      const totalReaction = `SELECT post_id, COUNT(*) AS total_reaction FROM reactions WHERE post_id IN (?) GROUP BY post_id`;
+
+      db.query(totalReaction, [postIds], (err, reactionRows) => {
+        if (err) {
+          console.log(
+            "Error retrieving total reaction from reaction table: ",
+            err.stack || err.message
+          );
+          return res.redirect(303, "/");
+        } else {
+          // console.log(reactionRows);
+          const getTotalReaction = reactionRows.reduce((map, reactions) => {
+            map[reactions.post_id] = reactions.total_reaction;
+            return map;
+          }, {});
+
+          rows.forEach((reaction) => {
+            reaction.total_reaction = getTotalReaction[reaction.id] || 0;
+          });
+
+          console.log(getTotalReaction);
+          console.log(rows);
+
+          return res.render("default/index", {
+            title: "Home | astablog",
+            articles: rows,
+            totalReaction: reactionRows.total_reaction,
+          });
+        }
+      });
+    });
+  });
 });
 
 /*
@@ -121,7 +155,7 @@ router.get("/", (req, res) => {
 router.get("/home", isAuth.isLoggedIn, (req, res) => {
   // Retrieve user details stored in session
   const userName = req.session.userFound;
-  
+
   // Retrieve all articles from Database
   const articlesQuery = `SELECT * FROM users INNER JOIN posts ON users.id = posts.user_id`;
   db.query(articlesQuery, (err, articles) => {
@@ -139,7 +173,7 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
     }
 
     // Retrieve total comments for each post
-    const postIds = articles.map(article => article.id);
+    const postIds = articles.map((article) => article.id);
     const commentsQuery = `SELECT post_id, COUNT(*) AS totalComments FROM comments WHERE post_id IN (?) GROUP BY post_id`;
     db.query(commentsQuery, [postIds], (err, comments) => {
       if (err) {
@@ -154,20 +188,61 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
       }, {});
 
       // Attach comment count to articles
-      const enrichedArticles = articles.map(article => ({
+      const enrichedArticles = articles.map((article) => ({
         ...article,
         totalComments: commentMap[article.id] || 0,
       }));
 
-      // console.log(enrichedArticles)
-      res.render("user/home", {
-        title: "Home | astablog",
-        userInfo: userName.username,
-        articles: enrichedArticles,
+      //Get total reaction of each post
+      const totalReaction = `SELECT post_id, COUNT(*) AS total_reaction FROM reactions WHERE post_id IN (?) GROUP BY post_id`;
+
+      db.query(totalReaction, [postIds], (err, reactionRows) => {
+        if (err) {
+          console.log(
+            "Error retrieving total reaction from reaction table: ",
+            err.stack || err.message
+          );
+          return res.redirect(303, "/");
+        } else {
+          // console.log(reactionRows);
+          const getTotalReaction = reactionRows.reduce((map, reactions) => {
+            map[reactions.post_id] = reactions.total_reaction;
+            return map;
+          }, {});
+
+          enrichedArticles.forEach((reaction) => {
+            reaction.total_reaction = getTotalReaction[reaction.id] || 0;
+          });
+
+          // console.log(getTotalReaction);
+          // console.log(articles);
+
+          // console.log(enrichedArticles);
+          res.render("user/home", {
+            title: "Home | astablog",
+            userInfo: userName.username,
+            articles: enrichedArticles,
+          });
+        }
       });
     });
   });
 });
+
+// News letter api
+router.post('/api/subscribe/newsletter', isAuth.isLoggedIn, (req, res) => {
+  //Get email from the subscribe form
+  const {email} = req.body
+  if(!email){
+    console.log('Please enter your email');
+    res.json({success: false, message: 'Please enter your email address to receive our updates.'});
+    return;
+  }
+
+  console.log('Thank you for subscribing to our new letter.');
+  res.json({success: true, message: 'Thank you for subscribing to our new letter.'});
+
+})
 
 // Logged-in page: Profile routes
 router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
@@ -178,11 +253,14 @@ router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
   const userDetails = `SELECT full_name, username, email, profile_picture, bio, location, facebook_id, twitter_id, profession FROM users WHERE id = ?`;
   db.query(userDetails, [userName.id], (err, result) => {
     if (err) {
-      console.error("Error retriving user data from database: ", err.stack || err.message);
+      console.error(
+        "Error retriving user data from database: ",
+        err.stack || err.message
+      );
       req.flash("error", "Something went wrong. Please try again.");
       return res.redirect(303, "/user/profile");
     } else {
-    //   console.log("User details retrieved", result);
+      //   console.log("User details retrieved", result);
 
       res.render("user/profile", {
         title: "Profile | astablog",
@@ -199,68 +277,92 @@ router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
 router.get("/edit/profile", isAuth.isLoggedIn, (req, res) => {
   //Retrive user details stored in session.
   const userName = req.session.userFound;
-  
 
   //Populate user details in the respective fields
   const getAllUserDetails = `SELECT profile_picture, username, full_name, location, bio, facebook_id, twitter_id, profession FROM users WHERE id = ?`;
 
   db.query(getAllUserDetails, [userName.id], (err, results) => {
-    if(err){
-        console.error('Error retrieving user details: ' + err.stack); 
-        res.redirect(303, '/user/profile');
-    }else{
-        // console.log(results[0]);
-        const dbResults = results[0];
+    if (err) {
+      console.error("Error retrieving user details: " + err.stack);
+      res.redirect(303, "/user/profile");
+    } else {
+      // console.log(results[0]);
+      const dbResults = results[0];
 
-        res.render("user/editprofile", {
-            title: "Edit Profile | astablog",
-            userInfo: userName.username,
-            message: req.flash("error"), userDetails: dbResults,
-          });
+      res.render("user/editprofile", {
+        title: "Edit Profile | astablog",
+        userInfo: userName.username,
+        message: req.flash("error"),
+        userDetails: dbResults,
+      });
     }
-  })
-
+  });
 });
 
-router.post("/edit/profile", isAuth.isLoggedIn, upload.single('profilePhoto'), (req, res, next) => {
-
+router.post(
+  "/edit/profile",
+  isAuth.isLoggedIn,
+  upload.single("profilePhoto"),
+  (req, res, next) => {
     //Get user details from request body
     const userID = req.session.userFound;
     const loggedUserID = userID.id;
     // console.log(userID);
     // console.log(userID.profilePicture);
     const profilePhoto = req.file;
-    const profilePhotoURL = profilePhoto ? profilePhoto.filename : userID.profilePicture;
-    
+    const profilePhotoURL = profilePhoto
+      ? profilePhoto.filename
+      : userID.profilePicture;
+
     // console.log(profilePhoto);
-  const {username, full_name, location, bio, facebookID, twitterID, profession} = req.body;
+    const {
+      username,
+      full_name,
+      location,
+      bio,
+      facebookID,
+      twitterID,
+      profession,
+    } = req.body;
 
-  //console.log(username, full_name, location, bio, userID)
+    //console.log(username, full_name, location, bio, userID)
 
-  const updateUserProfile = `UPDATE users SET profile_picture = ?, username = ?, full_name = ?, location = ?, \`bio\` = ?, facebook_id = ?, twitter_id = ?, profession = ? WHERE id = ?`;
+    const updateUserProfile = `UPDATE users SET profile_picture = ?, username = ?, full_name = ?, location = ?, \`bio\` = ?, facebook_id = ?, twitter_id = ?, profession = ? WHERE id = ?`;
 
-  db.query(updateUserProfile, [profilePhotoURL, username, full_name, location, bio, facebookID, twitterID, profession, loggedUserID], (err, result) => {
-    if(err) {
-        console.error('Error updating user profile: ' + err.stack);
-        req.flash('error', 'Error updating profile. Please try again.');
-        res.redirect(303, '/edit/profile');
-    }else{
-
-      if(!result.length === 0){
-        // console.log('User profile updated ', result);
-        res.redirect(303, "/user/profile");
-      }else{
-        console.log('User profile updated  with same info');
-        res.redirect(303, "/user/profile");
+    db.query(
+      updateUserProfile,
+      [
+        profilePhotoURL,
+        username,
+        full_name,
+        location,
+        bio,
+        facebookID,
+        twitterID,
+        profession,
+        loggedUserID,
+      ],
+      (err, result) => {
+        if (err) {
+          console.error("Error updating user profile: " + err.stack);
+          req.flash("error", "Error updating profile. Please try again.");
+          res.redirect(303, "/edit/profile");
+        } else {
+          if (!result.length === 0) {
+            // console.log('User profile updated ', result);
+            res.redirect(303, "/user/profile");
+          } else {
+            console.log("User profile updated  with same info");
+            res.redirect(303, "/user/profile");
+          }
+        }
       }
-
-    }
-  });
-});
+    );
+  }
+);
 
 // Logged-in page: View another user Profile routes
-router.get('/viewprofile/:id?', isAuth.isLoggedIn, (req, res) => {
-
+router.get("/viewprofile/:id?", isAuth.isLoggedIn, (req, res) => {
   //Retrive user details stored in session.
   const userName = req.session.userFound;
   const userProfileId = req.params.id;
@@ -268,18 +370,19 @@ router.get('/viewprofile/:id?', isAuth.isLoggedIn, (req, res) => {
 
   const profileQuery = `SELECT * FROM users WHERE id = ? `;
   db.query(profileQuery, [userProfileId], (err, rows) => {
-    if (err){
-      console.error('Error retrieving user details for preview: ', err.stack);
+    if (err) {
+      console.error("Error retrieving user details for preview: ", err.stack);
       res.status(500);
-    }else{
-
+    } else {
       // console.log(rows);
-        const userInfo = rows[0];
-        res.render('user/viewprofile', {title: `View Profile | ${userInfo.username}`, userInfo: userName.username, viewUserDetails: userInfo});
+      const userInfo = rows[0];
+      res.render("user/viewprofile", {
+        title: `View Profile | ${userInfo.username}`,
+        userInfo: userName.username,
+        viewUserDetails: userInfo,
+      });
     }
-  })
-
-
+  });
 });
 
 // router.post('/user/viewprofile', isAuth.isLoggedIn, (req, res) => {
@@ -288,87 +391,125 @@ router.get('/viewprofile/:id?', isAuth.isLoggedIn, (req, res) => {
 
 // Logged-in page: Write Article routes
 router.get("/create/article", isAuth.isLoggedIn, (req, res) => {
-    //Retrive user details stored in session.
-    const userName = req.session.userFound;
+  //Retrive user details stored in session.
+  const userName = req.session.userFound;
 
-  res.render("user/createarticle", { title: "Write Article | astablog", message: req.flash("error"),  userInfo: userName.username, });
+  res.render("user/createarticle", {
+    title: "Write Article | astablog",
+    message: req.flash("error"),
+    userInfo: userName.username,
+  });
 });
 
 // Handle article creation
-router.post("/create/article", isAuth.isLoggedIn, uploadArticleImage.single('article_image'), (req, res) => {
+router.post(
+  "/create/article",
+  isAuth.isLoggedIn,
+  uploadArticleImage.single("article_image"),
+  (req, res) => {
+    const userID = req.session.userFound.id;
+    // console.log(userID);
 
-  const userID = req.session.userFound.id;
-  // console.log(userID);
-
-     // Sanitize summernote CKEditor content before sending to the database
-     const cleanContent = sanitizeHtml(editordata, {
+    // Sanitize summernote CKEditor content before sending to the database
+    const cleanContent = sanitizeHtml(editordata, {
       allowedTags: [
-        'p', 'b', 'i', 'u', 'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
-        'strong', 'em', 'blockquote', 'code', 'pre', 'ul', 'ol', 'li', 'br', 'hr', 'span', 
-        'div', 'iframe', 'audio', 'video', 'source', 'figcaption', 'figure', 'address'
+        "p",
+        "b",
+        "i",
+        "u",
+        "a",
+        "img",
+        "table",
+        "thead",
+        "tbody",
+        "tr",
+        "th",
+        "td",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "strong",
+        "em",
+        "blockquote",
+        "code",
+        "pre",
+        "ul",
+        "ol",
+        "li",
+        "br",
+        "hr",
+        "span",
+        "div",
+        "iframe",
+        "audio",
+        "video",
+        "source",
+        "figcaption",
+        "figure",
+        "address",
       ],
       allowedAttributes: {
-        '*': ['style', 'class'],
-        'a': ['href', 'target'],
-        'img': ['src', 'alt', 'width', 'height'],
-        'table': ['border', 'cellspacing', 'cellpadding'],
-        'iframe': ['src', 'frameborder', 'allow', 'allowfullscreen'],
-        'audio': ['src', 'controls'],
-        'video': ['src', 'controls'],
-        'source': ['src', 'type'],
-        'blockquote': ['cite'],
-        'span': ['class'],
+        "*": ["style", "class"],
+        a: ["href", "target"],
+        img: ["src", "alt", "width", "height"],
+        table: ["border", "cellspacing", "cellpadding"],
+        iframe: ["src", "frameborder", "allow", "allowfullscreen"],
+        audio: ["src", "controls"],
+        video: ["src", "controls"],
+        source: ["src", "type"],
+        blockquote: ["cite"],
+        span: ["class"],
       },
-      disallowedTagsMode: 'discard',
+      disallowedTagsMode: "discard",
     });
 
-  const { article_title} = req.body;
-  const articleImage = req.file ? req.file.filename : null;
-  
-  // console.log(article_title, cleanContent, articleImage, userID);
+    const { article_title } = req.body;
+    const articleImage = req.file ? req.file.filename : null;
+
+    // console.log(article_title, cleanContent, articleImage, userID);
     try {
-  
-    if(!article_title && !editordata){
+      if (!article_title && !editordata) {
+        console.log("Please fill out the input fileds");
+        req.flash("error", "Please fill out the input fileds.");
+        res.redirect("/create/article");
+      } else {
+        // Save article in the database
+        const insertArticle = `INSERT INTO posts (title, body, image, user_id) VALUES (?, ?, ?, ?)`;
 
-      console.log('Please fill out the input fileds');
-      req.flash('error', 'Please fill out the input fileds.')
-      res.redirect('/create/article');
+        db.query(
+          insertArticle,
+          [article_title, cleanContent, articleImage, userID],
+          (error, results) => {
+            if (error) {
+              console.error("Error creating article:", error.stack);
+              req.flash("error", "Something went wrong. Please try again.");
+              return res.status(500).send("Internal Server Error");
+            }
 
-    }else{
-            // Save article in the database
-            const insertArticle = `INSERT INTO posts (title, body, image, user_id) VALUES (?, ?, ?, ?)`;
-
-            db.query(insertArticle, 
-              [article_title, cleanContent, articleImage, userID], 
-              (error, results) => {
-                if (error) {
-                  console.error("Error creating article:", error.stack);
-                  req.flash('error', 'Something went wrong. Please try again.');
-                  return res.status(500).send("Internal Server Error");
-                }
-      
-                // Redirect after saving the article
-                res.redirect(303, "/post");
-              });
-    }
-
+            // Redirect after saving the article
+            res.redirect(303, "/post");
+          }
+        );
+      }
     } catch (error) {
       console.error("Error handling images:", error);
       res.status(500).send("Internal Server Error");
     }
-  // });
-});
-
+    // });
+  }
+);
 
 //Logged-in page: Read Article
-router.get('/post/:id?', isAuth.isLoggedIn, (req, res) => {
-    const userName = req.session.userFound;
-    const postId = req.params.id;
-    // console.log(postId);
+router.get("/post/:id?", isAuth.isLoggedIn, (req, res) => {
+  const userName = req.session.userFound;
+  const postId = req.params.id;
+  // console.log(postId);
 
-    //Join post, users, comments, reaction tables to get all the details of the post and display to front end. 
-    const allArticle = `
+  //Join post, users, comments, reaction tables to get all the details of the post and display to front end.
+  const allArticle = `
     SELECT
     posts.id AS post_id,
     posts.title AS post_title,
@@ -415,220 +556,217 @@ router.get('/post/:id?', isAuth.isLoggedIn, (req, res) => {
     LEFT JOIN reactions ON reactions.post_id = posts.id
     WHERE posts.id = ?
   `;
-    db.query(allArticle, [postId], (err, result) => {
-      if(err){
-        console.error(`Error retrieving data from post table: ${err.stack}`);
-        res.status(500);
-      }else{
-        if(result.length > 0){
+  db.query(allArticle, [postId], (err, result) => {
+    if (err) {
+      console.error(`Error retrieving data from post table: ${err.stack}`);
+      res.status(500);
+    } else {
+      if (result.length > 0) {
+        // Process the result into structured data
+        const post = result[0];
+        const postComments = result;
+        const getComment = result.filter((comments) => {
+          // console.log(comments);
+        });
 
-          // Process the result into structured data
-          const post = result[0];
-          const postComments = result;
-          const getComment = result.filter((comments) => {
-            // console.log(comments);
-          });
+        console.log(result.length);
+        // const postCommentsReplies = result;
+        // console.log(postCommentsReplies)
 
-          console.log(result.length);
-          // const postCommentsReplies = result;
-          // console.log(postCommentsReplies)
+        // const reactions = result.filter((reaction) => reaction.reaction_type);
 
-          // const reactions = result.filter((reaction) => reaction.reaction_type);
+        // console.log('Comments: ', comments);
+        // console.log('Reaction: ', reactions);
 
-          // console.log('Comments: ', comments);
-          // console.log('Reaction: ', reactions);
+        // Retrieve all recent post from posts table joined with users table
+        const recentPosts = `SELECT * FROM users, posts WHERE users.id = posts.user_id`;
 
-          // Retrieve all recent post from posts table joined with users table
-          const recentPosts = `SELECT * FROM users, posts WHERE users.id = posts.user_id`;
+        db.query(recentPosts, [], (err, row) => {
+          if (err) {
+            console.error(
+              "Error retrieving recent posts from posts table: ",
+              err.stack
+            );
+            res.status(500);
+          } else {
+            const totalComment = `SELECT COUNT(*) AS totalComments FROM comments WHERE post_id = ?`;
 
-          db.query(recentPosts, [], (err, row) => {
-            if(err){
+            db.query(totalComment, [postId], (err, commentRows) => {
+              if (err) {
+                console.error(`Error getting total comments: ${err.stack}`);
+                res.status(500);
+              } else {
+                // console.log(commentRows[0]);
 
-              console.error('Error retrieving recent posts from posts table: ', err.stack);
-              res.status(500);
+                // console.log(postComments);
+                // console.log(reactions);
 
-            }else{
+                // postComments.forEach((comment) =>{
+                //   console.log(comment);
+                // })
 
-              const totalComment = `SELECT COUNT(*) AS totalComments FROM comments WHERE post_id = ?`;
-              
-              db.query(totalComment, [postId], (err, commentRows) => {
+                // for(let comment of postComments){
+                //   console.log(comment);
+                // }
 
-                if(err){
-                  console.error(`Error getting total comments: ${err.stack}`);
-                  res.status(500);
-                }else{
-                  // console.log(commentRows[0]);
-
-                  // console.log(postComments);
-              // console.log(reactions);
-
-              // postComments.forEach((comment) =>{
-              //   console.log(comment);
-              // })
-
-              // for(let comment of postComments){
-              //   console.log(comment);
-              // }
-
-              res.render('user/post', {
-                title: `Article | astablog}`,
-                userInfo: userName.username,
-                post: result[0], // Pass the post data to the view
-                postComments: postComments,
-                postCommentsReplies: result,
-                // reactions: result,
-                recentPost: row,
-                totalComment: commentRows[0],
-                message: req.flash('error'), replyMessage: req.flash('error'),
-              });
-                }
-              })
-              
-            }
-          })
-
-          
-        }else{
-          res.status(404);
-        }
+                res.render("user/post", {
+                  title: `Article | astablog}`,
+                  userInfo: userName.username,
+                  post: result[0], // Pass the post data to the view
+                  postComments: postComments,
+                  postCommentsReplies: result,
+                  // reactions: result,
+                  recentPost: row,
+                  totalComment: commentRows[0],
+                  message: req.flash("error"),
+                  replyMessage: req.flash("error"),
+                });
+              }
+            });
+          }
+        });
+      } else {
+        res.status(404);
       }
-    })
-
+    }
+  });
 });
 
 //Logged-in page: Reaction to post api to send to the frontend
-router.post('/react', isAuth.isLoggedIn, (req, res) => {
+router.post("/react", isAuth.isLoggedIn, (req, res) => {
   const { post_id, reaction_type } = req.body;
   const user_id = req.session.userFound.id;
 
   const checkReaction = `SELECT * FROM reactions WHERE post_id = ? AND user_id = ?`;
-  
-  db.query(checkReaction, [post_id, user_id], (err, result) => {
-      if (err) {
-          console.error('Error checking reaction:', err);
-          return res.status(500).json({ error: 'Database error' });
-      }
 
-      if (result.length > 0) {
-          // If user has already reacted, remove the reaction
-          const deleteReaction = `DELETE FROM reactions WHERE post_id = ? AND user_id = ?`;
-          db.query(deleteReaction, [post_id, user_id], (err) => {
-              if (err) {
-                  console.error('Error removing reaction:', err);
-                  return res.status(500).json({ error: 'Database error' });
-              }
-              return res.json({ success: true, message: 'Reaction removed' });
-          });
-      } else {
-          // Insert new reaction
-          const insertReaction = `INSERT INTO reactions (post_id, user_id, reaction_type) VALUES (?, ?, ?)`;
-          db.query(insertReaction, [post_id, user_id, reaction_type], (err) => {
-              if (err) {
-                  console.error('Error inserting reaction:', err);
-                  return res.status(500).json({ error: 'Database error' });
-              }
-              return res.json({ success: true, message: 'Reaction added' });
-          });
-      }
+  db.query(checkReaction, [post_id, user_id], (err, result) => {
+    if (err) {
+      console.error("Error checking reaction:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    if (result.length > 0) {
+      // If user has already reacted, remove the reaction
+      const deleteReaction = `DELETE FROM reactions WHERE post_id = ? AND user_id = ?`;
+      db.query(deleteReaction, [post_id, user_id], (err) => {
+        if (err) {
+          console.error("Error removing reaction:", err);
+          return res.status(500).json({ error: "Database error" });
+        }
+        return res.json({ success: true, message: "Reaction removed" });
+      });
+    } else {
+      // Insert new reaction
+      const insertReaction = `INSERT INTO reactions (post_id, user_id, reaction_type) VALUES (?, ?, ?)`;
+      db.query(insertReaction, [post_id, user_id, reaction_type], (err) => {
+        if (err) {
+          console.error("Error inserting reaction:", err);
+          return res.status(500).json({ error: "Database error" });
+        }
+        return res.json({ success: true, message: "Reaction added" });
+      });
+    }
   });
 });
 
 //Logged-in page: Reaction count
 
-router.get('/reactions/:post_id', (req, res) => {
+router.get("/reactions/:post_id", (req, res) => {
   const post_id = req.params.post_id;
 
   const getReactions = `SELECT reaction_type, COUNT(*) as count FROM reactions WHERE post_id = ? GROUP BY reaction_type`;
 
   db.query(getReactions, [post_id], (err, results) => {
-      if (err) {
-          console.error('Error fetching reactions:', err);
-          return res.status(500).json({ error: 'Database error' });
-      }
+    if (err) {
+      console.error("Error fetching reactions:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
 
-      const reactionCounts = { like: 0, dislike: 0 };
-      results.forEach(row => {
-          reactionCounts[row.reaction_type] = row.count;
-      });
+    const reactionCounts = { like: 0, dislike: 0 };
+    results.forEach((row) => {
+      reactionCounts[row.reaction_type] = row.count;
+    });
 
-      res.json({ reactions: reactionCounts });
+    res.json({ reactions: reactionCounts });
   });
 });
 
-
 //Logged-in page: Comment
-router.post('/post/:id?', isAuth.isLoggedIn, (req, res) => {
-try {
-  const {comment} = req.body;
-  const { id } = req.params;
-  const user_id = req.session.userFound.id;
+router.post("/post/:id?", isAuth.isLoggedIn, (req, res) => {
+  try {
+    const { comment } = req.body;
+    const { id } = req.params;
+    const user_id = req.session.userFound.id;
 
-  if(!comment){
-    console.log('Comment cannot be empty.');
-    req.flash('error', 'Comment cannot be empty.');
-    res.redirect(`/post/${id}`)
+    if (!comment) {
+      console.log("Comment cannot be empty.");
+      req.flash("error", "Comment cannot be empty.");
+      res.redirect(`/post/${id}`);
+    } else {
+      // console.log(comment, id);
+      // console.log('User ID: ', user_id);
 
-  }else{
-    // console.log(comment, id);
-    // console.log('User ID: ', user_id);
+      const insertComment = `INSERT INTO comments (post_id, user_id, comment) VALUES(?, ?, ?)`;
 
-    const insertComment = `INSERT INTO comments (post_id, user_id, comment) VALUES(?, ?, ?)`;
-
-    db.query(insertComment, [id, user_id, comment], (err, result) => {
-      if(err){
-        console.error('Error inserting comment into comment table: ', err.stack);
-        res.status(500);
-      }else{
-        // console.log(`User with ID ${user_id} has successfully commented on post with ID ${id}`);
-        res.redirect(`/post/${id}`)
-      }
-    })
+      db.query(insertComment, [id, user_id, comment], (err, result) => {
+        if (err) {
+          console.error(
+            "Error inserting comment into comment table: ",
+            err.stack
+          );
+          res.status(500);
+        } else {
+          // console.log(`User with ID ${user_id} has successfully commented on post with ID ${id}`);
+          res.redirect(`/post/${id}`);
+        }
+      });
+    }
+  } catch (error) {
+    console.error("Something went wrong", error.stack);
+    req.flash("error", "Something went wrong. Please try again.");
+    res.status(500);
   }
-
-} catch (error) {
-  console.error('Something went wrong', error.stack);
-  req.flash('error', 'Something went wrong. Please try again.');
-  res.status(500);
-}
 });
 
-
 //Logged-in page: Reply to Comment
-router.post('/post/:id/reply', isAuth.isLoggedIn, (req, res) => {
+router.post("/post/:id/reply", isAuth.isLoggedIn, (req, res) => {
   try {
-
     // console.log(req);
 
-    const {reply_comment, parent_comment_id} = req.body;
-    const {id} = req.params; 
+    const { reply_comment, parent_comment_id } = req.body;
+    const { id } = req.params;
     const user_id = req.session.userFound.id;
     // console.log('Parent ID: ', parent_comment_id);
     // console.log(req.body)
     // console.log('Reply Message: ', reply_comment);
     //Check if replay is empty
-    if(!reply_comment || !parent_comment_id || !id){
-      console.log('Empty reply message. Please write a reply message.');
+    if (!reply_comment || !parent_comment_id || !id) {
+      console.log("Empty reply message. Please write a reply message.");
       // flash('error', 'Empty reply');
       res.redirect(303, `/post/${id}?empty%reply`);
       return;
-    }else{
-
+    } else {
       const replyMessageQuery = `INSERT INTO comments (post_id, user_id, comment, parent_comment_id) VALUE(?, ?, ?, ?)`;
 
-      db.query(replyMessageQuery, [id, user_id, reply_comment, parent_comment_id], (err, result) => {
-        if(err){
-          console.error('Error inserting reply into comment table', err.stack);
-          res.status(500);
-          return;
-        }else{
-                // console.log(`User with ID ${user_id} has reply to post with ID ${id} user comment ${parent_comment_id}. Here is the reply: ${reply_comment}`);
-                res.redirect(`/post/${id}?reply`);
-                return;
+      db.query(
+        replyMessageQuery,
+        [id, user_id, reply_comment, parent_comment_id],
+        (err, result) => {
+          if (err) {
+            console.error(
+              "Error inserting reply into comment table",
+              err.stack
+            );
+            res.status(500);
+            return;
+          } else {
+            // console.log(`User with ID ${user_id} has reply to post with ID ${id} user comment ${parent_comment_id}. Here is the reply: ${reply_comment}`);
+            res.redirect(`/post/${id}?reply`);
+            return;
+          }
         }
-      })
-
+      );
     }
-
   } catch (error) {
     console.error(`Something went wrong: ${error.stack}`);
     res.status(500);
@@ -640,7 +778,6 @@ router.post('/post/:id/reply', isAuth.isLoggedIn, (req, res) => {
 
 // Admin dashboard
 router.get("/asta-admin", isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
-  
   // Get user id stored in session
   const userID = req.session.userFound;
   // console.log('Admin ID: ', userID);
@@ -679,7 +816,7 @@ router.get("/asta-admin", isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
               console.error("Error fetching user details:", err);
               return res.status(500);
             }
-      
+
             res.render("admin/dashboard", {
               title: "Admin Dashboard | astablog",
               totalUsers: users[0].totalUsers,
@@ -688,11 +825,10 @@ router.get("/asta-admin", isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
               totalReply: replies[0].totalReply,
               userInfo: result[0],
             });
-
-          })
-
-        })})
-  });
+          });
+        });
+      });
+    });
   });
 });
 
@@ -702,189 +838,209 @@ router.get(
   isAuth.isLoggedIn,
   isAdmin.isAdmin,
   (req, res) => {
-
-  // Get user id stored in session
-  const userID = req.session.userFound;
-  // console.log('Admin ID: ', userID);
-  // Get user details from database
-  const userDetails = `SELECT * FROM users WHERE id = ?`;
-  db.query(userDetails, [userID.id], (err, result) => {
-    if (err) {
-      console.error("Error fetching user details:", err.stack || err);
-      return res.status(500);
-    }
+    // Get user id stored in session
+    const userID = req.session.userFound;
+    // console.log('Admin ID: ', userID);
+    // Get user details from database
+    const userDetails = `SELECT * FROM users WHERE id = ?`;
+    db.query(userDetails, [userID.id], (err, result) => {
+      if (err) {
+        console.error("Error fetching user details:", err.stack || err);
+        return res.status(500);
+      }
       // console.log(result);
       res.render("admin/article", {
-        title:  "Admin Article List | astaBlog",
+        title: "Admin Article List | astaBlog",
         userInfo: result[0],
       });
-    })
+    });
   }
 );
 
 // Admin comments
-router.get('/asta-admin/comments', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
-
-  // Get user id stored in session
-  const userID = req.session.userFound;
-  // console.log('Admin ID: ', userID);
-  // Get user details from database
-  const userDetails = `SELECT * FROM users WHERE id = ?`;
-  db.query(userDetails, [userID.id], (err, result) => {
-    if (err) {
-      console.error("Error fetching user details:", err.stack || err);
-      return res.status(500);
-    }
+router.get(
+  "/asta-admin/comments",
+  isAuth.isLoggedIn,
+  isAdmin.isAdmin,
+  (req, res) => {
+    // Get user id stored in session
+    const userID = req.session.userFound;
+    // console.log('Admin ID: ', userID);
+    // Get user details from database
+    const userDetails = `SELECT * FROM users WHERE id = ?`;
+    db.query(userDetails, [userID.id], (err, result) => {
+      if (err) {
+        console.error("Error fetching user details:", err.stack || err);
+        return res.status(500);
+      }
       // console.log(result);
-      res.render('admin/comments', {
-        title:  "Admin Comments List | astaBlog",
+      res.render("admin/comments", {
+        title: "Admin Comments List | astaBlog",
         userInfo: result[0],
       });
-    })
-
-})
+    });
+  }
+);
 
 // Admin Replies
 
-router.get('/asta-admin/replies', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
-
-  // Get user id stored in session
-  const userID = req.session.userFound;
-  // console.log('Admin ID: ', userID);
-  // Get user details from database
-  const userDetails = `SELECT * FROM users WHERE id = ?`;
-  db.query(userDetails, [userID.id], (err, result) => {
-    if (err) {
-      console.error("Error fetching user details:", err.stack || err);
-      return res.status(500);
-    }
+router.get(
+  "/asta-admin/replies",
+  isAuth.isLoggedIn,
+  isAdmin.isAdmin,
+  (req, res) => {
+    // Get user id stored in session
+    const userID = req.session.userFound;
+    // console.log('Admin ID: ', userID);
+    // Get user details from database
+    const userDetails = `SELECT * FROM users WHERE id = ?`;
+    db.query(userDetails, [userID.id], (err, result) => {
+      if (err) {
+        console.error("Error fetching user details:", err.stack || err);
+        return res.status(500);
+      }
       // console.log(result);
-      res.render('admin/replies', {
-        title:  "Admin Replies List | astaBlog",
+      res.render("admin/replies", {
+        title: "Admin Replies List | astaBlog",
         userInfo: result[0],
       });
-    })
-
-})
+    });
+  }
+);
 
 // Admin users list
-router.get('/asta-admin/users', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
-  
-  // Get user ID stored in session
-  const userID = req.session.userFound;
+router.get(
+  "/asta-admin/users",
+  isAuth.isLoggedIn,
+  isAdmin.isAdmin,
+  (req, res) => {
+    // Get user ID stored in session
+    const userID = req.session.userFound;
 
-  // Get user details from database
-  const userDetailsQuery = `SELECT * FROM users WHERE id = ?`;
-  db.query(userDetailsQuery, [userID.id], (err, userResult) => {
-    if (err) {
-      console.error("Error fetching user details:", err.stack || err);
-      return res.status(500).send("Internal Server Error");
-    }
-
-    // Get all non-admin users
-    const allUsersQuery = `SELECT * FROM users WHERE is_admin = 0`;
-    db.query(allUsersQuery, [], (err, users) => {
+    // Get user details from database
+    const userDetailsQuery = `SELECT * FROM users WHERE id = ?`;
+    db.query(userDetailsQuery, [userID.id], (err, userResult) => {
       if (err) {
-        console.error("Error querying all users:", err.stack || err);
+        console.error("Error fetching user details:", err.stack || err);
         return res.status(500).send("Internal Server Error");
       }
 
-      // Get post counts per user
-      const postCountQuery = `SELECT user_id, COUNT(*) AS totalPost FROM posts GROUP BY user_id`;
-      db.query(postCountQuery, [], (err, postCounts) => {
+      // Get all non-admin users
+      const allUsersQuery = `SELECT * FROM users WHERE is_admin = 0`;
+      db.query(allUsersQuery, [], (err, users) => {
         if (err) {
-          console.error("Error getting total articles for each user:", err.stack || err);
+          console.error("Error querying all users:", err.stack || err);
           return res.status(500).send("Internal Server Error");
         }
 
-        // Create a lookup object for post counts
-        const postCountMap = {};
-        postCounts.forEach(row => {
-          postCountMap[row.user_id] = row.totalPost;
-        });
+        // Get post counts per user
+        const postCountQuery = `SELECT user_id, COUNT(*) AS totalPost FROM posts GROUP BY user_id`;
+        db.query(postCountQuery, [], (err, postCounts) => {
+          if (err) {
+            console.error(
+              "Error getting total articles for each user:",
+              err.stack || err
+            );
+            return res.status(500).send("Internal Server Error");
+          }
 
-        // Merge post counts into user data (ensuring no duplicates)
-        users.forEach(user => {
-          user.totalPost = postCountMap[user.id] || 0; // Default to 0 if no posts
-        });
+          // Create a lookup object for post counts
+          const postCountMap = {};
+          postCounts.forEach((row) => {
+            postCountMap[row.user_id] = row.totalPost;
+          });
 
-        // Render the page
-        res.render('admin/users', {
-          title: "Admin Users List | astaBlog",
-          userInfo: userResult[0] || {}, 
-          allUser: users,
+          // Merge post counts into user data (ensuring no duplicates)
+          users.forEach((user) => {
+            user.totalPost = postCountMap[user.id] || 0; // Default to 0 if no posts
+          });
+
+          // Render the page
+          res.render("admin/users", {
+            title: "Admin Users List | astaBlog",
+            userInfo: userResult[0] || {},
+            allUser: users,
+          });
         });
       });
     });
-  });
-});
-
-
+  }
+);
 
 // Admin route to handle image upload
 // router.post('/asta-admin/upload-slider', uploadHeaderImage.single('sliderImage'), (req, res) => {
-  
-  router.post("/api/upload-slider", uploadHeaderImage.single("sliderImage"), (req, res) => {
 
-      // Get user id stored in session
-  const userID = req.session.userFound;
+router.post(
+  "/api/upload-slider",
+  uploadHeaderImage.single("sliderImage"),
+  (req, res) => {
+    // Get user id stored in session
+    const userID = req.session.userFound;
 
-  const sub_title = req.body.sub_title;
-  const main_title = req.body.main_title;
-  
-  // console.log(sub_title, main_title);
-  
-      // Check if a file was uploaded and if the required fields are present
-      if (!req.file) {
-          return res.json({ success: false, message: "No file uploaded" });
-      }
-      if(!req.body.sub_title){
-        return res.json({ success: false, message: "Please provide Sub Title" });
-      }
-      if(!req.body.main_title){
-        return res.json({ success: false, message: "Please provide Main Title" });
-      }
+    const sub_title = req.body.sub_title;
+    const main_title = req.body.main_title;
 
-      const imagePath = "/uploads/sliders/" + req.file.filename;
-      const query = "INSERT INTO header_images (image_path, uploaded_by, subtitle, maintitle) VALUES (?, ?, ?, ?)";
-  
-      db.query(query, [imagePath,userID.id, sub_title, main_title ], (err) => {
-          if (err) {
-              console.error("Database insert error:", err);
-              return res.json({ success: false });
-          }
-          res.json({ success: true, imagePath, message: 'Image uploaded successfully.' });
+    // console.log(sub_title, main_title);
+
+    // Check if a file was uploaded and if the required fields are present
+    if (!req.file) {
+      return res.json({ success: false, message: "No file uploaded" });
+    }
+    if (!req.body.sub_title) {
+      return res.json({ success: false, message: "Please provide Sub Title" });
+    }
+    if (!req.body.main_title) {
+      return res.json({ success: false, message: "Please provide Main Title" });
+    }
+
+    const imagePath = "/uploads/sliders/" + req.file.filename;
+    const query =
+      "INSERT INTO header_images (image_path, uploaded_by, subtitle, maintitle) VALUES (?, ?, ?, ?)";
+
+    db.query(query, [imagePath, userID.id, sub_title, main_title], (err) => {
+      if (err) {
+        console.error("Database insert error:", err);
+        return res.json({ success: false });
+      }
+      res.json({
+        success: true,
+        imagePath,
+        message: "Image uploaded successfully.",
       });
-  });
-  
+    });
+  }
+);
 
 // API route for image slider
-router.get('/api/sliders', (req, res) => {
+router.get("/api/sliders", (req, res) => {
   const getSliders = `SELECT * FROM header_images ORDER BY uploaded_at DESC`;
 
   db.query(getSliders, (err, results) => {
-      if (err) {
-          console.error('Error fetching slider images:', err.stack || err.message || err);
-          return res.status(500).json({ error: 'Database error' });
-      }
-      // console.log(results);
-      // Construct full image URLs
-      const baseUrl = `${req.protocol}://${req.get('host')}`;
-      // Store subtile, maintitle and image url in an object
-      const slider = results.map(row => ({
-        imagePath: `${baseUrl}${row.image_path}`,
-        subtitle: row.subtitle,
-        maintitle: row.maintitle,
-      }));
-      // console.log(sliderData);
-      // res.json(sliderData);
-      // const imagePaths = results.map(row => `${baseUrl}${row.image_path}`);
+    if (err) {
+      console.error(
+        "Error fetching slider images:",
+        err.stack || err.message || err
+      );
+      return res.status(500).json({ error: "Database error" });
+    }
+    // console.log(results);
+    // Construct full image URLs
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    // Store subtile, maintitle and image url in an object
+    const slider = results.map((row) => ({
+      imagePath: `${baseUrl}${row.image_path}`,
+      subtitle: row.subtitle,
+      maintitle: row.maintitle,
+    }));
+    // console.log(sliderData);
+    // res.json(sliderData);
+    // const imagePaths = results.map(row => `${baseUrl}${row.image_path}`);
 
-      // const imageSubtitle = results.map(row => row.subtitle);
-      // const imageMainTitle = results.map(row => row.maintitle);
-      // console.log(imageSubtitle, imageMainTitle);
+    // const imageSubtitle = results.map(row => row.subtitle);
+    // const imageMainTitle = results.map(row => row.maintitle);
+    // console.log(imageSubtitle, imageMainTitle);
 
-      res.json({ images: slider });
+    res.json({ images: slider });
   });
 });
 
@@ -899,71 +1055,71 @@ router.post("/api/delete-slider", (req, res) => {
   // Delete from database
   const query = "DELETE FROM header_images WHERE image_path = ?";
   db.query(query, ["/uploads/sliders/" + filename], (err) => {
-      if (err) {
-          console.error("Database delete error:", err);
-          return res.json({ success: false });
-      }
+    if (err) {
+      console.error("Database delete error:", err);
+      return res.json({ success: false });
+    }
 
-      // Delete from filesystem
-      fs.unlink(filePath, (fsErr) => {
-          if (fsErr) console.error("File delete error:", fsErr);
-          res.json({ success: true });
-      });
+    // Delete from filesystem
+    fs.unlink(filePath, (fsErr) => {
+      if (fsErr) console.error("File delete error:", fsErr);
+      res.json({ success: true });
+    });
   });
 });
 
 // Admin page Settings
 
-router.get('/asta-admin/settings', isAuth.isLoggedIn, isAdmin.isAdmin, (req, res) => {
+router.get(
+  "/asta-admin/settings",
+  isAuth.isLoggedIn,
+  isAdmin.isAdmin,
+  (req, res) => {
+    // Get user id stored in session
+    const userID = req.session.userFound;
+    // console.log('Admin ID: ', userID);
+    // Get user details from database
+    const userDetails = `SELECT * FROM users WHERE id = ?`;
+    db.query(userDetails, [userID.id], (err, result) => {
+      if (err) {
+        console.error("Error fetching user details:", err.stack || err);
+        return res.status(500);
+      }
 
-  // Get user id stored in session
-  const userID = req.session.userFound;
-  // console.log('Admin ID: ', userID);
-  // Get user details from database
-  const userDetails = `SELECT * FROM users WHERE id = ?`;
-  db.query(userDetails, [userID.id], (err, result) => {
-    if (err) {
-      console.error("Error fetching user details:", err.stack || err);
-      return res.status(500);
-    }
+      // Retrieve all images
+      const getSliders = `SELECT * FROM header_images ORDER BY uploaded_at DESC`;
 
-    // Retrieve all images
-    const getSliders = `SELECT * FROM header_images ORDER BY uploaded_at DESC`;
-
-    db.query(getSliders, (err, results) => {
+      db.query(getSliders, (err, results) => {
         if (err) {
-            console.error('Error fetching slider images:', err.stack || err.message || err);
-            return res.status(500).json({ error: 'Database error' });
+          console.error(
+            "Error fetching slider images:",
+            err.stack || err.message || err
+          );
+          return res.status(500).json({ error: "Database error" });
         }
         // console.log(results);
         // Construct full image URLs
-        const baseUrl = `${req.protocol}://${req.get('host')}`;
-        const sliderData = results.map(row => ({
-            image_path: `${baseUrl}${row.image_path}`,
-            subtitle: row.subtitle || '',
-            maintitle: row.maintitle || '',
+        const baseUrl = `${req.protocol}://${req.get("host")}`;
+        const sliderData = results.map((row) => ({
+          image_path: `${baseUrl}${row.image_path}`,
+          subtitle: row.subtitle || "",
+          maintitle: row.maintitle || "",
         }));
 
         // const baseUrl = `${req.protocol}://${req.get('host')}`;
         // const imagePaths = results.map(row => `${baseUrl}${row.image_path}`);
         // const subTitle = results.map(row => row.subtitle);
         // const mainTitle = results.map(row => row.maintitle);
-  
-              
-      // console.log(result);
-      res.render('admin/settings', {
-        title:  "Admin Settings | astaBlog",
-        userInfo: result[0],
-        sliderData,
+
+        // console.log(result);
+        res.render("admin/settings", {
+          title: "Admin Settings | astaBlog",
+          userInfo: result[0],
+          sliderData,
+        });
       });
-
     });
-
-
-    })
-
-      
-
-})
+  }
+);
 
 module.exports = router;

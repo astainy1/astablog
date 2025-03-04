@@ -43,7 +43,7 @@
             <span class="fa fa-comment  comment-count"> &nbsp; <%= article.totalComments %></span>
 
             <a class="blog-action-center" data-type="like" id="reaction_btn"><i
-              class="fa fa-thumbs-up" id="react_post"> <span class="like-count"></span> </i></a>
+              class="fa fa-thumbs-up" id="react_post"> <span class="like-count"><%= article.total_reaction %></span> </i></a>
           </a>
         </section>
       </section>
@@ -58,6 +58,74 @@
 
   </main>
 </section>
+
+<!-- New Letter pop up Modal message container -->
+<section class="news_letter_modal_container" id="popup_modal">
+  <section class="modal_success">
+    
+    <section class="modal_success_header">
+      <h2>Newsletter</h2>
+      <span class="close_modal">&times;</span>
+    </section>
+
+    <section class="modal_body">
+      <section class="modal_success_content_body">
+        <h2>Thank you for subscribing to our newsletter.</h2>
+        <p>Stay tuned for our latest updates!</p>
+      </section>
+    </section>
+
+  </section>
+</section>
+
+<script>
+  const popupModal = document.getElementById('popup_modal');
+  const closeModal = document.querySelector('.close_modal');
+  const subscribe_btn = document.getElementById('subscribe_btn');
+  const newsletterForm = document.getElementById('newsletterForm');
+  
+  //Show modal
+  document.addEventListener('DOMContentLoaded', () => {
+    newsletterForm.addEventListener('submit', (e) => {
+      const email = document.getElementById('newsletterEmail').value;
+      e.preventDefault();
+
+      console.log(email);
+      //Get the email from the newsletter form and send to the backend
+      fetch('/api/subscribe/newsletter', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email: email})
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if(data.success){
+
+          console.log(data.message);
+          popupModal.classList.add('add_modal');
+        }else{
+          alert('Please enter your email address.');
+        }
+      })
+      .catch((err) => console.log('Something went wrong. ', err))
+
+    });
+    //Close modal on click outside
+    window.addEventListener('click', (e) => {
+      if (e.target == popupModal) {
+        popupModal.classList.remove('add_modal');
+        window.location.href = '/home';
+      }
+    });
+  });
+
+  //Remove modal
+  closeModal.addEventListener('click', () => {
+    popupModal.classList.remove('add_modal');
+    window.location.href = '/home';
+
+  });
+</script>
 
 <!-- Include footer -->
 <%- include('./partials/__footer.ejs') %>
