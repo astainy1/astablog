@@ -76,6 +76,7 @@
   $(document).ready(function() {
       $(".viewUserBtn").click(function() {
           // Get user details from the button attributes
+          const userInfo = $(this).data("username");
           const fullName = $(this).data("fullname");
           const username = $(this).data("username");
           const email = $(this).data("email");
@@ -83,6 +84,7 @@
           const totalPost = $(this).data("totalpost");
 
           // Populate the modal with user data
+          $("#modalUserInfo").text(`${userInfo} Information`);
           $("#modalFullName").text(fullName);
           $("#modalUsername").text(username);
           $("#modalEmail").text(email);
@@ -94,6 +96,15 @@
       });
   });
 </script>
+
+<!-- Script to delete user from database -->
+ <script>
+    const deleteUser = document.getElementById("deleteUser");
+    deleteUser.addEventListener("click", () => {
+        console.log(deleteUser);
+    })
+ </script>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const uploadForm = document.getElementById("uploadForm");
@@ -142,6 +153,7 @@
     });
 });
 
+// function to delete header image
 function deleteImage(imageUrl) {
     fetch("/api/delete-slider", {
         method: "POST",
@@ -158,7 +170,7 @@ function deleteImage(imageUrl) {
     })
     .catch(error => console.error("Delete error:", error));
 }
-
 </script>
+
 </body>
 </html>

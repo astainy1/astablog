@@ -36,7 +36,8 @@
                                             <th>Full Name</th>
                                             <th>Username</th>
                                             <th>Email</th>
-                                            <th>Number of Articles</th>
+                                            <th>Published Articles</th>
+                                            <th>Unpublished Articles</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -53,6 +54,7 @@
                                                     <td><%= user.username %></td>
                                                     <td><%= user.email %></td>
                                                     <td><%= user.totalPost %></td>
+                                                    <td>0</td>
                                                     <td>
                                                         <button type="button" class="btn btn-success viewUserBtn"
                                                                 data-id="<%= user.id %>"
@@ -63,7 +65,7 @@
                                                                 data-totalpost="<%= user.totalPost %>">
                                                             View
                                                         </button>
-                                                        <button type="button" class="btn btn-danger">Delete</button>
+                                                        <button type="submit" class="btn btn-danger" id="delete_user" data-userID="<%= user.id%>">Delete</button>
                                                     </td>
                                                 </tr>
                                             <% }); %>
@@ -79,7 +81,8 @@
                                             <th>Full Name</th>
                                             <th>Username</th>
                                             <th>Email</th>
-                                            <th>Number of Articles</th>
+                                            <th>Published Articles</th>
+                                            <th>Unpublished Articles</th>
                                             <th>Action</th>
                                         </tr>
                                     </tfoot>
@@ -98,7 +101,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="userInfoModalLabel">User Information</h5>
+              
+               <h5 class="modal-title" id="modalUserInfo" ><h5>
+                
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -110,7 +115,8 @@
                 <p><strong>Full Name:</strong> <span id="modalFullName"></span></p>
                 <p><strong>Username:</strong> <span id="modalUsername"></span></p>
                 <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-                <p><strong>Number of Articles:</strong> <span id="modalTotalPost"></span></p>
+                <p><strong>Published Articles:</strong> <span id="modalTotalPost"></span></p>
+                <p><strong>Unpublished Articles:</strong> <span id="modalTotalPost">0</span></p>
             </div>
         </div>
     </div>

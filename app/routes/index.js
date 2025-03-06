@@ -4,6 +4,7 @@ const router = express.Router();
 // const bcrypt = require("bcrypt");
 const path = require("path");
 const sanitizeHtml = require("sanitize-html");
+const nodemailer = require("nodemailer");
 // const saltRounds = 12;
 // const passport = require("passport");
 // const LocalStrategy = require("passport-local");
@@ -12,9 +13,35 @@ const multer = require("multer");
 const fs = require("fs");
 const db = require("../config/db");
 const isAuth = require("../middlewares/isLoggedIn");
+require("dotenv").config();
 
 // Middleware to protect admin routes
 const isAdmin = require("../middlewares/isLoggedIn");
+
+// Configure the transporter (use your SMTP credentials)
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: "astablog0@gmail.com",
+    pass: process.env.APP_PASSWORD,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+  debug: true,
+  logger: true,
+});
+console.log("App Password Loaded:", process.env.APP_PASSWORD ? "Yes" : "No");
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("SMTP Connection Error:", error);
+  } else {
+    console.log("SMTP Connection Success:", success);
+  }
+});
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -131,8 +158,8 @@ router.get("/", (req, res) => {
             reaction.total_reaction = getTotalReaction[reaction.id] || 0;
           });
 
-          console.log(getTotalReaction);
-          console.log(rows);
+          // console.log(getTotalReaction);
+          // console.log(rows);
 
           return res.render("default/index", {
             title: "Home | astablog",
@@ -157,7 +184,7 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
   const userName = req.session.userFound;
 
   // Retrieve all articles from Database
-  const articlesQuery = `SELECT * FROM users INNER JOIN posts ON users.id = posts.user_id`;
+  const articlesQuery = `SELECT * FROM users INNER JOIN posts ON users.id = posts.user_id ORDER BY posts.created_at DESC`;
   db.query(articlesQuery, (err, articles) => {
     if (err) {
       console.error("Error fetching articles:", err.stack || err.message);
@@ -229,21 +256,6 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
   });
 });
 
-// News letter api
-router.post('/api/subscribe/newsletter', isAuth.isLoggedIn, (req, res) => {
-  //Get email from the subscribe form
-  const {email} = req.body
-  if(!email){
-    console.log('Please enter your email');
-    res.json({success: false, message: 'Please enter your email address to receive our updates.'});
-    return;
-  }
-
-  console.log('Thank you for subscribing to our new letter.');
-  res.json({success: true, message: 'Thank you for subscribing to our new letter.'});
-
-})
-
 // Logged-in page: Profile routes
 router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
   //Retrive user details stored in session.
@@ -269,6 +281,112 @@ router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
         message: req.flash("error"),
       });
       return;
+    }
+  });
+});
+
+// News letter api
+router.post("/api/subscribe/newsletter", isAuth.isLoggedIn, (req, res) => {
+  //Get email from the subscribe form
+  const userId = req.session.userFound;
+  const { email } = req.body;
+
+  if (!email) {
+    // console.log('Please enter your email');
+    res.json({
+      success: false,
+      message: "Please enter your email address.",
+    });
+    return;
+  }
+
+  //Check for duplicate email
+  const queryEmail = `SELECT * FROM news_letter WHERE email = ? `;
+
+  db.query(queryEmail, [email], (err, row) => {
+    if (err) {
+      console.log("Error checking for duplicate news_letter email");
+      return res.status(500);
+    } else {
+      // console.log(row.length);
+      if (row.length > 0) {
+        res.json({
+          success: false,
+          message: "You have already subscribed!",
+        });
+        return;
+      }
+
+      console.log("Thank you for subscribing to our new letter.");
+
+      //Insert subscriber email into newletter table
+      const insertEmail = `INSERT INTO news_letter (user_id, email) VALUES(?, ?)`;
+
+      db.query(insertEmail, [userId.id, email], (err, result) => {
+        if (err) {
+          console.log(
+            "Error inserting user emain into newsletter table: ",
+            err.stack || err.message
+          );
+          res.json({
+            success: false,
+            message: "Failed to subscribe to our new letter.",
+          });
+          return;
+        } else {
+          // send email
+
+          try {
+            const mailOptions = {
+              from: '"Asta Blog" <noreply.asta@blog.org>',
+              to: email,
+              subject: "🎉 Thank You for Subscribing to Asta Blog! 🚀",
+              text: `Hello ${userId.username}, thank you for subscribing to our newsletter. Stay tuned for updates!`,
+              html: `
+              <div style="background-color: #f4f4f4; padding: 20px;">
+                <table style="width: 100%; max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                  <tr>
+                    <td style="text-align: center; padding: 20px 0;">
+                      <img src="https://your-logo-url.com/logo.png" alt="Asta Blog" width="150" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 20px; font-family: Arial, sans-serif; color: #333;">
+                      <h2 style="text-align: center; color: #007bff;">Welcome, ${userId.username}! 🎉</h2>
+                      <p style="font-size: 16px; text-align: center; line-height: 1.6;">
+                        Thank you for subscribing to <strong>Asta Blog</strong>! You're now part of our amazing community where you'll receive the latest updates, articles, and exclusive content.
+                      </p>
+                      <p style="font-size: 16px; text-align: center;">
+                        Stay tuned, and let's embark on this exciting journey together! 🚀
+                      </p>
+                      <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://your-blog-url.com" style="background: #007bff; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-size: 16px;">Visit Our Blog</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="text-align: center; font-size: 12px; color: #888; padding: 10px;">
+                      &copy; ${new Date().getFullYear()} Asta Blog. All rights reserved.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              `,
+            };
+            
+
+            transporter.sendMail(mailOptions);
+            console.log("Email sent: ");
+            res.json({
+              success: true,
+              message: "Thank you for subscribing to our new letter.",
+            });
+            return;
+          } catch (error) {
+            console.error("Error sending email:", error);
+          }
+        }
+      });
     }
   });
 });
@@ -569,7 +687,7 @@ router.get("/post/:id?", isAuth.isLoggedIn, (req, res) => {
           // console.log(comments);
         });
 
-        console.log(result.length);
+        // console.log(result.length);
         // const postCommentsReplies = result;
         // console.log(postCommentsReplies)
 

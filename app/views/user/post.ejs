@@ -10,17 +10,19 @@
       <article class="blog-summary-title" id="noshadow">
 
         <section class="main-title-text">
-          <a href="/post/<%= post.post_id %>" class="blog-tagline">
+          <a href="#" class="blog-tagline" >
             <% if(post.post_image) { %>
-              <img src="<%= '../uploads/post/' + post.post_image %>">
+              <img src="<%= '../uploads/post/' + post.post_image %>" >
               <% }else { %>
 
                 <img src="../img/default_no_image.jpg" alt="Photo">
 
                 <% } %>
+                <a href="/post/<%= post.post_id %>" class="blog-tagline">
                   <span>
                     <%= post.post_title %>
                   </span>
+                </a>
           </a>
           <section class="blog-action-container" data-post-id="<%= post.post_id %>" id="reaction_container">
             <!-- <section class="blog-action-container" style="margin-bottom: 1rem; display: flex; gap: 3rem;"> -->
@@ -124,7 +126,7 @@
                       <li>
                         <a href="<%= post.post_author_twitter %>"><i class="fa-brands fa-twitter"></i></a>
                       </li>
-                    <% } %>
+                      <% } %>
           </ul>
         </section>
     </section>
@@ -307,10 +309,54 @@
                   <div style="margin-bottom: 10em"></div>
                   <div style="margin-bottom: 16em"></div>
 
+                  <!-- Preview image popup modal -->
+                  <section class="preview_image_popup_container">
+                    <section id="close_modal">&times;</section>
+                    <section class="preview_image">
+                      <img alt="post image">
+                    </section>
+                  </section>
                   <!-- Recent Post -->
 
                   <%- include('./partials/__recent_post.ejs') %>
                     </section>
+
+                    <script>
+                      // alert("Click on the image to view full image");
+                      const image_container = document.querySelectorAll('.blog-tagline img');
+
+                      const imageFullViewContainer = document.querySelector('.preview_image_popup_container ');
+
+                      const fullImage = document.querySelector('.preview_image img');
+
+                      console.log(image_container);
+                      
+                      image_container.forEach(image => {
+                        image.addEventListener('click', () => {
+                          console.log(image.getAttribute('src'));
+
+                          imageFullViewContainer.style.display = 'block';
+                          fullImage.src = image.getAttribute('src');
+                        });
+
+                        const close_modal = document.querySelector('#close_modal');
+                        close_modal.addEventListener('click', () => {
+                          console.log('Close button is clicked')
+                          imageFullViewContainer.style.display = 'none';
+                        });
+
+                      });
+
+                      imageFullViewContainer.addEventListener('çlick', () => {
+                        imageFullViewContainer.style.display = 'none';
+                      });
+                      // Prevent the click event from bubbling up to the parent container
+                      imageFullViewContainer.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        imageFullViewContainer.style.display = 'none';
+                      });
+                    </script>
+
                     <script defer>
 
                       document.addEventListener("DOMContentLoaded", () => {
@@ -404,5 +450,10 @@
                         });
                       });
 
+
+                      // Code for full preview of image
+
                     </script>
+
+                    
                     <%- include('./partials/__footer') %>

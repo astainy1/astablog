@@ -67,11 +67,8 @@
       <h2>Newsletter</h2>
       <span class="close_modal">&times;</span>
     </section>
-
     <section class="modal_body">
       <section class="modal_success_content_body">
-        <h2>Thank you for subscribing to our newsletter.</h2>
-        <p>Stay tuned for our latest updates!</p>
       </section>
     </section>
 
@@ -83,7 +80,8 @@
   const closeModal = document.querySelector('.close_modal');
   const subscribe_btn = document.getElementById('subscribe_btn');
   const newsletterForm = document.getElementById('newsletterForm');
-  
+  const modalContent = document.querySelector('.modal_success_content_body');
+  const subscriptionBtn = document.querySelector('#subscribe_btn');
   //Show modal
   document.addEventListener('DOMContentLoaded', () => {
     newsletterForm.addEventListener('submit', (e) => {
@@ -101,10 +99,38 @@
       .then((data) => {
         if(data.success){
 
+          
+          modalContent.innerHTML = `<h2>${data.message}</h2>
+          <p>Stay tuned for our latest updates!</p>`;
           console.log(data.message);
-          popupModal.classList.add('add_modal');
+          setTimeout(() => {
+            subscriptionBtn.style = 'opacity: 0.7;';
+            subscriptionBtn.textContent = 'Loading...';
+          }, 300);
+
+          setTimeout(() => {
+            popupModal.classList.add('add_modal');
+            subscriptionBtn.style = 'opacity: 100;';
+            subscriptionBtn.textContent = 'SUBSCRIBE';
+          }, 2000);
+
         }else{
-          alert('Please enter your email address.');
+          // alert(`${data.message}`);
+
+          console.log(modalContent);
+          setTimeout(() => {
+            subscriptionBtn.style = 'opacity: 0.7;';
+            subscriptionBtn.textContent = 'Loading...';
+          }, 300);
+
+          document.querySelector('.modal_success_header').style = 'background: red;';
+          modalContent.innerHTML = `<h2>${data.message}</h2>
+        <p>Stay tuned for our latest updates!</p>`;
+        setTimeout(() => {
+            popupModal.classList.add('add_modal');
+            subscriptionBtn.style = 'opacity: 100;';
+            subscriptionBtn.textContent = 'SUBSCRIBE';
+          }, 2000);
         }
       })
       .catch((err) => console.log('Something went wrong. ', err))
@@ -114,7 +140,7 @@
     window.addEventListener('click', (e) => {
       if (e.target == popupModal) {
         popupModal.classList.remove('add_modal');
-        window.location.href = '/home';
+        window.location.reload();
       }
     });
   });
@@ -122,7 +148,7 @@
   //Remove modal
   closeModal.addEventListener('click', () => {
     popupModal.classList.remove('add_modal');
-    window.location.href = '/home';
+    window.location.reload();
 
   });
 </script>
