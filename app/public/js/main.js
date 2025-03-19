@@ -29,7 +29,7 @@ window.addEventListener('resize', () => {
 })
 
 window.addEventListener("scroll", () => {
-  console.log("User is scrolling the page.");
+  // console.log("User is scrolling the page.");
   // console.log(window.scrollbars);
   // console.log(body.scro);
 
@@ -52,7 +52,7 @@ const menuBtn = document.getElementById("show-menu-btn");
 menuBtn.addEventListener("click", () => {
   const menu = document.getElementById("menu");
   if (!isDisplaying) {
-    console.log("Displaying: " + isDisplaying);
+    // console.log("Displaying: " + isDisplaying);
     menu.style.display = "flex";
     isDisplaying = true;
     document.onscroll = () => {
@@ -61,7 +61,7 @@ menuBtn.addEventListener("click", () => {
       isDisplaying = false;
     };
   } else {
-    console.log("It's not Displaying: " + isDisplaying);
+    // console.log("It's not Displaying: " + isDisplaying);
     menu.style.display = "none";
     isDisplaying = false;
   }

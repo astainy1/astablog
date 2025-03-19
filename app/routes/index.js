@@ -1,24 +1,21 @@
 // import node modules
 const express = require("express");
 const router = express.Router();
-// const bcrypt = require("bcrypt");
 const path = require("path");
 const sanitizeHtml = require("sanitize-html");
 const nodemailer = require("nodemailer");
-// const saltRounds = 12;
-// const passport = require("passport");
-// const LocalStrategy = require("passport-local");
-// const { body, validationResult } = require("express-validator");
 const multer = require("multer");
 const fs = require("fs");
+require("dotenv").config();
+
+//Custom modules
 const db = require("../config/db");
 const isAuth = require("../middlewares/isLoggedIn");
-require("dotenv").config();
 
 // Middleware to protect admin routes
 const isAdmin = require("../middlewares/isLoggedIn");
 
-// Configure the transporter (use your SMTP credentials)
+// Configure transporter (using my google SMTP credentials)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -30,18 +27,20 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false,
   },
-  debug: true,
-  logger: true,
+  // debug: true,
+  // logger: true,
 });
+
 console.log("App Password Loaded:", process.env.APP_PASSWORD ? "Yes" : "No");
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.log("SMTP Connection Error:", error);
-  } else {
-    console.log("SMTP Connection Success:", success);
-  }
-});
+//Verify transporter configuration 
+// transporter.verify((error, success) => {
+//   if (error) {
+//     console.log("SMTP Connection Error:", error.stack);
+//   } else {
+//     console.log("SMTP Connection Success:", success);
+//   }
+// });
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -104,6 +103,7 @@ router.get("/", (req, res) => {
       return res.render("default/index", {
         title: "Home | astablog",
         articles: [],
+        sidebarText: 'Summary',
       });
     }
 
@@ -123,6 +123,7 @@ router.get("/", (req, res) => {
         return res.render("default/index", {
           title: "Home | astablog",
           articles: rows,
+          sidebarText: 'Summary',
         });
       }
 
@@ -165,6 +166,7 @@ router.get("/", (req, res) => {
             title: "Home | astablog",
             articles: rows,
             totalReaction: reactionRows.total_reaction,
+            sidebarText: 'Summary',
           });
         }
       });
@@ -196,6 +198,7 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
         title: "Home | astablog",
         userInfo: userName.username,
         articles: [],
+        sidebarText: 'Subscribe to our Newsletter'
       });
     }
 
@@ -247,6 +250,7 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
           // console.log(enrichedArticles);
           res.render("user/home", {
             title: "Home | astablog",
+            sidebarText: "Subscribe to our  Newsletter",
             userInfo: userName.username,
             articles: enrichedArticles,
           });
@@ -254,6 +258,8 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
       });
     });
   });
+
+
 });
 
 // Logged-in page: Profile routes
@@ -263,7 +269,9 @@ router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
 
   //Retrive all user details from database
   const userDetails = `SELECT full_name, username, email, profile_picture, bio, location, facebook_id, twitter_id, profession FROM users WHERE id = ?`;
+  
   db.query(userDetails, [userName.id], (err, result) => {
+    
     if (err) {
       console.error(
         "Error retriving user data from database: ",
@@ -273,7 +281,6 @@ router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
       return res.redirect(303, "/user/profile");
     } else {
       //   console.log("User details retrieved", result);
-
       res.render("user/profile", {
         title: "Profile | astablog",
         userInfo: userName.username,
@@ -285,7 +292,7 @@ router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
   });
 });
 
-// News letter api
+// News Letter Subscription API
 router.post("/api/subscribe/newsletter", isAuth.isLoggedIn, (req, res) => {
   //Get email from the subscribe form
   const userId = req.session.userFound;
@@ -360,7 +367,7 @@ router.post("/api/subscribe/newsletter", isAuth.isLoggedIn, (req, res) => {
                         Stay tuned, and let's embark on this exciting journey together! 🚀
                       </p>
                       <div style="text-align: center; margin: 20px 0;">
-                        <a href="https://your-blog-url.com" style="background: #007bff; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-size: 16px;">Visit Our Blog</a>
+                        <a href="https://your-blog-url.com" style="background: #ff105f; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-size: 16px;">Visit Our Blog</a>
                       </div>
                     </td>
                   </tr>
@@ -374,7 +381,6 @@ router.post("/api/subscribe/newsletter", isAuth.isLoggedIn, (req, res) => {
               `,
             };
             
-
             transporter.sendMail(mailOptions);
             console.log("Email sent: ");
             res.json({
@@ -480,6 +486,7 @@ router.post(
 );
 
 // Logged-in page: View another user Profile routes
+
 router.get("/viewprofile/:id?", isAuth.isLoggedIn, (req, res) => {
   //Retrive user details stored in session.
   const userName = req.session.userFound;
@@ -502,10 +509,6 @@ router.get("/viewprofile/:id?", isAuth.isLoggedIn, (req, res) => {
     }
   });
 });
-
-// router.post('/user/viewprofile', isAuth.isLoggedIn, (req, res) => {
-//   res.redirect(303, '');
-// });
 
 // Logged-in page: Write Article routes
 router.get("/create/article", isAuth.isLoggedIn, (req, res) => {
@@ -624,7 +627,7 @@ router.post(
 router.get("/post/:id?", isAuth.isLoggedIn, (req, res) => {
   const userName = req.session.userFound;
   const postId = req.params.id;
-  // console.log(postId);
+  console.log(req.params);
 
   //Join post, users, comments, reaction tables to get all the details of the post and display to front end.
   const allArticle = `
@@ -967,10 +970,78 @@ router.get(
         return res.status(500);
       }
       // console.log(result);
-      res.render("admin/article", {
-        title: "Admin Article List | astaBlog",
-        userInfo: result[0],
+      //Get all published articles and display into Articles Table
+      const allArticles = `SELECT * FROM users INNER JOIN posts ON users.id = posts.user_id`;
+
+      db.query(allArticles, [], (err, articles) => {
+        if(err){
+          console.error("Error fetching articles:", err.stack || err);
+          return res.status(500);
+        }else{
+
+          // const articlesDetails = articleRows.map(row => {
+          //   return row;
+          // })
+          
+          // console.log(articlesDetails);
+
+          // Retrieve total comments for each post
+    const postIds = articles.map((article) => article.id);
+    const commentsQuery = `SELECT post_id, COUNT(*) AS totalComments FROM comments WHERE post_id IN (?) GROUP BY post_id`;
+    db.query(commentsQuery, [postIds], (err, comments) => {
+      if (err) {
+        console.error("Error fetching comments:", err);
+        return res.status(500);
+      }
+
+      // Map comment counts to respective posts
+      const commentMap = comments.reduce((acc, { post_id, totalComments }) => {
+        acc[post_id] = totalComments;
+        return acc;
+      }, {});
+
+      // Attach comment count to articles
+      const articleRows = articles.map((article) => ({
+        ...article,
+        totalComments: commentMap[article.id] || 0,
+      }));
+
+      //Get total reaction of each post
+      const totalReaction = `SELECT post_id, COUNT(*) AS total_reaction FROM reactions WHERE post_id IN (?) GROUP BY post_id`;
+
+      db.query(totalReaction, [postIds], (err, reactionRows) => {
+        if (err) {
+          console.log(
+            "Error retrieving total reaction from reaction table: ",
+            err.stack || err.message
+          );
+          return res.redirect(303, "/");
+        } else {
+          // console.log(reactionRows);
+          const getTotalReaction = reactionRows.reduce((map, reactions) => {
+            map[reactions.post_id] = reactions.total_reaction;
+            return map;
+          }, {});
+
+          articleRows.forEach((reaction) => {
+            reaction.total_reaction = getTotalReaction[reaction.id] || 0;
+          });
+
+          // console.log(getTotalReaction);
+          // console.log(articles);
+
+          console.log(articleRows);
+          res.render("admin/article", {
+            title: "Admin Article List | astaBlog",
+            userInfo: result[0],
+            article: articleRows
+          });
+        }
       });
+    });
+        }
+      })
+
     });
   }
 );
@@ -1025,6 +1096,37 @@ router.get(
     });
   }
 );
+
+// Admin New Letter - Get route
+
+router.get(
+  "/asta-admin/newsletter",
+  isAuth.isLoggedIn,
+  isAdmin.isAdmin,
+  (req, res) => {
+    // Get user id stored in session
+    const userID = req.session.userFound;
+    // console.log('Admin ID: ', userID);
+    // Get user details from database
+    const userDetails = `SELECT * FROM users WHERE id = ?`;
+    db.query(userDetails, [userID.id], (err, result) => {
+      if (err) {
+        console.error("Error fetching user details:", err.stack || err);
+        return res.status(500);
+      }
+      // console.log(result);
+      res.render("admin/newsletter", {
+        title: "Admin News Letter List | astaBlog",
+        userInfo: result[0],
+      });
+    });
+  }
+);
+
+// Admin News Letter - Post route
+// router.post(
+
+// )
 
 // Admin users list
 router.get(
@@ -1162,6 +1264,22 @@ router.get("/api/sliders", (req, res) => {
   });
 });
 
+router.post("/api/delete/user", (req, res) => {
+  const {userID} = req.body;
+
+  //Delete user from database
+  const deleteUser = `DELETE FROM users WHERE id = ?`;
+  db.query(deleteUser, [userID], (err, result) => {
+    if(err){
+      console.error('Error deleting user: ', err.message || err.stack);
+      res.json({success: false, message: err.stack});
+      return;
+    }else{
+      res.json({success: true, message: 'Are you sure you want to delete this user?'});
+      return;
+    }
+  })
+})
 // API route for deleting images
 router.post("/api/delete-slider", (req, res) => {
   const { imageUrl } = req.body;
@@ -1174,14 +1292,14 @@ router.post("/api/delete-slider", (req, res) => {
   const query = "DELETE FROM header_images WHERE image_path = ?";
   db.query(query, ["/uploads/sliders/" + filename], (err) => {
     if (err) {
-      console.error("Database delete error:", err);
+      console.error("Error deleting image from database:", err);
       return res.json({ success: false });
     }
 
     // Delete from filesystem
     fs.unlink(filePath, (fsErr) => {
-      if (fsErr) console.error("File delete error:", fsErr);
-      res.json({ success: true });
+      if (fsErr) console.error("File deletion error:", fsErr);
+      return res.json({ success: true });
     });
   });
 });

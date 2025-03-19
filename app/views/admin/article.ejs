@@ -34,25 +34,27 @@ include('./partials/__sidebar.ejs') %> <%- include('./partials/__navbar.ejs') %>
                     <tr>
                       <th>Main Image</th>
                       <th>Title</th>
-                      <th>Writer</th>
+                      <th>Author</th>
                       <th>Number of Comments</th>
                       <th>Number of Reactions</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
+                    <% if(article) { %>
+                      <% for(let row of article) { %>
                     <tr>
                       <td>
                         <img
-                          src=""
+                          src="<%= row.image ? '../uploads/post/' + row.image : '../img/author/default_profile_image.jpg' %>"
                           alt="image"
                           style="border-radius: 50%; width: 50px; height: 50px"
                         />
                       </td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td><%= row.title %></td>
+                      <td><%= row.username %></td>
+                      <td><%= row.totalComments %></td>
+                      <td><%= row.total_reaction %></td>
                       <td>
                         <button
                           type="button"
@@ -63,24 +65,26 @@ include('./partials/__sidebar.ejs') %> <%- include('./partials/__navbar.ejs') %>
                           data-email=""
                           data-profile=""
                           data-totalpost=""
-                        >
+                          onclick="alert('Sorry, you cannot edit this article because it has already been published by the author.')">
                           View
                         </button>
-                        <button type="button" class="btn btn-danger">
+                        <button type="button" class="btn btn-danger" onclick="alert('You are not allowed to delete this Article.')">
                           Delete
                         </button>
                       </td>
                     </tr>
-
-                    <!-- <tr>
-                                                <td colspan="6" class="text-center">No Users Found</td>
-                                            </tr> -->
+                    <% } %>
+                    <% } else { %>
+                    <tr>
+                        <td colspan="6" class="text-center">No Published Articles! </td>
+                    </tr>
+                    <% } %>
                   </tbody>
                   <tfoot>
                     <tr>
                         <th>Main Image</th>
                         <th>Title</th>
-                        <th>Writer</th>
+                        <th>Author</th>
                         <th>Number of Comments</th>
                         <th>Number of Reactions</th>
                         <th>Action</th>

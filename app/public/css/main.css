@@ -11,6 +11,34 @@ html, body, *{
     font-family: 'Open Sans', sans-serif;
 }
 
+#errorMessage {
+    color: white; 
+    text-align: center;
+    font-size: 0.9rem; 
+    background: red; 
+    padding: 5px 0;
+}
+
+#successMessage {
+    background-color: green; 
+    text-align: center;
+    font-size: 0.9rem; 
+    padding: 5px 0; 
+    color: #fff;
+}
+
+#errorMessage, #successMessage {
+    opacity: 0.9; 
+    transition: opacity 1s ease-out; 
+  }
+  
+  .fadeOut {
+    opacity: 0;
+    pointer-events: none; 
+  }
+  
+
+
 :root{
     --background-btn: linear-gradient(to right, #ff105f, #ff00a6);
 }

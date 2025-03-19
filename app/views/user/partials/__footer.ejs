@@ -21,6 +21,22 @@
 <script  src="../js/vendor/jquery/jquery-validation-1.21.0/dist/jquery.validate.min.js"></script>
 <script src="../css/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
 
+<script>
+    // Timeout function to hide messages after 3 seconds
+    setTimeout(function() {
+      // Hide error message if it exists
+      const errorMessage = document.getElementById("errorMessage");
+      if (errorMessage) {
+        errorMessage.style.display = 'none';
+      }
+  
+      // Hide success message if it exists
+      const successMessage = document.getElementById("successMessage");
+      if (successMessage) {
+        successMessage.style.display = 'none';
+      }
+    }, 6000); // Time in milliseconds (3000ms = 3 seconds)
+  </script>
 <!-- <script src="stylesheet" href="../css/summernote-0.9.0-dist/summernote.min.js"></script> -->
 <script src="../js/vendor/jquery/validation.js"></script>
 </html>

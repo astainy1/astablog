@@ -52,7 +52,7 @@
                                                     </td>
                                                     <td><%= user.full_name %></td>
                                                     <td><%= user.username %></td>
-                                                    <td><%= user.email %></td>
+                                                    <td><a href="mailto:<%= user.email %>"><%= user.email %></a> </td>
                                                     <td><%= user.totalPost %></td>
                                                     <td>0</td>
                                                     <td>
@@ -65,7 +65,7 @@
                                                                 data-totalpost="<%= user.totalPost %>">
                                                             View
                                                         </button>
-                                                        <button type="submit" class="btn btn-danger" id="delete_user" data-userID="<%= user.id%>">Delete</button>
+                                                        <button class="btn btn-danger" id="delete_user" onclick="deleteUser('<%= user.id %>')">Delete</button>
                                                     </td>
                                                 </tr>
                                             <% }); %>

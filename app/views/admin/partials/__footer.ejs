@@ -71,6 +71,7 @@
 <!-- JavaScript to Handle Modal Data -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
 
+<!-- Script to view user profile -->
 <script>
 
   $(document).ready(function() {
@@ -95,15 +96,32 @@
           $("#userInfoModal").modal("show");
       });
   });
-</script>
 
-<!-- Script to delete user from database -->
- <script>
-    const deleteUser = document.getElementById("deleteUser");
-    deleteUser.addEventListener("click", () => {
-        console.log(deleteUser);
-    })
- </script>
+
+//   Function to delete user from databas
+  function deleteUser(userID) {
+    // console.log(userID);
+        alert('Are you sure you want to delete this user?');
+        fetch('/api/delete/user', {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ userID })
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.success) {
+                console.log(data);
+                alert(data.message);
+                location.reload();
+            }else{
+                alert("Error deleting user");
+                location.reload();
+            }
+        })
+    };
+    // deleteUser(1);
+
+</script>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -154,7 +172,7 @@
 });
 
 // function to delete header image
-function deleteImage(imageUrl) {
+function deleteImage (imageUrl) {
     fetch("/api/delete-slider", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
