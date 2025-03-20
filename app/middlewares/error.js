@@ -1,4 +1,4 @@
-// Middleware to throw error
+// Middleware for throwing error
 
 const express = require("express");
 const app = express();

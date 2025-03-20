@@ -24,7 +24,7 @@
   "main": "blog.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node blog.js",
+    "start": "nodemon blog.js",
     "dev": "nodemon blog.js -e js",
     "type": "modules"
   },

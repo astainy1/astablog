@@ -17,6 +17,6 @@ module.exports.isAdmin = (req, res, next) => {
     }else{
         // console.log('You are not allowed to this route.');
         res.status(403);
-        res.render('403', {title: 'Access Denied | astablog'});
+        res.render('403', {title: 'Access Denied | astaBlog'});
     }
 }

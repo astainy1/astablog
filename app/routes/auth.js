@@ -74,7 +74,7 @@ router.post("/login", (req, res) => {
     // console.log("Please enter your email address and password");
     req.flash("error", "Email and password are required.");
     res.redirect(303, "/login");
-
+    return;
   }
 
   // Check if user exist in the database
@@ -113,7 +113,7 @@ router.post("/login", (req, res) => {
           // console.log(userID.is_admin);
             // Check if logged-in user is an Admin or regular user
 
-            // Check is user is Admin
+            // Check if user is Admin
           if (userID.is_admin === 1) {
 
             req.session.userFound = {
@@ -279,7 +279,8 @@ router.get("/reset", (req, res) => {
 
 router.post("/reset", (req, res) => {
   const { email } = req.body;
-  console.log(email + ' Is changing his password.')
+  console.log(email + ' Is changing his password.');
+
   const queryConfirmEmail = `SELECT * FROM users WHERE email = ?`;
 
   db.query(queryConfirmEmail, [email], (err, rows) => {
@@ -325,7 +326,7 @@ router.post("/reset", (req, res) => {
       to: email,
       subject: "Password Reset Request",
       html: `
-        <p>You requested a password reset.</p>
+        <p>You've requested a password reset.</p>
         <p>Click the link below to reset your password:</p>
         <a href="${resetLink}">${resetLink}</a>
         <p>This link will expire in 30 minutes.</p>
@@ -345,8 +346,7 @@ router.post("/reset", (req, res) => {
      // Redirect to the confirmation page
       return res.redirect("/reset-sent");
     });
-      // Redirect user to reset password page with token
-      // return res.redirect(`/new/password?token=${resetToken}`);
+    
     });
   });
 });
@@ -358,7 +358,6 @@ router.get("/reset-sent", (req, res) => {
     message: req.flash("success") // Display success message
   });
 });
-
 
 // Default page: New Password Routes
 router.get("/new/password", (req, res) => {
@@ -451,7 +450,6 @@ router.post("/new/password", (req, res) => {
     });
   });
 });
-
 
 // Admin Section Routes
 router.get('/asta-admin/profile', isAuth.isLoggedIn, (req, res) => {

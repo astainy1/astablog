@@ -354,7 +354,7 @@ router.post("/api/subscribe/newsletter", isAuth.isLoggedIn, (req, res) => {
                 <table style="width: 100%; max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
                   <tr>
                     <td style="text-align: center; padding: 20px 0;">
-                      <img src="https://your-logo-url.com/logo.png" alt="Asta Blog" width="150" />
+                      <img src="https://astablog.onrender.com/logo/logo-darkgreen.png" alt="Asta Blog" width="150" />
                     </td>
                   </tr>
                   <tr>
@@ -367,7 +367,7 @@ router.post("/api/subscribe/newsletter", isAuth.isLoggedIn, (req, res) => {
                         Stay tuned, and let's embark on this exciting journey together! 🚀
                       </p>
                       <div style="text-align: center; margin: 20px 0;">
-                        <a href="https://your-blog-url.com" style="background: #ff105f; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-size: 16px;">Visit Our Blog</a>
+                        <a href="https://astablog.onrender.com" style="background: #ff105f; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-size: 16px;">Visit Our Blog</a>
                       </div>
                     </td>
                   </tr>

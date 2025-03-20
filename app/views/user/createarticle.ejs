@@ -499,6 +499,7 @@
       </section>
       <section>
         <button type="submit" id="publist-article-btn">Publish &rarr;</button>
+        <!-- <button type="submit" id="publist-article-btn">Save as draft &rarr;</button> -->
       </section>
     </form>
     <!-- <h1> Create Article</h1> -->
@@ -560,7 +561,7 @@
 </script>
 <script>
   $(document).ready(function () {
-    alert('Connect established!');
+    // alert('Connect established!');
     $('#summernote').summernote({
       placeholder: 'Write Article here....',
       tabsize: 2,
@@ -575,7 +576,7 @@
         ['para', ['ul', 'ol', 'paragraph']],
         ['table', ['table']],
         ['insert', ['link', 'video']],
-        ['view', ['fullscreen', 'codeview', 'help']]
+        ['view', ['codeview', 'help']]
       ]
     });
   });
