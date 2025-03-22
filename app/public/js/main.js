@@ -14,19 +14,17 @@ let isDisplaying = false;
 
 // Menu open and close
 closeMenuBtn.addEventListener("click", () => {
-
   document.querySelector(".mobile-menu-container").style.right = "-50%";
 });
 openMenuBtn.addEventListener("click", () => {
-
   document.querySelector(".mobile-menu-container").style.right = 0;
 });
 
-window.addEventListener('resize', () => {
-  console.log('Window is resize');
+window.addEventListener("resize", () => {
+  // console.log('Window is resize');
   menu.style.display = "none";
   isDisplaying = false;
-})
+});
 
 window.addEventListener("scroll", () => {
   // console.log("User is scrolling the page.");
@@ -38,7 +36,10 @@ window.addEventListener("scroll", () => {
     document.documentElement.scrollTop = 0; //Chrome
   });
 
-  if (document.body.scrollTop > 1500 || document.documentElement.scrollTop > 1500) {
+  if (
+    document.body.scrollTop > 1500 ||
+    document.documentElement.scrollTop > 1500
+  ) {
     scrollTopContainer.style.display = "block";
     // console.log("Scroll is greater than 40");
   } else {
@@ -46,7 +47,6 @@ window.addEventListener("scroll", () => {
     // console.log("Scroll is lesser than 40");
   }
 });
-
 
 const menuBtn = document.getElementById("show-menu-btn");
 menuBtn.addEventListener("click", () => {

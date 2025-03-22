@@ -33,7 +33,7 @@ const transporter = nodemailer.createTransport({
 
 console.log("App Password Loaded:", process.env.APP_PASSWORD ? "Yes" : "No");
 
-//Verify transporter configuration 
+//Verify transporter configuration
 // transporter.verify((error, success) => {
 //   if (error) {
 //     console.log("SMTP Connection Error:", error.stack);
@@ -103,7 +103,7 @@ router.get("/", (req, res) => {
       return res.render("default/index", {
         title: "Home | astablog",
         articles: [],
-        sidebarText: 'Summary',
+        sidebarText: "Summary",
       });
     }
 
@@ -123,7 +123,7 @@ router.get("/", (req, res) => {
         return res.render("default/index", {
           title: "Home | astablog",
           articles: rows,
-          sidebarText: 'Summary',
+          sidebarText: "Summary",
         });
       }
 
@@ -166,7 +166,7 @@ router.get("/", (req, res) => {
             title: "Home | astablog",
             articles: rows,
             totalReaction: reactionRows.total_reaction,
-            sidebarText: 'Summary',
+            sidebarText: "Summary",
           });
         }
       });
@@ -198,7 +198,7 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
         title: "Home | astablog",
         userInfo: userName.username,
         articles: [],
-        sidebarText: 'Subscribe to our Newsletter'
+        sidebarText: "Subscribe to our Newsletter",
       });
     }
 
@@ -258,8 +258,6 @@ router.get("/home", isAuth.isLoggedIn, (req, res) => {
       });
     });
   });
-
-
 });
 
 // Logged-in page: Profile routes
@@ -269,9 +267,8 @@ router.get("/user/profile", isAuth.isLoggedIn, (req, res) => {
 
   //Retrive all user details from database
   const userDetails = `SELECT full_name, username, email, profile_picture, bio, location, facebook_id, twitter_id, profession FROM users WHERE id = ?`;
-  
+
   db.query(userDetails, [userName.id], (err, result) => {
-    
     if (err) {
       console.error(
         "Error retriving user data from database: ",
@@ -359,7 +356,9 @@ router.post("/api/subscribe/newsletter", isAuth.isLoggedIn, (req, res) => {
                   </tr>
                   <tr>
                     <td style="padding: 20px; font-family: Arial, sans-serif; color: #333;">
-                      <h2 style="text-align: center; color: #007bff;">Welcome, ${userId.username}! 🎉</h2>
+                      <h2 style="text-align: center; color: #007bff;">Welcome, ${
+                        userId.username
+                      }! 🎉</h2>
                       <p style="font-size: 16px; text-align: center; line-height: 1.6;">
                         Thank you for subscribing to <strong>Asta Blog</strong>! You're now part of our amazing community where you'll receive the latest updates, articles, and exclusive content.
                       </p>
@@ -380,12 +379,12 @@ router.post("/api/subscribe/newsletter", isAuth.isLoggedIn, (req, res) => {
               </div>
               `,
             };
-            
+
             transporter.sendMail(mailOptions);
             console.log("Email sent: ");
             res.json({
               success: true,
-              message: "Thank you for subscribing to our new letter.",
+              message: "You have subscribed to our new letter.",
             });
             return;
           } catch (error) {
@@ -685,10 +684,14 @@ router.get("/post/:id?", isAuth.isLoggedIn, (req, res) => {
       if (result.length > 0) {
         // Process the result into structured data
         const post = result[0];
+
+        // console.log(post);
         const postComments = result;
-        const getComment = result.filter((comments) => {
-          // console.log(comments);
+
+        const getComment = result.filter((comment) => {
+          return comment;
         });
+        // console.log(getComment);
 
         // console.log(result.length);
         // const postCommentsReplies = result;
@@ -734,9 +737,9 @@ router.get("/post/:id?", isAuth.isLoggedIn, (req, res) => {
                   title: `Article | astablog}`,
                   userInfo: userName.username,
                   post: result[0], // Pass the post data to the view
-                  postComments: postComments,
-                  postCommentsReplies: result,
-                  // reactions: result,
+                  postComments: result,
+                  // postCommentsReplies: result,
+                  reactions: result,
                   recentPost: row,
                   totalComment: commentRows[0],
                   message: req.flash("error"),
@@ -974,74 +977,78 @@ router.get(
       const allArticles = `SELECT * FROM users INNER JOIN posts ON users.id = posts.user_id`;
 
       db.query(allArticles, [], (err, articles) => {
-        if(err){
+        if (err) {
           console.error("Error fetching articles:", err.stack || err);
           return res.status(500);
-        }else{
-
+        } else {
           // const articlesDetails = articleRows.map(row => {
           //   return row;
           // })
-          
+
           // console.log(articlesDetails);
 
           // Retrieve total comments for each post
-    const postIds = articles.map((article) => article.id);
-    const commentsQuery = `SELECT post_id, COUNT(*) AS totalComments FROM comments WHERE post_id IN (?) GROUP BY post_id`;
-    db.query(commentsQuery, [postIds], (err, comments) => {
-      if (err) {
-        console.error("Error fetching comments:", err);
-        return res.status(500);
-      }
+          const postIds = articles.map((article) => article.id);
+          const commentsQuery = `SELECT post_id, COUNT(*) AS totalComments FROM comments WHERE post_id IN (?) GROUP BY post_id`;
+          db.query(commentsQuery, [postIds], (err, comments) => {
+            if (err) {
+              console.error("Error fetching comments:", err);
+              return res.status(500);
+            }
 
-      // Map comment counts to respective posts
-      const commentMap = comments.reduce((acc, { post_id, totalComments }) => {
-        acc[post_id] = totalComments;
-        return acc;
-      }, {});
+            // Map comment counts to respective posts
+            const commentMap = comments.reduce(
+              (acc, { post_id, totalComments }) => {
+                acc[post_id] = totalComments;
+                return acc;
+              },
+              {}
+            );
 
-      // Attach comment count to articles
-      const articleRows = articles.map((article) => ({
-        ...article,
-        totalComments: commentMap[article.id] || 0,
-      }));
+            // Attach comment count to articles
+            const articleRows = articles.map((article) => ({
+              ...article,
+              totalComments: commentMap[article.id] || 0,
+            }));
 
-      //Get total reaction of each post
-      const totalReaction = `SELECT post_id, COUNT(*) AS total_reaction FROM reactions WHERE post_id IN (?) GROUP BY post_id`;
+            //Get total reaction of each post
+            const totalReaction = `SELECT post_id, COUNT(*) AS total_reaction FROM reactions WHERE post_id IN (?) GROUP BY post_id`;
 
-      db.query(totalReaction, [postIds], (err, reactionRows) => {
-        if (err) {
-          console.log(
-            "Error retrieving total reaction from reaction table: ",
-            err.stack || err.message
-          );
-          return res.redirect(303, "/");
-        } else {
-          // console.log(reactionRows);
-          const getTotalReaction = reactionRows.reduce((map, reactions) => {
-            map[reactions.post_id] = reactions.total_reaction;
-            return map;
-          }, {});
+            db.query(totalReaction, [postIds], (err, reactionRows) => {
+              if (err) {
+                console.log(
+                  "Error retrieving total reaction from reaction table: ",
+                  err.stack || err.message
+                );
+                return res.redirect(303, "/");
+              } else {
+                // console.log(reactionRows);
+                const getTotalReaction = reactionRows.reduce(
+                  (map, reactions) => {
+                    map[reactions.post_id] = reactions.total_reaction;
+                    return map;
+                  },
+                  {}
+                );
 
-          articleRows.forEach((reaction) => {
-            reaction.total_reaction = getTotalReaction[reaction.id] || 0;
-          });
+                articleRows.forEach((reaction) => {
+                  reaction.total_reaction = getTotalReaction[reaction.id] || 0;
+                });
 
-          // console.log(getTotalReaction);
-          // console.log(articles);
+                // console.log(getTotalReaction);
+                // console.log(articles);
 
-          console.log(articleRows);
-          res.render("admin/article", {
-            title: "Admin Article List | astaBlog",
-            userInfo: result[0],
-            article: articleRows
+                console.log(articleRows);
+                res.render("admin/article", {
+                  title: "Admin Article List | astaBlog",
+                  userInfo: result[0],
+                  article: articleRows,
+                });
+              }
+            });
           });
         }
       });
-    });
-        }
-      })
-
     });
   }
 );
@@ -1265,21 +1272,24 @@ router.get("/api/sliders", (req, res) => {
 });
 
 router.post("/api/delete/user", (req, res) => {
-  const {userID} = req.body;
+  const { userID } = req.body;
 
   //Delete user from database
   const deleteUser = `DELETE FROM users WHERE id = ?`;
   db.query(deleteUser, [userID], (err, result) => {
-    if(err){
-      console.error('Error deleting user: ', err.message || err.stack);
-      res.json({success: false, message: err.stack});
+    if (err) {
+      console.error("Error deleting user: ", err.message || err.stack);
+      res.json({ success: false, message: err.stack });
       return;
-    }else{
-      res.json({success: true, message: 'Are you sure you want to delete this user?'});
+    } else {
+      res.json({
+        success: true,
+        message: "Are you sure you want to delete this user?",
+      });
       return;
     }
-  })
-})
+  });
+});
 // API route for deleting images
 router.post("/api/delete-slider", (req, res) => {
   const { imageUrl } = req.body;

@@ -7,7 +7,7 @@
       <form method="post" name="login" class="login-form">
         <h3>Login</h3>
         <% if(errorMessage) { %>
-          <span id="errorMessage"><%= errorMessage %></span>
+          <span id="errorMessage" class="danger"><%= errorMessage %></span>
           <% } %>
           <% if(successMessage) { %>
             <span id="successMessage"><%= successMessage %></span>

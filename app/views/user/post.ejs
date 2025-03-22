@@ -169,6 +169,7 @@
   <% for(let comment of postComments) {%>
     <% if(comment?.comment_text) { %>
       <section class="commentted-message-container" data-comment-id="<%= comment.comment_id %>">
+        
         <section class="author-image-container">
 
           <% if(comment && comment.comment_author_profile_picture) { %>
@@ -187,6 +188,19 @@
               <%= comment.comment_author %>
             </strong>
           </a>
+
+          <!-- If commentor has a reply, display reply being replied to -->
+
+          <a href="/viewprofile/<%= comment.reply_author_id %>" style="text-decoration: none; color: #525050;">
+            <em>- <%= comment.reply_author_username %> </em> &nbsp; 
+          </a>
+          <span>replies to &nbsp; </span>
+          <a href="/viewprofile/<%= comment.comment_author_id %>" style="text-decoration: none; color: #525050;">
+            <em>
+              <%='@' + comment.comment_author || comment.comment_author%>
+            </em></span>
+          </a>
+
           <p class="author-bio">
             <%= comment.comment_text %>
           </p>
@@ -196,14 +210,14 @@
               <a href="#"
               ><i class="fa-brands fa-facebook-f"></i></a
             ></li> -->
-              <li>
+              <!-- <li>
                 <a href="#like" onclick="alert('Feature is not available. Contact system developer.')"><i
                     class="fa fa-thumbs-up"></i>0</a>
-              </li>
-              <li>
+              </li> -->
+              <!-- <li>
                 <a href="#dislike" onclick="alert('Feature is not  available. Contact system developer.')"><i
                     class="fa fa-thumbs-down"></i>0</a>
-              </li>
+              </li> -->
               <li>
                 <a class="reply-btn" style="cursor: pointer;">- <i>Reply</i> </a><span class="county-reply">(1)</span>
               </li>
@@ -228,73 +242,6 @@
       </form>
       <!-- Reply form ends -->
       <!-- Commented ends -->
-
-      <!-- Reply section starts -->
-      <% if(comment?.reply_text) { %>
-        <section class="reply-comment">
-          <section class="author-image-container">
-            <% if(comment && comment.reply_author_profile_picture) { %>
-              <img src="<%= '../uploads/profile/' + comment.reply_author_profile_picture %>"
-                alt="<%= comment.reply_author_username %> picture">
-              <% }else { %>
-                <img src="../img/author/default_profile_image.jpg" alt="<%= comment.reply_author_username%> picture">
-                <% } %>
-          </section>
-          <section class="author-details">
-            <section class="reply-author-names">
-
-              <a href="/viewprofile/<%= comment.reply_author_id %>" style="text-decoration: none; color: #525050;">
-                <em>- <%= comment.reply_author_username %> </em> &nbsp; <span>replies to &nbsp;
-              </a>
-              <a href="/viewprofile/<%= comment.comment_author_id %>" style="text-decoration: none; color: #525050;">
-                <em>
-                  <%='@' + comment.comment_author || comment.comment_author%>
-                </em></span>
-              </a>
-
-              <span class="reply-time">
-                <% comment.reply_created_at %>
-              </span>
-            </section>
-            <p class="author-bio">
-              <%= comment.reply_text %>
-            </p>
-            <section class="social-icon">
-              <ul>
-                <li>
-                  <a href="#like" onclick="alert('Feature is not available. Contact system developer.')"><i
-                      class="fa fa-thumbs-up"></i>0</a>
-                </li>
-                <li>
-                  <a href="#dislike" onclick="alert('Feature is not available. Contact system developer.')"><i
-                      class="fa fa-thumbs-down"></i>0</a>
-                </li>
-
-                <li>
-                  <a href="#reply" class="reply-btn" onclick="alert('You cannot reply to this person')">- <i>Reply</i>
-                  </a><span class="count-reply">(0)</span>
-                </li>
-              </ul>
-            </section>
-          </section>
-        </section>
-        <% } else{ %>
-          <% } %>
-
-            <!-- Reply form starts -->
-            <form action="/post/<%= post.post_id %>/reply" method="post" class="reply-form-container inner-reply-form"
-              id="reply-form">
-              <span style="color: red; text-align: center;font-size: 0.9rem;">
-                <%= replyMessage %>
-              </span>
-              <textarea name="reply_comment" id="reply" cols="30" rows="7" placeholder="Write reply here"
-                required></textarea>
-
-              <section class="submit-reply-container">
-                <button type="submit" id="reply-submit-btn">Reply</button>
-              </section>
-
-            </form>
             <!-- Reply form ends -->
             <!-- Reply to section ends -->
             <% } else{ %>

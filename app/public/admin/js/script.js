@@ -9,6 +9,27 @@ const logoutBtn = document.querySelector(".logout-btn");
 const mobileCloseMenuBtn = document.querySelector("#close-sidebar");
 const body = document.querySelector("body");
 const timesBtn = document.querySelector("#times-btn");
+
+//Get all the links in the sidebar menu
+const allSidebarLink = document.querySelectorAll('#sidebar_manue_items li');
+
+// console.log('All sidebar links: ', allSidebarLink);
+
+//Add active state on link background when clicked
+allSidebarLink.forEach((btn) => {
+  btn.addEventListener('click', function(){
+
+    allSidebarLink.forEach((btn) => btn.classList.remove('active'));
+    // const strText = btn;
+    // console.log(strText);
+    // localStorage.setItem("clickedBtn", strText);
+
+    // const getItem = localStorage.getItem("clickedBtn");
+    // console.log(getItem);
+    this.classList.add('active');
+  })
+})
+
 // console.log(body);
 
 // console.log(toggleBtn);
@@ -22,7 +43,6 @@ let profile = 1;
 document.addEventListener("DOMContentLoaded", () => {
   // console.log(` Width: ${window.innerWidth} `);
   //    console.log(` Height: ${window.innerHeight}`);
-
   // alert('Toggle button clicked');
 
   // Event to handle the toggling of the sidebar menu
