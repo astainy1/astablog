@@ -351,7 +351,7 @@ router.post("/api/subscribe/newsletter", isAuth.isLoggedIn, (req, res) => {
                 <table style="width: 100%; max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
                   <tr>
                     <td style="text-align: center; padding: 20px 0;">
-                      <img src="https://astablog.onrender.com/logo/logo-black.png" alt="Asta Blog" width="150" />
+                      <img src="https://astablog.onrender.com/img/logo/logo-black.png" alt="Asta Blog" width="150" />
                     </td>
                   </tr>
                   <tr>
