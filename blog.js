@@ -42,7 +42,7 @@ app.use(
     secret: process.env.SESSION_SCRET_KEY,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }, //Will be set to true in production
+    cookie: { secure: false }, //Will be set to true in production
   })
 );
 
