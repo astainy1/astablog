@@ -1,0 +1,156 @@
+<!-- Include header -->
+<%- include('./partials/__header.ejs') %>
+
+<section class="main-content-container">
+  <!-- Include sidebar -->
+  <%- include('./partials/__sidebar.ejs') %>
+  <!-- Main content starts here -->
+  <main>
+    <% if (articles) { %>
+    <% for(let article of articles) { %>
+    <section class="blog-summary-title">
+      <section class="main-title-text">
+        <a href="/post/<%=article.id %>" class="blog-tagline">
+          <% if(article && article.image) { %>
+          <img src="<%= '../uploads/post/' + article.image %>" />
+          <% }else { %>
+          <img src="../img/default_no_image.jpg" alt="Article Photo" />
+          <% } %>
+          <span> <%= article.title %> </span>
+        </a>
+        <section class="blog-action-container">
+          <% let postedMonthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %> <% let getDatePostedAt =
+          new Date(article.created_at) %> <% let FullDatePostedAt = { month:
+          postedMonthArr[getDatePostedAt.getMonth()], day:
+          getDatePostedAt.getDate(), year: getDatePostedAt.getFullYear() } %> <%
+          FullDatePostedAt.day < 10 ? FullDatePostedAt.day = '0' +
+          FullDatePostedAt.day : FullDatePostedAt.day %>
+
+          <a href="/post/<%= article.id %>" class="blog-action-center">
+            <span class="recent-news-date"
+              ><%= FullDatePostedAt.month %> <%= FullDatePostedAt.day %>, <%=
+              FullDatePostedAt.year %></span
+            >
+            / <% if(article.username) { %>
+
+            <span class="recent-news-author"
+              >By &nbsp; <%= article.username %></span
+            >
+            <% } %> /
+            <span class="fa fa-comment comment-count">
+              &nbsp; <%= article.totalComments %></span
+            >
+
+            <a class="blog-action-center" data-type="like" id="reaction_btn"
+              ><i class="fa fa-thumbs-up" id="react_post">
+                <span class="like-count"><%= article.total_reaction %></span>
+              </i></a
+            >
+          </a>
+        </section>
+      </section>
+      <p class="blog-summary-main-content" style="background: #fff">
+        <%- article.body.substring(0, 500) %>....
+      </p>
+      <section class="blog-summary-read-more">
+        <a href="/post/<%= article.id %>">Read More</a>
+      </section>
+    </section>
+    <% } %>
+    <% } else{ %>
+     <h5 class="text-center mt-5">No Post Availiable.</h5>
+    <% } %>
+  </main>
+</section>
+
+<!-- New Letter pop up Modal message container -->
+<section class="news_letter_modal_container" id="popup_modal">
+  <section class="modal_success">
+    <section class="modal_success_header">
+      <h2 class="modal_title">Thank you!</h2>
+      <span class="close_modal">&times;</span>
+    </section>
+    <section class="modal_body">
+      <section class="modal_success_content_body"></section>
+    </section>
+  </section>
+</section>
+
+<script>
+  const popupModal = document.getElementById("popup_modal");
+  const closeModal = document.querySelector(".close_modal");
+  const subscribe_btn = document.getElementById("subscribe_btn");
+  const newsletterForm = document.getElementById("newsletterForm");
+  const modalContent = document.querySelector(".modal_success_content_body");
+  const subscriptionBtn = document.querySelector("#subscribe_btn");
+  //Show modal
+  document.addEventListener("DOMContentLoaded", () => {
+    newsletterForm.addEventListener("submit", (e) => {
+      const email = document.getElementById("newsletterEmail").value;
+      e.preventDefault();
+
+      console.log(email);
+      //Get the email from the newsletter form and send to the backend
+      fetch("/api/subscribe/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            modalContent.innerHTML = `<h2>${data.message}</h2>
+          <p>Stay tuned for our latest updates.</p>`;
+            console.log(data.message);
+            setTimeout(() => {
+              subscriptionBtn.style = "opacity: 0.7;";
+              subscriptionBtn.innerHTML = `<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...`;
+            }, 300);
+
+            setTimeout(() => {
+              popupModal.classList.add("add_modal");
+              subscriptionBtn.style = "opacity: 100;";
+              subscriptionBtn.textContent = "SUBSCRIBE";
+            }, 2000);
+          } else {
+            // alert(`${data.message}`);
+
+            console.log(modalContent);
+            setTimeout(() => {
+              subscriptionBtn.style = "opacity: 0.7;";
+              subscriptionBtn.innerHTML = `<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...`;;
+            }, 300);
+
+            document.querySelector(".modal_success_header").style =
+              "background: red;";
+            document.querySelector(".modal_title").textContent = "Oops!";
+            modalContent.innerHTML = `<h2>${data.message}</h2>
+        <p>Stay tuned for our latest updates.</p>`;
+            setTimeout(() => {
+              popupModal.classList.add("add_modal");
+              subscriptionBtn.style = "opacity: 100;";
+              subscriptionBtn.textContent = "SUBSCRIBE";
+            }, 2000);
+          }
+        })
+        .catch((err) => console.log("Something went wrong. ", err));
+    });
+    //Close modal on click outside
+    window.addEventListener("click", (e) => {
+      if (e.target == popupModal) {
+        popupModal.classList.remove("add_modal");
+        window.location.reload();
+      }
+    });
+  });
+
+  //Remove modal
+  closeModal.addEventListener("click", () => {
+    popupModal.classList.remove("add_modal");
+    window.location.reload();
+  });
+</script>
+
+<!-- Include footer -->
+<%- include('./partials/__footer.ejs') %>

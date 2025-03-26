@@ -1,0 +1,52 @@
+<aside>
+    <section class="text-wadget">
+        <h2><%= sidebarText %></h2>
+        <p style="padding: 15px; color: #414040;">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque perspiciatis nihil animi numquam? Architecto omnis excepturi quisquam rem necessitatibus. Placeat quaerat minus magni est quia, maxime quo consectetur vero qui.
+        </p>
+    </section>
+    <section class="recent-news">
+        <h3 class="recent-post-text"> Recent Post</h3>
+        <% if(articles) { %>
+        <% for(let post of articles) { %>
+        <section class="recent-news-container">
+            <% if(post && post.image) { %>
+                <img src="<%= '../uploads/post/' + post.image %>">
+            <% }else { %>
+
+                <img src="../img/default_no_image.jpg" alt="Article Photo">
+                
+            <% } %>
+            <section class="recent-news-text">
+                <h4>
+                    <a href="/post/<%= post.id %>"><%= post.title.substring(0, 50) %>......</a>
+                </h4>
+                <section class="recent-news-date-container">
+                    <% let monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %>
+
+                    <% let getDateAt = new Date(post.created_at) %>
+
+                    <% let postedAt = {
+                        month: monthArr[getDateAt.getMonth()],
+                        day: getDateAt.getDate(),
+                        year: getDateAt.getFullYear()
+                    } %>
+
+                    <% postedAt.day < 10 ? postedAt.day = '0' + postedAt.day : postedAt.day %>
+                    
+                    <span class="recent-news-date"><%= postedAt.month %> <%= postedAt.day %>, <%= postedAt.year %></span>
+                    <% if(post.full_name) { %>
+                    <span class="recent-news-author">By &nbsp; <%= post.username %></span>
+                    <% } %>
+                        
+                </section>
+
+            </section>
+        </section>
+        <% } %>
+        <% } else{ %>
+            <h4 class="text-center mt-5" style="text-align: center; margin: 2em auto;">No Recent Post.</h4>
+        <% } %>
+
+    </section>
+</aside>
