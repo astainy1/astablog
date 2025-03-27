@@ -42,7 +42,7 @@ app.use(
     secret: process.env.SESSION_SCRET_KEY,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { secure: false }, 
   })
 );
 
