@@ -25,9 +25,9 @@ app.set("view engine", "ejs");
 
 // Set up utility middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());//Middleware to get data from the frontend
+app.use(express.json()); //Middleware to get data from the frontend
 // app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json()); 
+// app.use(bodyParser.json());
 
 //Create various directory if not exist.
 const profileDir = path.join(__dirname, "uploads/profile");
@@ -42,10 +42,9 @@ app.use(
     secret: process.env.SESSION_SCRET_KEY,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }, //Will be set to true in production
+    cookie: { secure: false },
   })
 );
-
 
 // Set up flash middleware
 app.use(flash());
@@ -57,10 +56,9 @@ app.use(authRoutes);
 app.use(routes);
 
 // Error middleware
-
-if (process.env.NODE_ENV === "development") {
-  app.use(errorHander);
-}
+// if (process.env.NODE_ENV === "development") {
+//   app.use(errorHander);
+// }
 
 app.use(notFound);
 app.use(serverError);
