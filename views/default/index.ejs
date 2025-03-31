@@ -69,6 +69,30 @@
         </section>
         <div style="margin-bottom: 5em;"></div>
     </section>
-   
+    <!-- <section class="summary-container">
+        <h2>Overall Article Summary</h2>
+        <p id="summary-text">Loading summary...</p>
+    </section> -->
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    fetch('/summary')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            if (data.success) {
+                document.getElementById("summary-text").textContent = data.summary;
+            } else {
+                document.getElementById("summary-text").textContent = "No summary available.";
+            }
+        })
+        .catch(function (error) {
+            console.error("Error fetching summary:", error);
+            document.getElementById("summary-text").textContent = "Error loading summary.";
+        });
+});
+
+    </script>
     <!-- Include footer section -->
      <%- include('../user/partials/__footer.ejs') %>

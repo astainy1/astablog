@@ -7,7 +7,8 @@ const nodemailer = require("nodemailer");
 const multer = require("multer");
 const fs = require("fs");
 require("dotenv").config();
-
+// const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { GoogleGenAI } = require("@google/genai");
 //Custom modules
 const db = require("../config/db");
 const isAuth = require("../middlewares/isLoggedIn");
@@ -33,14 +34,18 @@ const transporter = nodemailer.createTransport({
 
 console.log("App Password Loaded:", process.env.APP_PASSWORD ? "Yes" : "No");
 
-//Verify transporter configuration
-// transporter.verify((error, success) => {
-//   if (error) {
-//     console.log("SMTP Connection Error:", error.stack);
-//   } else {
-//     console.log("SMTP Connection Success:", success);
-//   }
-// });
+
+// Initialize Gemini API
+const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// Verify transporter configuration
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("SMTP Connection Error:", error.stack);
+  } else {
+    console.log("SMTP Connection Success:", success);
+  }
+});
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -173,6 +178,33 @@ router.get("/", (req, res) => {
     });
   });
 });
+
+// Generate a single summary for all articles
+async function generateAIResponse(req, res) {
+  try {
+      // AI Prompt
+      const prompt = "Explain how AI works";
+
+      // Call Gemini API
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      
+      const result = await model.generateContent({ contents: [{ role: "user", text: prompt }] });
+
+      // Extract response text
+      const responseText = result?.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated";
+
+      console.log(responseText);
+
+      // Send response to front end
+      res.json({ success: true, response: responseText });
+  } catch (error) {
+      console.error("Error generating AI response:", error);
+      res.status(500).json({ success: false, message: "Error generating AI response" });
+  }
+}
+
+// Route for front end to fetch AI response
+router.get("/summary", generateAIResponse);
 
 /*
     Logged-in user pages.
